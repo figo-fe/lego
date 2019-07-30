@@ -49,6 +49,8 @@ code {
   height: 50px;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  position: relative;
+  z-index: 9;
 }
 .frame-body {
   flex: 1;
@@ -62,4 +64,28 @@ code {
   font-size: 20px;
   margin: 15px 0 15px 20px;
   cursor: pointer;
+}
+.sitepath {
+  background: #ffffff;
+  line-height: 25px;
+  padding: 16px 24px;
+  font-size: 16px;
+  color: #444444;
+  font-weight: bold;
+}
+.main-content {
+  padding: 24px;
+}
+/* 卡片通用样式 */
+.lego-card {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s;
+  list-style: none;
 }
