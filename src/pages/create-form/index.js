@@ -9,7 +9,9 @@ export default () => {
   const [schemaCode, setSchemaCode] = useState('');
 
   const configRef = useCallback(node => {
-    configRef.current = initEditor(node, createForm);
+    configRef.current = initEditor(node, createForm, {
+      disable_collapse: true
+    });
   }, []);
 
   const previewRef = useCallback(
@@ -78,13 +80,14 @@ export default () => {
     console.log(previewRef.current.editor.getValue());
   }
 
-  function doSave() { 
-    console.log(schemaRef.current.getValue())
+  function doSave() {
+    const schema = schemaRef.current.getValue();
+    console.log(JSON.stringify(JSON.parse(schema)));
   }
 
   return (
     <Wrap>
-      <div className="lego-card create-form-wrap">
+      <div className="lego-card">
         <div style={{ display: step !== 1 && 'none' }} ref={configRef} />
         {step === 2 && (
           <div className="form-preview">
@@ -119,8 +122,12 @@ export default () => {
         )}
         {step === 2 && (
           <div className="btns-row">
-            <button onClick={doSave} type="button" className="btn btn-success btn-sm">
-              保存
+            <button
+              onClick={doSave}
+              type="button"
+              className="btn btn-success btn-sm"
+            >
+              保存配置
             </button>
             <button
               onClick={doConsole}
@@ -134,7 +141,7 @@ export default () => {
               type="button"
               className="btn btn-outline-primary btn-sm"
             >
-              更新
+              更新表单
             </button>
             <button
               onClick={() => setStep(1)}

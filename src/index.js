@@ -7,6 +7,7 @@ import './common/base.css';
 import Aside from './components/aside';
 import Nav from './components/nav';
 import CreateForm from './pages/create-form';
+import Setting from './pages/setting';
 
 const App = () => (
   <Router>
@@ -14,6 +15,7 @@ const App = () => (
       <Aside />
       <section className="frame-body">
         <Nav />
+        <Route path="/setting" component={Setting} />
         <Route path="/create-form" component={CreateForm} />
       </section>
     </div>

@@ -76,19 +76,6 @@ code {
 .main-content {
   padding: 1.5rem;
 }
-/* 卡片通用样式 */
-.lego-card {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  color: rgba(0, 0, 0, 0.65);
-  font-size: 14px;
-  position: relative;
-  background: #fff;
-  border-radius: 2px;
-  transition: all 0.3s;
-  list-style: none;
-}
 /* 底部按钮容器 */
 .btns-row {
   padding: 1rem 0;
@@ -98,10 +85,19 @@ code {
 }
 
 /* json-editor */
-.create-form-wrap {
+.lego-card {
+  box-sizing: border-box;
+  margin: 0;
   padding: 1rem;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s;
+  list-style: none;
 }
-.create-form-wrap .card {
+.lego-card .card {
   border-color: #e3e3e3;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   padding: 1rem;
@@ -113,27 +109,31 @@ code {
 .form-control[type='file'] {
   height: auto;
 }
-.create-form-wrap .btn-group {
+.card-body .btn-group {
   display: inline-block;
 }
-.create-form-wrap .btn {
+.card-body .btn {
   font-size: 12px;
 }
-.create-form-wrap .btn-light {
+.card-body .btn-light {
   background: #f8f8f8;
   border: 1px solid #d9d9d9;
 }
-.create-form-wrap .input-group-prepend .btn-light {
+.card-body .input-group-prepend .btn-light {
   border-left: none;
 }
-.create-form-wrap .btn-light:hover {
+.card-body .btn-light:hover {
   color: #212529;
   background-color: #e2e6ea;
   border-color: #dae0e5;
 }
-.create-form-wrap a img {
+.card-body a img {
   max-width: 200px;
   max-height: 100px;
+}
+.card-body .form-text {
+  font-size: 13px;
+  color: #888888;
 }
 .form-preview {
   position: relative;
