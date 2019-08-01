@@ -1,3 +1,33 @@
+const dict = {
+  '(name)': '名称',
+  '(desc)': '描述',
+  '(cate)': '分类',
+  '(shop)': '商家',
+  '(show)': '显示',
+  '(price|sale)': '价格',
+  '(url|link)': '链接',
+  '(product)': '商品',
+  '(hot)': '热度',
+  '(order)': '排序',
+  '(image|img|pic)': '图片',
+  '(state|status)': '状态',
+  '(time)': '时间',
+  '(start)': '开始时间',
+  '(end)': '结束时间',
+  '(range)': '范围',
+  '(focus)': '焦点图',
+  '(comment)': '评论',
+  '(num)': '数量',
+  '(color)': '颜色'
+};
+const getTitle = key => {
+  for (var rule in dict) {
+    if (new RegExp(rule, 'i').test(key)) {
+      return dict[rule];
+    }
+  }
+  return key;
+};
 const getType = function(data) {
   if (typeof data == 'object') {
     return toString.call(data) === '[object Array]' ? 'array' : 'object';
@@ -8,15 +38,15 @@ const getType = function(data) {
 const dataHandle = {
   number: key => ({
     type: 'number',
-    title: key,
+    title: getTitle(key),
     options: {
       grid_columns: 3
     }
   }),
   boolean: key => ({
-    type: 'boolean',
-    title: key,
-    enum: [true, false],
+    type: 'integer',
+    title: getTitle(key),
+    enum: [1, 0],
     options: {
       enum_titles: ['是', '否'],
       grid_columns: 3
@@ -25,7 +55,7 @@ const dataHandle = {
   string: function(key, data) {
     const schema = {};
     schema.type = 'string';
-    schema.title = key;
+    schema.title = getTitle(key);
     schema.options = {
       grid_columns: 3
     };
@@ -59,7 +89,13 @@ const dataHandle = {
         break;
 
       case /^[12]\d{3}-\d{2}-\d{2} [\d:]{8}$/.test(data):
-        schema.format = 'datetime';
+        schema.format = 'datetime-local';
+        schema.options.flatpickr = {
+          wrap: true,
+          showClearButton: false,
+          time_24hr: true,
+          allowInput: true
+        };
         break;
 
       default:
@@ -70,7 +106,7 @@ const dataHandle = {
   },
   object: function(key, data) {
     const schema = {};
-    schema.title = key;
+    schema.title = getTitle(key);
     schema.type = 'object';
     schema.format = 'grid';
     schema.properties = {};
@@ -82,7 +118,7 @@ const dataHandle = {
   array: function(key, data) {
     const schema = {};
     schema.type = 'array';
-    schema.title = key;
+    schema.title = getTitle(key);
     schema.items = {};
     if (data[0] !== undefined) {
       schema.items = dataHandle[getType(data[0])](key, data[0]);

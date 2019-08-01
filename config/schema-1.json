@@ -1,0 +1,133 @@
+{
+    "title": "表单标题",
+    "type": "object",
+    "format": "grid",
+    "properties": {
+        "shop": {
+            "type": "string",
+            "title": "商家",
+            "options": {
+                "grid_columns": 3
+            },
+            "format": "text"
+        },
+        "name": {
+            "type": "string",
+            "title": "名称",
+            "options": {
+                "grid_columns": 3
+            },
+            "format": "text"
+        },
+        "desc": {
+            "type": "string",
+            "title": "描述",
+            "options": {
+                "grid_columns": 3
+            },
+            "format": "text"
+        },
+        "show": {
+            "type": "integer",
+            "title": "显示",
+            "enum": [
+                1,
+                0
+            ],
+            "options": {
+                "enum_titles": [
+                    "是",
+                    "否"
+                ],
+                "grid_columns": 3
+            }
+        },
+        "price": {
+            "type": "number",
+            "title": "价格",
+            "options": {
+                "grid_columns": 3
+            }
+        },
+        "cate": {
+            "type": "string",
+            "title": "分类",
+            "options": {
+                "grid_columns": 3
+            },
+            "format": "text"
+        },
+        "time": {
+            "type": "string",
+            "title": "时间",
+            "options": {
+                "grid_columns": 3,
+                "flatpickr": {
+                    "wrap": true,
+                    "showClearButton": false,
+                    "time_24hr": true,
+                    "allowInput": true
+                }
+            },
+            "format": "datetime-local"
+        },
+        "state": {
+            "type": "string",
+            "title": "状态",
+            "options": {
+                "grid_columns": 3
+            },
+            "format": "text"
+        },
+        "imgs": {
+            "type": "array",
+            "title": "图片",
+            "items": {
+                "title": "图片",
+                "type": "object",
+                "format": "grid",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "名称",
+                        "options": {
+                            "grid_columns": 3
+                        },
+                        "format": "text"
+                    },
+                    "desc": {
+                        "type": "string",
+                        "title": "描述",
+                        "options": {
+                            "grid_columns": 3
+                        },
+                        "format": "text"
+                    },
+                    "color": {
+                        "type": "string",
+                        "title": "颜色",
+                        "options": {
+                            "grid_columns": 3
+                        },
+                        "format": "text"
+                    },
+                    "url": {
+                        "type": "string",
+                        "title": "链接",
+                        "options": {
+                            "grid_columns": 3
+                        },
+                        "format": "upload",
+                        "links": [
+                            {
+                                "rel": "",
+                                "href": "{{self}}",
+                                "mediaType": "image"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

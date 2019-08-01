@@ -6,7 +6,7 @@ const upload = (type, file, cbs) => {
 const getUploadBtn = () => {
   const btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'btn btn-primary';
+  btn.className = 'btn btn-light';
   btn.innerHTML = [
     '<input type="file" style="position:absolute;opacity:0;left:0;top:0;bottom:0;width:40px" />',
     '<i class="fas fa-cloud-upload-alt"></i>'
@@ -34,13 +34,20 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
     this.title = this.header = this.label = this.theme.getFormInputLabel(
       this.getTitle()
     );
+
     this.input = this.theme.getFormInputField('text');
     this.inputGroup = this.theme.getInputGroup(this.input, [btn]);
 
     this.progress = getProgress();
     this.inputGroup.insertBefore(this.progress, this.input);
 
-    this.container.appendChild(this.inputGroup);
+    this.control = this.theme.getFormControl(
+      this.label,
+      this.inputGroup,
+      this.description,
+      this.infoButton
+    );
+    this.container.appendChild(this.control);
     this.input.value = this.value;
 
     this.input.addEventListener('change', function(e) {
@@ -114,7 +121,6 @@ export default (el, schema = {}, opts = {}) => {
     return new JSONEditor(el, {
       disable_edit_json: true,
       disable_properties: true,
-      disable_collapse: true,
       ...opts,
       schema
     });

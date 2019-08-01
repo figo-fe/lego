@@ -78,6 +78,10 @@ export default () => {
     console.log(previewRef.current.editor.getValue());
   }
 
+  function doSave() { 
+    console.log(schemaRef.current.getValue())
+  }
+
   return (
     <Wrap>
       <div className="lego-card create-form-wrap">
@@ -115,7 +119,7 @@ export default () => {
         )}
         {step === 2 && (
           <div className="btns-row">
-            <button type="button" className="btn btn-success btn-sm">
+            <button onClick={doSave} type="button" className="btn btn-success btn-sm">
               保存
             </button>
             <button

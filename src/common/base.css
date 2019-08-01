@@ -107,12 +107,29 @@ code {
   padding: 1rem;
   margin-bottom: 0.6rem;
 }
+.form-control {
+  font-size: 14px;
+}
 .form-control[type='file'] {
   height: auto;
-  font-size: 13px;
+}
+.create-form-wrap .btn-group {
+  display: inline-block;
 }
 .create-form-wrap .btn {
-  font-size: 14px;
+  font-size: 12px;
+}
+.create-form-wrap .btn-light {
+  background: #f8f8f8;
+  border: 1px solid #d9d9d9;
+}
+.create-form-wrap .input-group-prepend .btn-light {
+  border-left: none;
+}
+.create-form-wrap .btn-light:hover {
+  color: #212529;
+  background-color: #e2e6ea;
+  border-color: #dae0e5;
 }
 .create-form-wrap a img {
   max-width: 200px;
