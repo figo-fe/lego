@@ -1,3 +1,6 @@
+export { default as json2schema } from './json2schema';
+export { default as initEditor } from './initeditor';
+
 export const loadJs = url => {
   return new Promise(resolve => {
     const script = document.createElement('script');

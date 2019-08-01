@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <title>LEGO</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/5.10.0-12/css/all.min.css">
+  <script src="%PUBLIC_URL%/jsoneditor/jsoneditor.min.js"></script>
+  <script src="%PUBLIC_URL%/ace/ace.js"></script>
+  <title>LEGO</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script>
+    window.FileUploader = function (file, cbs) {
+      setTimeout(() => {
+        cbs.progress(30);
+      }, 500);
+
+      setTimeout(() => {
+        cbs.success('https://avatar.csdn.net/F/1/7/3_wbj16116.jpg')
+      }, 2e3);
+    }
+  </script>
+</body>
+
 </html>

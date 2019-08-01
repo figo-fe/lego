@@ -74,7 +74,7 @@ code {
   font-weight: bold;
 }
 .main-content {
-  padding: 24px;
+  padding: 1.5rem;
 }
 /* 卡片通用样式 */
 .lego-card {
@@ -88,4 +88,72 @@ code {
   border-radius: 2px;
   transition: all 0.3s;
   list-style: none;
+}
+/* 底部按钮容器 */
+.btns-row {
+  padding: 1rem 0;
+}
+.btns-row .btn {
+  margin-right: 0.6rem;
+}
+
+/* json-editor */
+.create-form-wrap {
+  padding: 1rem;
+}
+.create-form-wrap .card {
+  border-color: #e3e3e3;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin-bottom: 0.6rem;
+}
+.form-control[type='file'] {
+  height: auto;
+  font-size: 13px;
+}
+.create-form-wrap .btn {
+  font-size: 14px;
+}
+.create-form-wrap a img {
+  max-width: 200px;
+  max-height: 100px;
+}
+.form-preview {
+  position: relative;
+  overflow: hidden;
+}
+.form-preview .schema-box {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 800px;
+  background: #f8f9fa;
+  transition: all 0.2s;
+  transform: translateX(800px);
+  z-index: 10;
+}
+.form-preview .schema-show {
+  transform: translateX(0);
+}
+.form-preview .schema-box .switch-btn {
+  position: absolute;
+  left: -30px;
+  top: 0;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 20px;
+  width: 30px;
+  background: #e2e6ea;
+  border-radius: 4px 0 0 4px;
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.form-preview .schema-box .switch-btn:hover {
+  color: #0069d9;
+}
+.form-preview .schema-code {
+  height: 100%;
 }
