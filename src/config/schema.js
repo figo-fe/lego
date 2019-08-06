@@ -116,6 +116,7 @@ export const setting = {
     baseUrl: {
       title: '接口前缀',
       type: 'string',
+      minLength: 1,
       options: {
         grid_columns: 7,
         inputAttributes: {

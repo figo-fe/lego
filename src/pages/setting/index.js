@@ -15,7 +15,7 @@ export default props => {
   const context = useContext(SettingContext);
 
   useEffect(() => {
-    if (context.name) {
+    if (context.name && context.baseUrl) {
       configRef.current.setValue(context);
     }
   }, [context, configRef]);

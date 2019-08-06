@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     axios('GET', SETTING)
       .then(res => {
-        const { name, baseUrl, sideMenu, uploadFn } = res.data;
+        const { name = '后台管理系统', baseUrl, sideMenu, uploadFn } = res.data;
         setSetting({ name, baseUrl, sideMenu, uploadFn });
       })
       .catch(err => {
