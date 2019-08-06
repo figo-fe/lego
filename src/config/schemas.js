@@ -105,11 +105,19 @@ export const setting = {
   type: 'object',
   format: 'grid',
   properties: {
+    name: {
+      title: '系统名称',
+      type: 'string',
+      default: '后台管理系统',
+      options: {
+        grid_columns: 4
+      }
+    },
     baseUrl: {
       title: '接口前缀',
       type: 'string',
       options: {
-        grid_columns: 6,
+        grid_columns: 4,
         inputAttributes: {
           placeholder: '如 https:/domain.com/api/ 或 /api/'
         }
@@ -120,7 +128,7 @@ export const setting = {
       type: 'string',
       default: 'jpg,png,mp4',
       options: {
-        grid_columns: 6
+        grid_columns: 4
       }
     },
     sideMenu: {

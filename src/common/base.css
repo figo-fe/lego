@@ -32,7 +32,10 @@ code {
   height: 50px;
   line-height: 50px;
   margin: 0;
+}
+.frame-aside a {
   color: #fff;
+  text-decoration: none;
 }
 .frame-aside h1 i {
   font-size: 30px;
