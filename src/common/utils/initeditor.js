@@ -1,8 +1,5 @@
 const JSONEditor = window.JSONEditor;
 
-const upload = (type, file, cbs) => {
-  cbs.success('//www.baidu.com/img/baidu_resultlogo@2.png');
-};
 const getUploadBtn = () => {
   const btn = document.createElement('button');
   btn.type = 'button';
@@ -22,11 +19,13 @@ const getProgress = () => {
   ].join('');
   return progress;
 };
+
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === 'string' && schema.format === 'upload') {
     return 'uploadFile';
   }
 });
+
 JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
   build: function() {
     const self = this;
@@ -116,7 +115,6 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.defaults.theme = 'bootstrap4';
     JSONEditor.defaults.options.iconlib = 'fontawesome5';
     JSONEditor.plugins.ace.theme = 'monokai';
-    JSONEditor.defaults.options.upload = upload;
 
     return new JSONEditor(el, {
       disable_edit_json: true,

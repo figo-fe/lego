@@ -1,3 +1,4 @@
+// 创建表单
 const jsonDemo = {
   shop: '搜狗自营',
   name: '搜狗翻译笔',
@@ -17,33 +18,34 @@ const jsonDemo = {
   ]
 };
 export const createForm = {
-  title: '填写表单配置',
+  title: '创建表单',
   type: 'object',
   format: 'grid',
   properties: {
-    method: {
-      title: 'Method',
+    name: {
+      title: '表单名称',
       type: 'string',
-      enum: ['POST', 'GET'],
+      minLength: 1,
       options: {
         grid_columns: 2
       }
     },
     api: {
-      title: 'API',
-      description: '表单提交接口，提交格式为 data: {JSONString}',
+      title: '提交接口',
+      description: '提交格式为 data: {JSONString}',
       type: 'string',
+      minLength: 1,
       options: {
         grid_columns: 5
       }
     },
     origin: {
-      title: '数据来源',
-      description: '编辑页数据来源，接口参数用{{xx}}替换',
+      title: '数据接口',
+      description: '编辑页数据接口，支持自定义参数（选填）',
       type: 'string',
       options: {
         inputAttributes: {
-          placeholder: '如 https://domain.com/api/?id={{id}}&state={{status}}'
+          placeholder: '如 /detail/?id={{id}}&state={{state}}'
         },
         grid_columns: 5
       }
@@ -61,6 +63,7 @@ export const createForm = {
   }
 };
 
+// 全局配置
 const uploadFnDemo = `/**
  * 实现 window.FileUploader
  * 
@@ -82,20 +85,16 @@ window.FileUploader = function (file, cbs) {
 };`;
 const sideMenu = `[
   {
-    "name": "订单管理",
-    "url": "/mall/order/"
+    "name": "一级菜单",
+    "url": "/v1/link/"
   },
   {
-    "name": "营销活动管理",
-    "url": "/mall/promo/",
+    "name": "一级菜单",
+    "url": "/v1/link/",
     "sub": [
       {
-        "name": "预售管理",
-        "url": "/mall/presell/"
-      },
-      {
-        "name": "优惠券管理",
-        "url": "/mall/coupon/"
+        "name": "二级菜单",
+        "url": "/v2/link/"
       }
     ]
   }
@@ -108,27 +107,19 @@ export const setting = {
     name: {
       title: '系统名称',
       type: 'string',
-      default: '后台管理系统',
+      minLength: 1,
       options: {
-        grid_columns: 4
+        grid_columns: 5
       }
     },
     baseUrl: {
       title: '接口前缀',
       type: 'string',
       options: {
-        grid_columns: 4,
+        grid_columns: 7,
         inputAttributes: {
           placeholder: '如 https:/domain.com/api/ 或 /api/'
         }
-      }
-    },
-    uploadAccept: {
-      title: '上传格式（逗号隔开）',
-      type: 'string',
-      default: 'jpg,png,mp4',
-      options: {
-        grid_columns: 4
       }
     },
     sideMenu: {

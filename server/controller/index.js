@@ -1,0 +1,1 @@
+exports.setting = require('./setting');

@@ -11,14 +11,18 @@ const dict = {
   '(order)': '排序',
   '(image|img|pic)': '图片',
   '(state|status)': '状态',
-  '(time)': '时间',
   '(start)': '开始时间',
   '(end)': '结束时间',
+  '(time|datetime)': '时间',
+  '(date)': '日期',
   '(range)': '范围',
   '(focus)': '焦点图',
   '(comment)': '评论',
   '(num)': '数量',
-  '(color)': '颜色'
+  '(color)': '颜色',
+  '(game)': '游戏',
+  '(pay|buy)': '支付',
+  '(amt|amount)': '金额'
 };
 const getTitle = key => {
   for (var rule in dict) {
@@ -56,6 +60,7 @@ const dataHandle = {
     const schema = {};
     schema.type = 'string';
     schema.title = getTitle(key);
+    schema.format = 'text';
     schema.options = {
       grid_columns: 3
     };
@@ -104,22 +109,24 @@ const dataHandle = {
     }
     return schema;
   },
-  object: function(key, data) {
+  object: function(key, data, opts = {}) {
     const schema = {};
     schema.title = getTitle(key);
     schema.type = 'object';
     schema.format = 'grid';
     schema.properties = {};
+    schema.options = opts;
     for (var k in data) {
       schema.properties[k] = dataHandle[getType(data[k])](k, data[k]);
     }
     return schema;
   },
-  array: function(key, data) {
+  array: function(key, data, opts = {}) {
     const schema = {};
     schema.type = 'array';
     schema.title = getTitle(key);
     schema.items = {};
+    schema.options = opts;
     if (data[0] !== undefined) {
       schema.items = dataHandle[getType(data[0])](key, data[0]);
     }
@@ -127,10 +134,10 @@ const dataHandle = {
   }
 };
 
-export default json => {
+export default (json, name = '表单标题') => {
   try {
     const data = typeof json == 'string' ? JSON.parse(json) : json;
-    return dataHandle[getType(data)]('表单标题', data);
+    return dataHandle[getType(data)](name, data, { disable_collapse: true });
   } catch (err) {
     console.warn(err);
     return {

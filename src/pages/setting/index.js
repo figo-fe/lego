@@ -1,16 +1,47 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useContext } from 'react';
 import Wrap from '../../components/wrap';
-import { initEditor } from '../../common/utils';
-import { setting } from '../../config/schemas';
+import { initEditor, axios, toast } from '../../common/utils';
+import { SettingContext } from '../../config/context';
+import { setting } from '../../config/schema';
+import { SETTING } from '../../common/apis';
 
-export default () => {
+export default props => {
   const configRef = useCallback(node => {
     configRef.current = initEditor(node, setting, {
       disable_collapse: true
     });
   }, []);
 
-  function doSave() {}
+  const context = useContext(SettingContext);
+
+  useEffect(() => {
+    if (context.name) {
+      configRef.current.setValue(context);
+    }
+  }, [context, configRef]);
+
+  function doSave() {
+    const _editor = configRef.current;
+    const validates = _editor.validate();
+
+    if (validates.length > 0) {
+      toast(
+        `表单填写有误：<br />${validates
+          .map(err => err.path + ': ' + err.message)
+          .join('<br />')}`
+      );
+    } else {
+      const value = _editor.getValue();
+      axios('POST', SETTING, value)
+        .then(() => {
+          toast('保存成功');
+          props.updateSetting(value);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
 
   return (
     <Wrap>

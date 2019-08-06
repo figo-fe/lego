@@ -1,5 +1,9 @@
 @import 'iconfont.css';
 
+::-webkit-input-placeholder {
+  color: red;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,7 +17,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+.lego-toast {
+  min-width: 150px;
+  max-width: 300px;
+  padding: 15px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  line-height: 1.5;
+  text-align: center;
+  font-size: 15px;
+  position: fixed;
+  left: 50%;
+  margin-left: -100px;
+  top: 30%;
+}
 /* main */
 .frame-main {
   display: flex;
@@ -32,6 +50,11 @@ code {
   height: 50px;
   line-height: 50px;
   margin: 0;
+  opacity: 0;
+  transition: all 0.2s;
+}
+.frame-aside .name-show {
+  opacity: 1;
 }
 .frame-aside a {
   color: #fff;
@@ -78,6 +101,9 @@ code {
 }
 .main-content {
   padding: 1.5rem;
+  box-sizing: border-box;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
 }
 /* 底部按钮容器 */
 .btns-row {

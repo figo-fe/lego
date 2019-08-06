@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Wrap from '../../components/wrap';
 import { initEditor, json2schema } from '../../common/utils';
-import { createForm } from '../../config/schemas';
+import { createForm } from '../../config/schema';
 
 export default () => {
   const [step, setStep] = useState(1);
@@ -17,8 +17,8 @@ export default () => {
   const previewRef = useCallback(
     node => {
       if (node) {
-        const { json } = configRef.current.getValue();
-        const schema = json2schema(json);
+        const { json, name } = configRef.current.getValue();
+        const schema = json2schema(json, name);
         if (schema) {
           previewRef.current = {
             editor: initEditor(node, schema, {
@@ -54,9 +54,9 @@ export default () => {
     const validates = _editor.validate();
     if (validates.length > 0) {
       alert(
-        `表单填写有误\n${validates.map(
-          err => err.path + ': ' + err.message + '\n'
-        )}`
+        `表单填写有误：\n${validates
+          .map(err => err.path + ': ' + err.message)
+          .join('\n')}`
       );
     } else {
       setStep(2);
@@ -68,10 +68,11 @@ export default () => {
       const { node, editor } = previewRef.current;
       if (editor) {
         editor.destroy();
-        previewRef.current.editor = initEditor(
-          node,
-          JSON.parse(schemaRef.current.getValue())
-        );
+        const { json } = configRef.current.getValue();
+        const schema = schemaRef.current.getValue();
+        previewRef.current.editor = initEditor(node, JSON.parse(schema), {
+          startval: JSON.parse(json)
+        });
       }
     }
   }
