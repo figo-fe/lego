@@ -20,7 +20,6 @@ const createFormTable = () => {
     name TEXT,
     api TEXT,
     origin TEXT,
-    json TEXT,
     schema TEXT
   )`;
 

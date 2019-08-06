@@ -86,7 +86,8 @@ window.FileUploader = function (file, cbs) {
 const sideMenu = `[
   {
     "name": "一级菜单",
-    "url": "/v1/link/"
+    "url": "/v1/link/",
+    "icon": "gift"
   },
   {
     "name": "一级菜单",

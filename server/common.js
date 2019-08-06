@@ -1,5 +1,6 @@
 exports.API = {
-  SETTING: '/_api/setting'
+  SETTING: '/_api/setting',
+  FORM: '/_api/form'
 };
 
 exports.resEnd = (ctx, ret = {}) => {

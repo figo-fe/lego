@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Wrap from '../../components/wrap';
-import { initEditor, json2schema } from '../../common/utils';
+import { initEditor, json2schema, axios, toast } from '../../common/utils';
 import { createForm } from '../../config/schema';
+import { FORM } from '../../common/apis';
 
 export default () => {
   const [step, setStep] = useState(1);
@@ -53,10 +54,10 @@ export default () => {
     const _editor = configRef.current;
     const validates = _editor.validate();
     if (validates.length > 0) {
-      alert(
-        `表单填写有误：\n${validates
+      toast(
+        `表单填写有误：<br />${validates
           .map(err => err.path + ': ' + err.message)
-          .join('\n')}`
+          .join('<br />')}`
       );
     } else {
       setStep(2);
@@ -83,7 +84,20 @@ export default () => {
 
   function doSave() {
     const schema = schemaRef.current.getValue();
-    console.log(JSON.stringify(JSON.parse(schema)));
+    const config = configRef.current.getValue();
+
+    axios('POST', FORM, {
+      name: config.name,
+      api: config.api,
+      origin: config.origin,
+      schema: JSON.stringify(JSON.parse(schema))
+    })
+      .then(() => {
+        toast('保存成功');
+      })
+      .catch(err => {
+        toast(err.msg);
+      });
   }
 
   return (
@@ -117,7 +131,7 @@ export default () => {
               type="button"
               className="btn btn-primary btn-sm"
             >
-              下一步
+              预览
             </button>
           </div>
         )}

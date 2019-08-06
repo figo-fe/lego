@@ -2,7 +2,7 @@ const Koa = require('koa');
 const static = require('koa-static');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
-const { setting } = require('./controller/index');
+const { setting, form } = require('./controller/index');
 const { API } = require('./common');
 
 const app = new Koa();
@@ -11,6 +11,10 @@ const handleApi = ctx => {
   switch (ctx.url) {
     case API.SETTING:
       setting(ctx);
+      break;
+
+    case API.FORM:
+      form(ctx);
       break;
   }
 };
