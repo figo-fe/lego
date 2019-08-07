@@ -78,17 +78,20 @@ li {
   font-size: 14px;
   color: #ffffff;
 }
-.side-menu a {
+.side-menu .link {
   color: #a2a9b1;
   display: block;
   padding: 0 24px;
+  cursor: pointer;
   transition: all 0.2s;
 }
-.side-menu a:hover,
-.side-menu a:focus {
+.side-menu .link:hover,
+.side-menu .item-v2 a:hover,
+.side-menu .item-v2 a:focus,
+.side-menu .active {
   color: #ffffff;
 }
-.side-menu a span {
+.side-menu .link span {
   margin-left: 10px;
 }
 .side-menu .item-v1 {
@@ -101,6 +104,9 @@ li {
 }
 .side-menu .item-v2 a {
   padding-left: 49px;
+  color: #a2a9b1;
+  display: block;
+  transition: all 0.2s;
 }
 .side-menu .sub-list {
   height: 0;
@@ -113,7 +119,7 @@ li {
 .side-menu .arr {
   position: absolute;
   right: 20px;
-  top: 13px;
+  top: 15px;
   font-size: 12px;
   transform: scale(0.8);
 }
@@ -123,7 +129,61 @@ li {
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: relative;
-  z-index: 9;
+  z-index: 15;
+}
+.nav-right {
+  position: absolute;
+  right: 1.5rem;
+  top: 0;
+  height: 50px;
+}
+.nav-right .nav-item {
+  float: right;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  position: relative;
+}
+.nav-right .nav-item:hover {
+  background: #f8f8f8;
+}
+.nav-right .nav-item .dropdown {
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  display: none;
+}
+.nav-right .fa-cog {
+  font-size: 20px;
+}
+.nav-right .nav-item:hover .dropdown {
+  display: block;
+}
+.nav-right .dropdown .list-box {
+  width: 140px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  line-height: 35px;
+  padding: 5px 0;
+}
+.nav-right .list-box .fas {
+  margin-right: 10px;
+}
+.nav-right .nav-item .dropdown a {
+  display: block;
+  font-size: 13px;
+  text-decoration: none;
+  color: #444444;
+  text-align: left;
+  padding-left: 15px;
+  transition: all 0.2s;
+}
+.nav-right .nav-item .dropdown a:hover {
+  background: #e6f7ff;
 }
 .frame-body {
   flex: 1;
@@ -211,11 +271,11 @@ li {
   font-size: 13px;
   color: #888888;
 }
-.form-preview {
+.form-view {
   position: relative;
   overflow: hidden;
 }
-.form-preview .schema-box {
+.form-view .schema-box {
   position: absolute;
   right: 0;
   top: 0;
@@ -226,10 +286,10 @@ li {
   transform: translateX(800px);
   z-index: 10;
 }
-.form-preview .schema-show {
+.form-view .schema-show {
   transform: translateX(0);
 }
-.form-preview .schema-box .switch-btn {
+.form-view .schema-box .switch-btn {
   position: absolute;
   left: -30px;
   top: 0;
@@ -244,9 +304,78 @@ li {
   cursor: pointer;
   transition: all 0.2s;
 }
-.form-preview .schema-box .switch-btn:hover {
+.form-view .schema-box .switch-btn:hover {
   color: #0069d9;
 }
-.form-preview .schema-code {
+.form-view .schema-code {
   height: 100%;
+}
+
+/* table-list */
+.table-list {
+  width: 100%;
+}
+.table-thead th {
+  border-bottom: 1px solid #e8e8e8;
+  height: 40px;
+  background: #fafafa;
+  padding-left: 15px;
+}
+.table-tbody td {
+  border-bottom: 1px solid #f0f0f0;
+  padding-left: 15px;
+  font-size: 14px;
+  height: 50px;
+}
+.table-tbody .handle {
+  margin-right: 15px;
+  cursor: pointer;
+  color: #666666;
+}
+.table-tbody tr {
+  transition: all 0.3s;
+}
+.table-tbody tr:hover {
+  background: #e6f7ff;
+}
+.table-tbody td .handle:hover {
+  color: #007bff;
+}
+.table-tbody .handle .fas {
+  vertical-align: middle;
+  margin-right: 5px;
+  font-size: 13px;
+  transition: all 0.2s;
+  vertical-align: middle;
+}
+.table-tbody .handle em {
+  font-style: normal;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.lego-pagination {
+  width: 100%;
+  text-align: right;
+  margin-top: 30px;
+  height: 32px;
+}
+.lego-pagination span {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0 6px;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  font-family: Arial;
+  margin-left: 8px;
+  border: 1px solid #d9d9d9;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.lego-pagination span:hover,
+.lego-pagination .cur {
+  border-color: #1890ff;
+  color: #1890ff;
 }

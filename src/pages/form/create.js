@@ -105,7 +105,7 @@ export default () => {
       <div className="lego-card">
         <div style={{ display: step !== 1 && 'none' }} ref={configRef} />
         {step === 2 && (
-          <div className="form-preview">
+          <div className="form-view">
             <div ref={previewRef} />
             <div className={'schema-box' + (schemaShow ? ' schema-show' : '')}>
               <div ref={schemaRef} className="schema-code">
@@ -131,7 +131,7 @@ export default () => {
               type="button"
               className="btn btn-primary btn-sm"
             >
-              预览
+              下一步
             </button>
           </div>
         )}

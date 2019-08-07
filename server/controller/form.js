@@ -13,8 +13,13 @@ const saveForm = data => {
   }
 };
 
+const getForm = id => db.prepare('SELECT * FROM forms WHERE id = ?').get(id);
+
 module.exports = ctx => {
   if (ctx.method.toUpperCase() == 'GET') {
+    resEnd(ctx, {
+      data: getForm(ctx.query.id)
+    });
   } else {
     try {
       saveForm(ctx.request.body);

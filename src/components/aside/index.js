@@ -4,7 +4,7 @@ import { SettingContext } from '../../config/context';
 
 export default () => {
   const context = useContext(SettingContext);
-  const [openIdx, setOpenIdx] = useState(0);
+  const [openIdx, setOpenIdx] = useState(null);
   const parseMenu = () => {
     try {
       return JSON.parse(context.sideMenu);
@@ -36,11 +36,35 @@ export default () => {
     >
       {list.map((item, idx) => (
         <li className="item-v2" key={idx}>
-          <Link to={item.url}>{item.name}</Link>
+          <Link to={item.url || ''}>{item.name}</Link>
         </li>
       ))}
     </ul>
   );
+
+  const FixedLink = props => {
+    const { idx } = props;
+    if (props.to) {
+      return (
+        <Link
+          className={'link' + (openIdx === idx ? ' active' : '')}
+          to={props.to}
+          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+        >
+          {props.children}
+        </Link>
+      );
+    } else {
+      return (
+        <div
+          className={'link' + (openIdx === idx ? ' active' : '')}
+          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+        >
+          {props.children}
+        </div>
+      );
+    }
+  };
 
   return (
     <aside className="frame-aside">
@@ -53,11 +77,11 @@ export default () => {
       <ul className="side-menu">
         {parseMenu().map((v1, idx) => (
           <li className="item-v1" key={idx}>
-            <Link to={v1.url} onClick={() => setOpenIdx(idx)}>
+            <FixedLink idx={idx} to={v1.url}>
               <i className={'icon fas fa-' + (v1.icon || icons[idx])} />
               <span>{v1.name}</span>
               <i className="arr fas fa-chevron-down" />
-            </Link>
+            </FixedLink>
             {v1.sub && renderSub(v1.sub, idx)}
           </li>
         ))}

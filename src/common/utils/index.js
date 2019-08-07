@@ -31,10 +31,33 @@ export const kv = key => {
   }
 };
 
+export const parseUrl = url => {
+  const map = {};
+  if (!url) {
+    url = window.location.search;
+  }
+  if (url.length < 2) {
+    return null;
+  }
+  url
+    .replace(/^\?/, '')
+    .split('&')
+    .forEach(kv => {
+      const arr = kv.split('=');
+      map[arr[0]] = arr[1];
+    });
+
+  return map;
+};
+
 export const axios = (method = 'GET', api, params = {}) => {
   method = method.toUpperCase() === 'GET' ? 'get' : 'post';
   if (method === 'post') {
     params = qs.stringify(params);
+  } else {
+    params = {
+      params: params
+    };
   }
   return new Promise((resolve, reject) => {
     _axios[method](api, params)

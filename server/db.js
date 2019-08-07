@@ -20,7 +20,8 @@ const createFormTable = () => {
     name TEXT,
     api TEXT,
     origin TEXT,
-    schema TEXT
+    schema TEXT,
+    state INTEGER DEFAULT 1
   )`;
 
   return db.prepare(sql).run();

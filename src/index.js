@@ -6,6 +6,8 @@ import Aside from './components/aside';
 import Nav from './components/nav';
 import Setting from './pages/setting';
 import FormCreate from './pages/form/create';
+import FormList from './pages/form/list';
+import FormUse from './pages/form/use';
 import { SettingContext } from './config/context';
 import { axios } from './common/utils';
 import { SETTING } from './common/apis';
@@ -39,6 +41,8 @@ const App = () => {
               render={() => <Setting updateSetting={setSetting} />}
             />
             <Route path="/htm/form/create" component={FormCreate} />
+            <Route path="/htm/form/list" component={FormList} />
+            <Route path="/htm/form/use/:id" component={FormUse} />
           </section>
         </div>
       </Router>
