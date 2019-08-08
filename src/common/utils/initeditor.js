@@ -122,6 +122,7 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.plugins.sceditor.plugins = 'dragdrop';
     JSONEditor.plugins.sceditor.emoticonsEnabled = false;
     JSONEditor.plugins.sceditor.icons = 'monocons';
+    JSONEditor.plugins.sceditor.height = 400;
 
     // 富文本编辑器默认工具栏
     JSONEditor.plugins.sceditor.toolbar = [
