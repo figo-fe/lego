@@ -11,7 +11,7 @@ import FormEdit from './pages/form/edit';
 import FormUse from './pages/form/use';
 import { SettingContext } from './config/context';
 import { axios } from './common/utils';
-import { SETTING } from './common/apis';
+import { SETTING } from './config/apis';
 
 import './common/bootstrap.css';
 import './common/base.css';

@@ -1,23 +1,35 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Wrap from '../../components/wrap';
 import { axios, toast, parseUrl, initEditor } from '../../common/utils';
-import { FORM } from '../../common/apis';
+import { FORM } from '../../config/apis';
 
 export default props => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ loading: true });
 
-  const formView = useCallback(
+  const formRef = useCallback(
     node => {
       const id = props.match.params.id;
       if (node) {
         axios('GET', FORM, { id }).then(res => {
-          const { api, origin, schema } = res.data;
-          setState({ api, origin, loading: false });
-          formView.current = initEditor(node, JSON.parse(schema));
+          let { api, origin, schema, state } = res.data;
+          if (state === 0) {
+            toast('表单已失效');
+            schema = JSON.stringify({
+              title: '无效表单',
+              properties: {},
+              options: {
+                disable_collapse: true
+              }
+            });
+          } else {
+            setState({ api, origin, loading: false });
+          }
+
+          formRef.current = initEditor(node, JSON.parse(schema));
         });
       } else {
         setState(s => Object.assign({}, s, { loading: true }));
-        formView.current.destroy();
+        formRef.current.destroy();
       }
     },
     [props.match.params.id]
@@ -26,7 +38,7 @@ export default props => {
   useEffect(() => {
     const params = parseUrl();
     // do = edit且配置数据源时进入编辑模式
-    if (params && state.origin) {
+    if (params && params.do === 'edit' && state.origin) {
       const originUrl = state.origin.replace(/=\{\{[^}]+\}\}/g, str => {
         const key = str.slice(3, -2);
         return `=${params[key] || ''}`;
@@ -36,7 +48,7 @@ export default props => {
         .then(res => {
           if (res.code === 0) {
             try {
-              formView.current.setValue(res.data);
+              formRef.current.setValue(res.data);
             } catch (err) {
               console.warn(err);
             }
@@ -44,10 +56,10 @@ export default props => {
         })
         .catch(err => console.warn(err));
     }
-  }, [state.origin, formView]);
+  }, [state.origin, formRef]);
 
   function doSubmit() {
-    const editor = formView.current;
+    const editor = formRef.current;
     const validates = editor.validate();
     const params = parseUrl();
 
@@ -73,6 +85,10 @@ export default props => {
     }
   }
 
+  function doConsole() {
+    console.log(formRef.current.getValue());
+  }
+
   function doBack() {
     props.history.goBack();
   }
@@ -80,7 +96,7 @@ export default props => {
   return (
     <Wrap>
       <div className="lego-card">
-        <div className="form-view" ref={formView} />
+        <div className="form-view" ref={formRef} />
         {!state.loading && (
           <div className="btns-row">
             <button
@@ -89,6 +105,13 @@ export default props => {
               className="btn btn-primary btn-sm"
             >
               提交
+            </button>
+            <button
+              onClick={doConsole}
+              type="button"
+              className="btn btn-outline-primary btn-sm"
+            >
+              console.log
             </button>
             <button
               onClick={doBack}

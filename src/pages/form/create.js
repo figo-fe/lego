@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Wrap from '../../components/wrap';
 import { initEditor, json2schema, axios, toast } from '../../common/utils';
 import { createForm } from '../../config/schema';
-import { FORM } from '../../common/apis';
+import { FORM } from '../../config/apis';
 
 export default () => {
   const [step, setStep] = useState(1);

@@ -314,6 +314,12 @@ li {
 }
 
 /* table-list */
+.table-top {
+  margin-bottom: 20px;
+}
+.table-top .btn .fas {
+  margin-right: 5px;
+}
 .table-list {
   width: 100%;
 }

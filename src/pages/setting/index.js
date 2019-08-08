@@ -3,7 +3,7 @@ import Wrap from '../../components/wrap';
 import { initEditor, axios, toast } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { setting } from '../../config/schema';
-import { SETTING } from '../../common/apis';
+import { SETTING } from '../../config/apis';
 
 export default props => {
   const configRef = useCallback(node => {

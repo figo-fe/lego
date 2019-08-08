@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import Wrap from '../../components/wrap';
 import { axios, toast, initEditor } from '../../common/utils';
-import { FORM } from '../../common/apis';
+import { FORM } from '../../config/apis';
 
 export default props => {
   const [formData, setFormData] = useState({

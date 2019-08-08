@@ -3,7 +3,7 @@ const url = require('url');
 const static = require('koa-static');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
-const { setting, form, formList } = require('./controller/index');
+const { setting, form, formDelete, formList } = require('./controller/index');
 const { API } = require('./common');
 
 const app = new Koa();
@@ -17,6 +17,10 @@ const handleApi = ctx => {
 
     case API.FORM:
       form(ctx);
+      break;
+
+    case API.FORM_DELETE:
+      formDelete(ctx);
       break;
 
     case API.FORM_LIST:

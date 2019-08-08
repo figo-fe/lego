@@ -64,7 +64,7 @@ export default props => {
           )}
         </tbody>
       </table>
-      <div className="lego-pagination">
+      {/* <div className="lego-pagination">
         <span>上一页</span>
         <span className="cur">1</span>
         <span>2</span>
@@ -72,7 +72,7 @@ export default props => {
         <span>4</span>
         <span>5</span>
         <span>下一页</span>
-      </div>
+      </div> */}
     </div>
   );
 };
