@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default () => (
   <nav className="frame-nav">
-    <i className="fas fa-outdent menu-fold" />
+    {/* <i className="fas fa-outdent menu-fold" /> */}
     <div className="nav-right">
       <div className="nav-item">
         <i className="fas fa-cog" />
