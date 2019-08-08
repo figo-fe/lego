@@ -5,7 +5,7 @@ const saveForm = data => {
   if (data.id) {
     db.prepare(
       'UPDATE forms set name = ?, api = ?, origin = ?, schema = ? where id = ?'
-    ).run(data.name, data.api, data.origin, data.schema, row.id);
+    ).run(data.name, data.api, data.origin, data.schema, data.id);
   } else {
     db.prepare(
       'INSERT INTO forms (name, api, origin, schema) VALUES (?, ?, ?, ?)'

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
 
 export default () => {
@@ -29,14 +29,32 @@ export default () => {
     'cube'
   ];
 
-  const renderSub = (list, idx) => (
+  const renderSub = (list, index) => (
     <ul
       className="sub-list"
-      style={{ height: (openIdx === idx ? list.length * 40 : 0) + 'px' }}
+      style={{ height: (openIdx === index ? list.length * 40 : 0) + 'px' }}
     >
       {list.map((item, idx) => (
         <li className="item-v2" key={idx}>
-          <Link to={item.url || ''}>{item.name}</Link>
+          <NavLink
+            activeClassName="active"
+            to={item.url || ''}
+            isActive={(match, location) => {
+              let isMatch = !!match;
+              if (!isMatch) {
+                if (item.url && location.pathname !== '/') {
+                  isMatch = item.url === location.pathname + location.search;
+                }
+              }
+              // 展开相应子菜单
+              if (isMatch && openIdx === null) {
+                setOpenIdx(index);
+              }
+              return isMatch;
+            }}
+          >
+            {item.name}
+          </NavLink>
         </li>
       ))}
     </ul>
@@ -46,13 +64,14 @@ export default () => {
     const { idx } = props;
     if (props.to) {
       return (
-        <Link
-          className={'link' + (openIdx === idx ? ' active' : '')}
+        <NavLink
+          className="link"
+          activeClassName="active"
           to={props.to}
           onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
         >
           {props.children}
-        </Link>
+        </NavLink>
       );
     } else {
       return (

@@ -53,8 +53,17 @@ export default props => {
     );
   };
   const handle = (action, item) => {
-    if (action === 'view') {
-      props.history.push(item.url);
+    switch (action) {
+      case 'view':
+        props.history.push(item.url);
+        break;
+
+      case 'edit':
+        props.history.push('/htm/form/edit/' + item.id);
+        break;
+
+      default:
+        console.log(action);
     }
   };
 

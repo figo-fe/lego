@@ -13,13 +13,13 @@ export default () => (
               <i className="fas fa-wrench" />
               <span>系统设置</span>
             </Link>
-            <Link to="/htm/form/create">
-              <i className="fas fa-plus" />
-              <span>创建表单</span>
-            </Link>
             <Link to="/htm/form/list">
-              <i className="fas fa-list" />
+              <i className="fas fa-list-alt" />
               <span>所有表单</span>
+            </Link>
+            <Link to="/htm/table/list">
+              <i className="fas fa-table" />
+              <span>所有列表</span>
             </Link>
           </div>
         </div>

@@ -142,14 +142,14 @@ export default () => {
               type="button"
               className="btn btn-success btn-sm"
             >
-              保存配置
+              保存
             </button>
             <button
               onClick={doConsole}
               type="button"
               className="btn btn-outline-primary btn-sm"
             >
-              打印(console.log)
+              console.log
             </button>
             <button
               onClick={doUpdate}
