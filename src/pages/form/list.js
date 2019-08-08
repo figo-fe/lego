@@ -74,7 +74,10 @@ export default props => {
   function deleteForm(id) {
     if (window.confirm('是否删除此表单？')) {
       axios('GET', FORM_DELETE, { id })
-        .then(res => toast('删除成功'))
+        .then(res => {
+          setList(list.filter(item => item.id !== id));
+          toast('删除成功');
+        })
         .catch(err => toast(err));
     }
   }
