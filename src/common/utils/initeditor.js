@@ -116,6 +116,43 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.defaults.options.iconlib = 'fontawesome5';
     JSONEditor.plugins.ace.theme = 'monokai';
 
+    // config sceditor
+    JSONEditor.plugins.sceditor.style =
+      process.env.PUBLIC_URL + '/sceditor/themes/content.min.css';
+    JSONEditor.plugins.sceditor.plugins = 'dragdrop';
+    JSONEditor.plugins.sceditor.emoticonsEnabled = false;
+    JSONEditor.plugins.sceditor.icons = 'monocons';
+
+    // 富文本编辑器默认工具栏
+    JSONEditor.plugins.sceditor.toolbar = [
+      'bold,italic,underline',
+      'font,size,color,removeformat',
+      'left,center,right,justify',
+      'bulletlist,orderedlist,table,code,quote',
+      'image,link,unlink',
+      'maximize,source'
+    ].join('|');
+
+    // 富文本编辑器拖动上传
+    JSONEditor.plugins.sceditor.dragdrop = {
+      allowedTypes: ['image/jpeg', 'image/png', 'image/gif'],
+      handleFile: (file, createPlaceholder) => {
+        // https://www.sceditor.com/documentation/plugins/dragdrop/
+        if (window.FileUploader) {
+          const placeholder = createPlaceholder();
+          window.FileUploader(file, {
+            success: function(url) {
+              placeholder.insert(`<img src="${url}" />`);
+            },
+            error: function(msg) {
+              placeholder.cancel();
+              alert(msg);
+            }
+          });
+        }
+      }
+    };
+
     return new JSONEditor(el, {
       disable_edit_json: true,
       disable_properties: true,
