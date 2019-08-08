@@ -17,18 +17,9 @@ const getForm = id => db.prepare('SELECT * FROM forms WHERE id = ?').get(id);
 
 module.exports = ctx => {
   if (ctx.method.toUpperCase() == 'GET') {
-    const row = getForm(ctx.query.id);
-    if (row) {
-      resEnd(ctx, {
-        data: getForm(ctx.query.id)
-      });
-    } else {
-      resEnd(ctx, {
-        code: 404,
-        data: null,
-        msg: '无效表单ID'
-      });
-    }
+    resEnd(ctx, {
+      data: getForm(ctx.query.id)
+    });
   } else {
     try {
       saveForm(ctx.request.body);

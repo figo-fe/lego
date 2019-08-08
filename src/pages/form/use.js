@@ -10,27 +10,23 @@ export default props => {
     node => {
       const id = props.match.params.id;
       if (node) {
-        axios('GET', FORM, { id })
-          .then(res => {
-            let { api, origin, schema, state = 0 } = res.data;
-            if (state === 0) {
-              toast('表单已失效');
-              schema = JSON.stringify({
-                title: '无效表单',
-                properties: {},
-                options: {
-                  disable_collapse: true
-                }
-              });
-            } else {
-              setState({ api, origin, loading: false });
-            }
+        axios('GET', FORM, { id }).then(res => {
+          let { api, origin, schema, state = 0 } = res.data;
+          if (state === 0) {
+            toast('表单已失效');
+            schema = JSON.stringify({
+              title: '无效表单',
+              properties: {},
+              options: {
+                disable_collapse: true
+              }
+            });
+          } else {
+            setState({ api, origin, loading: false });
+          }
 
-            formRef.current = initEditor(node, JSON.parse(schema));
-          })
-          .catch(err => {
-            toast(err.msg);
-          });
+          formRef.current = initEditor(node, JSON.parse(schema));
+        });
       } else {
         setState(s => Object.assign({}, s, { loading: true }));
         formRef.current.destroy();
