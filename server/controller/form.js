@@ -4,12 +4,12 @@ const { resEnd } = require('../common');
 const saveForm = data => {
   if (data.id) {
     db.prepare(
-      'UPDATE forms set name = ?, api = ?, origin = ?, schema = ? where id = ?'
-    ).run(data.name, data.api, data.origin, data.schema, data.id);
+      'UPDATE forms set name = ?, api = ?, origin = ?, schema = ?, desc = ? where id = ?'
+    ).run(data.name, data.api, data.origin, data.schema, data.desc, data.id);
   } else {
     db.prepare(
-      'INSERT INTO forms (name, api, origin, schema) VALUES (?, ?, ?, ?)'
-    ).run(data.name, data.api, data.origin, data.schema);
+      'INSERT INTO forms (name, api, origin, schema, desc) VALUES (?, ?, ?, ?, ?)'
+    ).run(data.name, data.api, data.origin, data.schema, data.desc);
   }
 };
 

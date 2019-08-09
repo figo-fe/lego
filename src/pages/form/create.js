@@ -90,6 +90,7 @@ export default () => {
       name: config.name,
       api: config.api,
       origin: config.origin,
+      desc: config.desc,
       schema: JSON.stringify(JSON.parse(schema))
     })
       .then(() => {
@@ -98,6 +99,10 @@ export default () => {
       .catch(err => {
         toast(err.msg);
       });
+  }
+
+  function toHelp() {
+    console.log(123);
   }
 
   return (
@@ -132,6 +137,13 @@ export default () => {
               className="btn btn-primary btn-sm"
             >
               下一步
+            </button>
+            <button
+              onClick={toHelp}
+              type="button"
+              className="btn btn-outline-primary btn-sm"
+            >
+              帮助
             </button>
           </div>
         )}

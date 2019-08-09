@@ -37,8 +37,9 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
     this.input = this.theme.getFormInputField('text');
     this.inputGroup = this.theme.getInputGroup(this.input, [btn]);
 
+    // 进度条
     this.progress = getProgress();
-    this.inputGroup.insertBefore(this.progress, this.input);
+    this.inputGroup.insertBefore(this.progress, btn.parentNode);
 
     this.control = this.theme.getFormControl(
       this.label,

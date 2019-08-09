@@ -22,7 +22,9 @@ const dict = {
   '(color)': '颜色',
   '(game)': '游戏',
   '(pay|buy)': '支付',
-  '(amt|amount)': '金额'
+  '(amt|amount)': '金额',
+  '(detail)': '详情',
+  '(click)': '点击'
 };
 const getTitle = key => {
   for (var rule in dict) {

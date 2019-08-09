@@ -18,13 +18,17 @@ export default props => {
         name: '表单名称'
       },
       {
+        key: 'desc',
+        name: '备注'
+      },
+      {
         key: 'url',
         name: 'URL'
       },
       {
         key: 'handles',
         name: '操作',
-        width: 200
+        width: 240
       }
     ],
     handles: [

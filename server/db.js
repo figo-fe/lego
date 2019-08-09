@@ -20,7 +20,9 @@ const createFormTable = () => {
     name TEXT,
     api TEXT,
     origin TEXT,
+    desc TEXT,
     schema TEXT,
+    ext TEXT DEFAULT '',
     state INTEGER DEFAULT 1
   )`;
 

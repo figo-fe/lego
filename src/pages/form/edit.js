@@ -8,7 +8,8 @@ export default props => {
     name: '',
     api: '',
     origin: '',
-    schema: ''
+    schema: '',
+    desc: ''
   });
   const [schemaShow, setSchemaShow] = useState(true);
 
@@ -111,7 +112,7 @@ export default props => {
           style={{ marginTop: 20, background: '#fafafa' }}
         >
           <div className="row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div className="form-group">
                 <label className="form-control-label">表单名称</label>
                 <input
@@ -123,7 +124,7 @@ export default props => {
                 />
               </div>
             </div>
-            <div className="col-md-5">
+            <div className="col-md-3">
               <div className="form-group">
                 <label className="form-control-label">提交接口</label>
                 <input
@@ -135,7 +136,7 @@ export default props => {
                 />
               </div>
             </div>
-            <div className="col-md-5">
+            <div className="col-md-3">
               <div className="form-group">
                 <label className="form-control-label">数据接口</label>
                 <input
@@ -143,6 +144,18 @@ export default props => {
                   onChange={handleChange}
                   value={formData.origin}
                   name="origin"
+                  className="form-control"
+                />
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="form-group">
+                <label className="form-control-label">备注</label>
+                <input
+                  type="text"
+                  onChange={handleChange}
+                  value={formData.desc}
+                  name="desc"
                   className="form-control"
                 />
               </div>

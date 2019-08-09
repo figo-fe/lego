@@ -27,27 +27,29 @@ export const createForm = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 2
+        grid_columns: 3
       }
     },
     api: {
       title: '提交接口',
-      description: '提交格式为 data: {JSONString}',
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 5
+        grid_columns: 3
       }
     },
     origin: {
       title: '数据接口',
-      description: '编辑页数据接口，支持自定义参数（选填）',
       type: 'string',
       options: {
-        inputAttributes: {
-          placeholder: '如 /detail/?id={{id}}&state={{state}}'
-        },
-        grid_columns: 5
+        grid_columns: 3
+      }
+    },
+    desc: {
+      title: '备注',
+      type: 'string',
+      options: {
+        grid_columns: 3
       }
     },
     json: {
