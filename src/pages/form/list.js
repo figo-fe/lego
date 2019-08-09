@@ -15,7 +15,8 @@ export default props => {
       },
       {
         key: 'name',
-        name: '表单名称'
+        name: '表单名称',
+        width: 240
       },
       {
         key: 'desc',
@@ -23,7 +24,8 @@ export default props => {
       },
       {
         key: 'url',
-        name: 'URL'
+        name: 'URL',
+        width: 300
       },
       {
         key: 'handles',
