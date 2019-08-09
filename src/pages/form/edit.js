@@ -18,8 +18,8 @@ export default props => {
       const id = props.match.params.id;
       if (node) {
         axios('GET', FORM, { id }).then(res => {
-          const { name, api, origin, schema } = res.data;
-          setFormData({ name, api, origin, schema });
+          const { name, api, origin, desc, schema } = res.data;
+          setFormData({ name, api, origin, desc, schema });
           formRef.current = initEditor(node, JSON.parse(schema));
         });
       } else {

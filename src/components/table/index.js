@@ -35,7 +35,7 @@ export default props => {
           </td>
         );
       } else {
-        return <td key={item.key}>{row[item.key]}</td>;
+        return <td key={item.key}>{row[item.key] || '--'}</td>;
       }
     });
 
