@@ -13,56 +13,59 @@ const jsonDemo = {
       name: '翻译宝',
       desc: '高清录音 语音转文字',
       color: '蓝色',
-      url: '//mall02.sogoucdn.com/image/2019/03/08/20190308130338_4522.jpg'
-    }
-  ]
+      url: '//mall02.sogoucdn.com/image/2019/03/08/20190308130338_4522.jpg',
+    },
+  ],
 };
 export const createForm = {
   title: '创建表单',
   type: 'object',
   format: 'grid',
+  options: {
+    disable_collapse: true,
+  },
   properties: {
     name: {
       title: '表单名称',
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 3
-      }
+        grid_columns: 3,
+      },
     },
     api: {
       title: '提交接口',
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 3
-      }
+        grid_columns: 3,
+      },
     },
     origin: {
-      title: '数据接口',
+      title: '数据源',
       type: 'string',
       options: {
-        grid_columns: 3
-      }
+        grid_columns: 3,
+      },
     },
     desc: {
       title: '备注',
       type: 'string',
       options: {
-        grid_columns: 3
-      }
+        grid_columns: 3,
+      },
     },
     json: {
       title: '数据示例',
-      description: '请填写数据示例，系统根据数据结构生成schema',
+      description: '请填写数据示例，系统根据数据结构自动生成schema',
       type: 'string',
       format: 'json',
-      default: JSON.stringify(jsonDemo, null, 4),
+      default: JSON.stringify(jsonDemo, null, 2),
       options: {
-        grid_columns: 12
-      }
-    }
-  }
+        grid_columns: 12,
+      },
+    },
+  },
 };
 
 // 全局配置
@@ -112,8 +115,8 @@ export const setting = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 5
-      }
+        grid_columns: 5,
+      },
     },
     baseUrl: {
       title: '接口前缀',
@@ -122,9 +125,9 @@ export const setting = {
       options: {
         grid_columns: 7,
         inputAttributes: {
-          placeholder: '如 https:/domain.com/api/ 或 /api/'
-        }
-      }
+          placeholder: '如 https:/domain.com/api/ 或 /api/',
+        },
+      },
     },
     sideMenu: {
       title: '左侧菜单配置',
@@ -132,8 +135,8 @@ export const setting = {
       format: 'json',
       default: sideMenu,
       options: {
-        grid_columns: 12
-      }
+        grid_columns: 12,
+      },
     },
     uploadFn: {
       title: '上传方法实现',
@@ -141,8 +144,8 @@ export const setting = {
       format: 'javascript',
       default: uploadFnDemo,
       options: {
-        grid_columns: 12
-      }
-    }
-  }
+        grid_columns: 12,
+      },
+    },
+  },
 };

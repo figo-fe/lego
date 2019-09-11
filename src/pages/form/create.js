@@ -1,80 +1,35 @@
-import React, { useCallback, useState } from 'react';
-import Wrap from '../../components/wrap';
-import { initEditor, json2schema, axios, toast } from '../../common/utils';
+import React, { useState, useRef } from 'react';
 import { createForm } from '../../config/schema';
+import { axios, toast, json2schema } from '../../common/utils';
+import { Wrap, Button, SchemaForm, AceCode } from '../../components';
 import { FORM } from '../../config/apis';
 
-export default () => {
+import './form.scss';
+
+export const FormCreate = props => {
   const [step, setStep] = useState(1);
-  const [schemaShow, setSchemaShow] = useState(false);
-  const [schemaCode, setSchemaCode] = useState('');
+  const [form, setForm] = useState({ schema: {}, data: {} });
+  const [extShow, setExtShow] = useState(true);
+  const configRef = useRef(null);
+  const previewRef = useRef(null);
+  const extRef = useRef(null);
 
-  const configRef = useCallback(node => {
-    configRef.current = initEditor(node, createForm, {
-      disable_collapse: true
-    });
-  }, []);
-
-  const previewRef = useCallback(
-    node => {
-      if (node) {
-        const { json, name } = configRef.current.getValue();
-        const schema = json2schema(json, name);
-        if (schema) {
-          previewRef.current = {
-            editor: initEditor(node, schema, {
-              startval: JSON.parse(json)
-            }),
-            node
-          };
-          setSchemaCode(schema);
-        }
-      } else {
-        // 销毁实例 释放内存
-        if (previewRef.current && previewRef.current.editor) {
-          previewRef.current.editor.destroy();
-          previewRef.current = null;
-        }
-      }
-    },
-    [configRef]
-  );
-
-  const schemaRef = useCallback(node => {
-    const ace = window.ace;
-    if (node) {
-      setTimeout(() => {
-        schemaRef.current = ace.edit(node, { mode: 'ace/mode/json' });
-        schemaRef.current.setTheme('ace/theme/monokai');
-      });
-    }
-  }, []);
-
+  // 预览和编辑表单
   function doNext() {
-    const _editor = configRef.current;
-    const validates = _editor.validate();
-    if (validates.length > 0) {
-      toast(
-        `表单填写有误：<br />${validates
-          .map(err => err.path + ': ' + err.message)
-          .join('<br />')}`
-      );
-    } else {
-      setStep(2);
-    }
-  }
+    const configEditor = configRef.current;
+    const validates = configEditor.validate();
 
-  function doUpdate() {
-    if (schemaRef.current && previewRef.current) {
-      const { node, editor } = previewRef.current;
-      if (editor) {
-        editor.destroy();
-        const { json } = configRef.current.getValue();
-        const schema = schemaRef.current.getValue();
-        previewRef.current.editor = initEditor(node, JSON.parse(schema), {
-          startval: JSON.parse(json)
-        });
-      }
+    if (validates.length > 0) {
+      toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
+    } else {
+      const { name, json } = configEditor.getValue();
+      const data = JSON.parse(json);
+
+      // 初始化预览表单
+      setForm({ schema: json2schema(data, name), data });
+
+      // 跳至预览页
+      setStep(2);
     }
   }
 
@@ -83,102 +38,62 @@ export default () => {
   }
 
   function doSave() {
-    const schema = schemaRef.current.getValue();
-    const config = configRef.current.getValue();
+    const schema = form.schema;
+    const { name, api, origin, desc } = configRef.current.getValue();
+    const ext = extRef.current.getValue();
 
     axios('POST', FORM, {
-      name: config.name,
-      api: config.api,
-      origin: config.origin,
-      desc: config.desc,
-      schema: JSON.stringify(JSON.parse(schema))
+      name,
+      api,
+      origin,
+      desc,
+      ext,
+      schema: JSON.stringify(schema),
     })
       .then(() => {
         toast('保存成功');
+        props.history.push('/htm/form/list');
       })
       .catch(err => {
         toast(err.msg);
       });
   }
 
-  function toHelp() {
-    console.log(123);
-  }
-
   return (
     <Wrap>
-      <div className="lego-card">
-        <div style={{ display: step !== 1 && 'none' }} ref={configRef} />
+      <div className='lego-card'>
+        <SchemaForm onReady={editor => (configRef.current = editor)} show={step === 1} schema={createForm} />
         {step === 2 && (
-          <div className="form-view">
-            <div ref={previewRef} />
-            <div className={'schema-box' + (schemaShow ? ' schema-show' : '')}>
-              <div ref={schemaRef} className="schema-code">
-                {JSON.stringify(schemaCode, null, 4)}
-              </div>
-              <div
-                className="switch-btn"
-                title="编辑schema"
-                onClick={() => setSchemaShow(!schemaShow)}
-              >
-                <i
-                  className={'fa fa-angle-' + (schemaShow ? 'right' : 'left')}
-                  aria-hidden="true"
-                />
-              </div>
+          <>
+            <SchemaForm
+              schema={form.schema}
+              startval={form.data}
+              editable={true}
+              onReady={editor => (previewRef.current = editor)}
+              onSchemaUpdate={schema => setForm(({ data }) => ({ data, schema }))}
+            />
+            <div className={'form-ext card ' + (extShow ? 'form-ext-show' : '')}>
+              <h3>
+                <label>表单扩展</label>
+                <span className='switch-ext' onClick={() => setExtShow(!extShow)}>
+                  <i className='fa fa-angle-right' />
+                </span>
+              </h3>
+              <AceCode type='javascript' onReady={ace => (extRef.current = ace)} />
             </div>
-          </div>
+          </>
         )}
-        {step === 1 && (
-          <div className="btns-row">
-            <button
-              onClick={doNext}
-              type="button"
-              className="btn btn-primary btn-sm"
-            >
-              下一步
-            </button>
-            <button
-              onClick={toHelp}
-              type="button"
-              className="btn btn-outline-primary btn-sm"
-            >
-              帮助
-            </button>
-          </div>
-        )}
-        {step === 2 && (
-          <div className="btns-row">
-            <button
-              onClick={doSave}
-              type="button"
-              className="btn btn-success btn-sm"
-            >
-              保存
-            </button>
-            <button
-              onClick={doConsole}
-              type="button"
-              className="btn btn-outline-primary btn-sm"
-            >
-              console.log
-            </button>
-            <button
-              onClick={doUpdate}
-              type="button"
-              className="btn btn-outline-primary btn-sm"
-            >
-              更新表单
-            </button>
-            <button
-              onClick={() => setStep(1)}
-              type="button"
-              className="btn btn-outline-secondary btn-sm"
-            >
-              返回
-            </button>
-          </div>
-        )}
+        <div className='btns-row'>
+          {step === 1 && [
+            <Button key='next' value='下一步' onClick={doNext} extClass='btn-primary' />,
+            <Button key='help' value='帮助' extClass='btn-outline-primary' />,
+          ]}
+          {step === 2 && [
+            <Button key='save' value='保存' onClick={doSave} extClass='btn-success' />,
+            <Button key='log' value='console.log' onClick={doConsole} extClass='btn-outline-primary' />,
+            <Button key='back' value='返回' onClick={() => setStep(1)} extClass='btn-outline-secondary' />,
+          ]}
+        </div>
       </div>
     </Wrap>
   );

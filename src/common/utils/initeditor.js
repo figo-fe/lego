@@ -6,7 +6,7 @@ const getUploadBtn = () => {
   btn.className = 'btn btn-light';
   btn.innerHTML = [
     '<input type="file" style="position:absolute;opacity:0;left:0;top:0;bottom:0;width:40px" />',
-    '<i class="fas fa-cloud-upload-alt"></i>'
+    '<i class="fas fa-cloud-upload-alt"></i>',
   ].join('');
 
   return btn;
@@ -15,7 +15,7 @@ const getProgress = () => {
   const progress = document.createElement('div');
   progress.style = [
     'transition: all .5s;position:absolute;left:0;bottom:0px;z-index:9;',
-    'height:2px;background:#007bff;border-radius:1px;width:0'
+    'height:2px;background:#007bff;border-radius:1px;width:0',
   ].join('');
   return progress;
 };
@@ -30,9 +30,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
   build: function() {
     const self = this;
     const btn = getUploadBtn();
-    this.title = this.header = this.label = this.theme.getFormInputLabel(
-      this.getTitle()
-    );
+    this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
 
     this.input = this.theme.getFormInputField('text');
     this.inputGroup = this.theme.getInputGroup(this.input, [btn]);
@@ -41,12 +39,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
     this.progress = getProgress();
     this.inputGroup.insertBefore(this.progress, btn.parentNode);
 
-    this.control = this.theme.getFormControl(
-      this.label,
-      this.inputGroup,
-      this.description,
-      this.infoButton
-    );
+    this.control = this.theme.getFormControl(this.label, this.inputGroup, this.description, this.infoButton);
     this.container.appendChild(this.control);
     this.input.value = this.value;
 
@@ -90,7 +83,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
         error: function(msg) {
           self.progress.style.width = '0';
           alert(msg);
-        }
+        },
       });
     }
   },
@@ -108,7 +101,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
   },
   sanitize: function(value) {
     return value;
-  }
+  },
 });
 
 export default (el, schema = {}, opts = {}) => {
@@ -118,8 +111,7 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.plugins.ace.theme = 'monokai';
 
     // config sceditor
-    JSONEditor.plugins.sceditor.style =
-      process.env.PUBLIC_URL + '/sceditor/themes/content.min.css';
+    JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/sceditor/themes/content.min.css';
     JSONEditor.plugins.sceditor.plugins = 'dragdrop';
     JSONEditor.plugins.sceditor.emoticonsEnabled = false;
     JSONEditor.plugins.sceditor.icons = 'monocons';
@@ -132,7 +124,7 @@ export default (el, schema = {}, opts = {}) => {
       'left,center,right,justify',
       'bulletlist,orderedlist,table,code,quote',
       'image,link,unlink',
-      'maximize,source'
+      'maximize,source',
     ].join('|');
 
     // 富文本编辑器拖动上传
@@ -146,20 +138,23 @@ export default (el, schema = {}, opts = {}) => {
             success: function(url) {
               placeholder.insert(`<img src="${url}" />`);
             },
+            progress: function(percent) {
+              console.log(percent);
+            },
             error: function(msg) {
               placeholder.cancel();
               alert(msg);
-            }
+            },
           });
         }
-      }
+      },
     };
 
     return new JSONEditor(el, {
       disable_edit_json: true,
       disable_properties: true,
       ...opts,
-      schema
+      schema,
     });
   } else {
     return null;

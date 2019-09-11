@@ -56,7 +56,7 @@ export const axios = (method = 'GET', api, params = {}) => {
     params = qs.stringify(params);
   } else {
     params = {
-      params: params
+      params: params,
     };
   }
   return new Promise((resolve, reject) => {
@@ -73,7 +73,7 @@ export const axios = (method = 'GET', api, params = {}) => {
         reject({
           code: -1,
           msg: String(res),
-          data: null
+          data: null,
         });
       });
   });
@@ -88,4 +88,19 @@ export const toast = msg => {
   setTimeout(() => {
     document.body.removeChild(box);
   }, 3e3);
+};
+
+export const execJs = jsCode => {
+  const s = document.createElement('script');
+  const fn = 'ext_' + Date.now().toString(16);
+
+  s.innerHTML = `window.${fn} = (function () {
+    try {
+      ${jsCode}
+    } catch (err) { console.warn('ExtJs Error -', err) }
+  })()`;
+
+  document.body.appendChild(s);
+
+  return [fn, s];
 };

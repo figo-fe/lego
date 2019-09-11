@@ -99,9 +99,9 @@ const dataHandle = {
         schema.format = 'datetime-local';
         schema.options.flatpickr = {
           wrap: true,
-          showClearButton: false,
+          showClearButton: true,
           time_24hr: true,
-          allowInput: true
+          allowInput: false
         };
         break;
 

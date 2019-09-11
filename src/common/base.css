@@ -273,45 +273,6 @@ li {
   font-size: 13px;
   color: #888888;
 }
-.form-view {
-  position: relative;
-  overflow: hidden;
-}
-.form-view .schema-box {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 800px;
-  background: #f8f9fa;
-  transition: all 0.2s;
-  transform: translateX(800px);
-  z-index: 10;
-}
-.form-view .schema-show {
-  transform: translateX(0);
-}
-.form-view .schema-box .switch-btn {
-  position: absolute;
-  left: -30px;
-  top: 0;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  font-size: 20px;
-  width: 30px;
-  background: #e2e6ea;
-  border-radius: 4px 0 0 4px;
-  color: #007bff;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.form-view .schema-box .switch-btn:hover {
-  color: #0069d9;
-}
-.form-view .schema-code {
-  height: 100%;
-}
 
 /* table-list */
 .table-top {
