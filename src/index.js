@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Aside from './components/aside';
-import Nav from './components/nav';
-import Setting from './pages/setting';
+import { Nav, Aside } from './components';
+import { Setting } from './pages/setting';
 import { FormCreate } from './pages/form/create';
-import FormList from './pages/form/list';
-import FormEdit from './pages/form/edit';
-import FormUse from './pages/form/use';
+import { FormList } from './pages/form/list';
+import { FormEdit } from './pages/form/edit';
+import { FormUse } from './pages/form/use';
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';

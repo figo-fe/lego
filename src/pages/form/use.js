@@ -3,7 +3,7 @@ import { Wrap, Button, SchemaForm } from '../../components';
 import { axios, toast, parseUrl, execJs } from '../../common/utils';
 import { FORM } from '../../config/apis';
 
-export default props => {
+export const FormUse = props => {
   const [state, setState] = useState({
     api: '',
     origin: '',

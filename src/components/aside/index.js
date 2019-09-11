@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
 
-export default () => {
+export const Aside = () => {
   const context = useContext(SettingContext);
   const [openIdx, setOpenIdx] = useState(null);
   const parseMenu = () => {
@@ -26,18 +26,15 @@ export default () => {
     'parachute-box',
     'microsoft',
     'paper-plane',
-    'cube'
+    'cube',
   ];
 
   const renderSub = (list, index) => (
-    <ul
-      className="sub-list"
-      style={{ height: (openIdx === index ? list.length * 40 : 0) + 'px' }}
-    >
+    <ul className='sub-list' style={{ height: (openIdx === index ? list.length * 40 : 0) + 'px' }}>
       {list.map((item, idx) => (
-        <li className="item-v2" key={idx}>
+        <li className='item-v2' key={idx}>
           <NavLink
-            activeClassName="active"
+            activeClassName='active'
             to={item.url || ''}
             isActive={(match, location) => {
               let isMatch = !!match;
@@ -51,8 +48,7 @@ export default () => {
                 setOpenIdx(index);
               }
               return isMatch;
-            }}
-          >
+            }}>
             {item.name}
           </NavLink>
         </li>
@@ -65,11 +61,10 @@ export default () => {
     if (props.to) {
       return (
         <NavLink
-          className="link"
-          activeClassName="active"
+          className='link'
+          activeClassName='active'
           to={props.to}
-          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-        >
+          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}>
           {props.children}
         </NavLink>
       );
@@ -77,8 +72,7 @@ export default () => {
       return (
         <div
           className={'link' + (openIdx === idx ? ' active' : '')}
-          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-        >
+          onClick={() => setOpenIdx(openIdx === idx ? null : idx)}>
           {props.children}
         </div>
       );
@@ -86,20 +80,20 @@ export default () => {
   };
 
   return (
-    <aside className="frame-aside">
+    <aside className='frame-aside'>
       <h1 className={!!context.name ? 'name-show' : ''}>
-        <Link to="/">
-          <i className="fas fa-cubes" />
+        <Link to='/'>
+          <i className='fas fa-cubes' />
           <span>{context.name || ''}</span>
         </Link>
       </h1>
-      <ul className="side-menu">
+      <ul className='side-menu'>
         {parseMenu().map((v1, idx) => (
-          <li className="item-v1" key={idx}>
+          <li className='item-v1' key={idx}>
             <FixedLink idx={idx} to={v1.url}>
               <i className={'icon fas fa-' + (v1.icon || icons[idx])} />
               <span>{v1.name}</span>
-              <i className="arr fas fa-chevron-down" />
+              <i className='arr fas fa-chevron-down' />
             </FixedLink>
             {v1.sub && renderSub(v1.sub, idx)}
           </li>

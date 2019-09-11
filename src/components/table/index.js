@@ -1,16 +1,9 @@
 import React from 'react';
 import { toast } from '../../common/utils';
 
-const icons = [
-  'file-alt',
-  'podcast',
-  'paper-plane',
-  'database',
-  'columns',
-  'cube'
-];
+const icons = ['file-alt', 'podcast', 'paper-plane', 'database', 'columns', 'cube'];
 
-export default props => {
+export const Table = props => {
   const renderTds = row =>
     props.th.map(item => {
       if (item.key === 'handles') {
@@ -19,15 +12,14 @@ export default props => {
             {row.handles.map((handle, idx) => (
               <span
                 key={idx}
-                className="handle"
+                className='handle'
                 onClick={() => {
                   if (typeof props.handle === 'function') {
                     props.handle(handle.action, row);
                   } else {
                     toast('无法处理，请检查配置');
                   }
-                }}
-              >
+                }}>
                 <i className={'fas fa-' + (handle.icon || icons[idx])} />
                 <em>{handle.name || handle.key}</em>
               </span>
@@ -41,20 +33,17 @@ export default props => {
 
   return (
     <div>
-      <table className="table-list">
-        <thead className="table-thead">
+      <table className='table-list'>
+        <thead className='table-thead'>
           <tr>
             {props.th.map(item => (
-              <th
-                key={item.key}
-                style={{ width: item.width ? item.width + 'px' : undefined }}
-              >
+              <th key={item.key} style={{ width: item.width ? item.width + 'px' : undefined }}>
                 {item.name}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="table-tbody">
+        <tbody className='table-tbody'>
           {props.list.length === 0 ? (
             <tr>
               <td colSpan={props.th.length}>暂无数据</td>

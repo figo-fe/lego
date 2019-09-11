@@ -91,6 +91,7 @@ export const FormCreate = props => {
           {step === 2 && [
             <Button key='save' value='保存' onClick={doSave} extClass='btn-success' />,
             <Button key='log' value='console.log' onClick={doConsole} extClass='btn-outline-primary' />,
+            <Button key='help' value='帮助' extClass='btn-outline-primary' />,
             <Button key='back' value='返回' onClick={() => setStep(1)} extClass='btn-outline-secondary' />,
           ]}
         </div>

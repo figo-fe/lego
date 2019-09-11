@@ -1,61 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import Wrap from '../../components/wrap';
-import Table from '../../components/table';
+import { Wrap, Table } from '../../components';
 import { FORM_LIST, FORM_DELETE } from '../../config/apis';
 import { axios, toast } from '../../common/utils';
 
-export default props => {
+export const FormList = props => {
   const [list, setList] = useState([]);
   const config = {
     th: [
       {
         key: 'id',
         name: 'ID',
-        width: 80
+        width: 80,
       },
       {
         key: 'name',
         name: '表单名称',
-        width: 240
+        width: 240,
       },
       {
         key: 'desc',
-        name: '备注'
+        name: '备注',
       },
       {
         key: 'url',
         name: 'URL',
-        width: 300
+        width: 300,
       },
       {
         key: 'handles',
         name: '操作',
-        width: 240
-      }
+        width: 240,
+      },
     ],
     handles: [
       {
         name: '预览',
         action: 'view',
-        icon: 'eye'
+        icon: 'eye',
       },
       {
         name: '编辑',
         action: 'edit',
-        icon: 'edit'
+        icon: 'edit',
       },
       {
         name: '删除',
         action: 'delete',
-        icon: 'trash-alt'
-      }
-    ]
+        icon: 'trash-alt',
+      },
+    ],
   };
   const mergeList = (config, list) => {
     return list.map(item =>
       Object.assign({}, item, {
-        handles: config.handles
-      })
+        handles: config.handles,
+      }),
     );
   };
   const handle = (action, item) => {
@@ -91,23 +90,20 @@ export default props => {
   useEffect(() => {
     axios('GET', FORM_LIST).then(res => {
       if (res.data && res.data.length > 0) {
-        setList(
-          res.data.map(item => ({ ...item, url: `/htm/form/use/${item.id}` }))
-        );
+        setList(res.data.map(item => ({ ...item, url: `/htm/form/use/${item.id}` })));
       }
     });
   }, []);
 
   return (
     <Wrap>
-      <div className="lego-card">
-        <div className="table-top">
+      <div className='lego-card'>
+        <div className='table-top'>
           <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={() => props.history.push('/htm/form/create')}
-          >
-            <i className="fas fa-plus" />
+            type='button'
+            className='btn btn-primary btn-sm'
+            onClick={() => props.history.push('/htm/form/create')}>
+            <i className='fas fa-plus' />
             <span>创建表单</span>
           </button>
         </div>

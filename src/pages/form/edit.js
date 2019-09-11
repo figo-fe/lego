@@ -3,7 +3,7 @@ import { Wrap, SchemaForm, AceCode, Button } from '../../components';
 import { axios, toast } from '../../common/utils';
 import { FORM } from '../../config/apis';
 
-export default props => {
+export const FormEdit = props => {
   const [formData, setFormData] = useState({
     name: '',
     api: '',
