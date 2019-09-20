@@ -8,6 +8,8 @@ import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
 import { FormUse } from './pages/form/use';
+import { TableEdit } from './pages/table';
+import { TableList } from './pages/table/list';
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
@@ -16,12 +18,7 @@ import './common/bootstrap.css';
 import './common/base.css';
 
 const App = () => {
-  const [setting, setSetting] = useState({
-    name: '',
-    baseUrl: '',
-    sideMenu: '',
-    uploadFn: '',
-  });
+  const [setting, setSetting] = useState({});
 
   useEffect(() => {
     axios('GET', SETTING)
@@ -65,6 +62,9 @@ const App = () => {
             <Route path='/htm/form/list' component={FormList} />
             <Route path='/htm/form/edit/:id' component={FormEdit} />
             <Route path='/htm/form/use/:id' component={FormUse} />
+            <Route path='/htm/table/create' component={TableEdit} />
+            <Route path='/htm/table/edit/:id' component={TableEdit} />
+            <Route path='/htm/table/list' component={TableList} />
           </div>
         </Router>
       </section>

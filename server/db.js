@@ -2,7 +2,7 @@ const Database = require('better-sqlite3');
 
 const db = new Database('./db/lego.db', { verbose: console.log });
 
-const createSettingTable = () => {
+const createSetting = () => {
   const sql = `CREATE TABLE IF NOT EXISTS setting (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -14,7 +14,7 @@ const createSettingTable = () => {
   return db.prepare(sql).run();
 };
 
-const createFormTable = () => {
+const createForm = () => {
   const sql = `CREATE TABLE IF NOT EXISTS forms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
@@ -29,8 +29,22 @@ const createFormTable = () => {
   return db.prepare(sql).run();
 };
 
+const createTable = () => {
+  const sql = `CREATE TABLE IF NOT EXISTS tables (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    desc TEXT,
+    config TEXT,
+    ext TEXT DEFAULT '',
+    state INTEGER DEFAULT 1
+  )`;
+
+  return db.prepare(sql).run();
+};
+
 // 创建表单
-console.log(createSettingTable());
-console.log(createFormTable());
+console.log(createSetting());
+console.log(createForm());
+console.log(createTable());
 
 module.exports = db;

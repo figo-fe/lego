@@ -104,3 +104,30 @@ export const execJs = jsCode => {
 
   return [fn, s];
 };
+
+// 构建带有模板变量的URL
+export const buildUrl = (url, params) => {
+  if (!params) {
+    params = parseUrl();
+  }
+  return url.replace(/\{\{[^}]+\}\}/g, find => {
+    const key = find.slice(2, -2);
+    return `${params[key] || ''}`;
+  });
+};
+
+// 根据path查找object中的值
+export const findByPath = (object, path) => {
+  let obj = Object.assign({}, object);
+  let props = path.split('.');
+
+  for (let i = 0; i < props.length; i++) {
+    let p = props[i];
+    if (obj && obj.hasOwnProperty(p)) {
+      obj = obj[p];
+    } else {
+      return undefined;
+    }
+  }
+  return obj;
+};

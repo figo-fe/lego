@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Wrap, Button, SchemaForm } from '../../components';
-import { axios, toast, parseUrl, execJs } from '../../common/utils';
+import { axios, toast, parseUrl, execJs, buildUrl } from '../../common/utils';
 import { FORM } from '../../config/apis';
 
 export const FormUse = props => {
@@ -20,12 +20,9 @@ export const FormUse = props => {
       let { api, origin, schema, ext, state = 0 } = res.data;
       if (state === 0) {
         toast('表单已失效');
-        schema = JSON.stringify({
-          title: '无效表单',
-          properties: {},
-          options: {
-            disable_collapse: true,
-          },
+        setState({
+          schema: '{"title":"无效表单","properties":{},"options":{"disable_collapse":true}}',
+          loading: false,
         });
       } else {
         setState({ api, origin, schema, loading: false });
@@ -51,10 +48,7 @@ export const FormUse = props => {
     const params = parseUrl();
     // do = edit且配置数据源时进入编辑模式
     if (params && params.do === 'edit' && state.origin) {
-      const originUrl = state.origin.replace(/=\{\{[^}]+\}\}/g, str => {
-        const key = str.slice(3, -2);
-        return `=${params[key] || ''}`;
-      });
+      const originUrl = buildUrl(state.origin, params);
 
       axios('GET', originUrl)
         .then(res => {
@@ -102,10 +96,6 @@ export const FormUse = props => {
     console.log(formRef.current.getValue());
   }
 
-  function doBack() {
-    props.history.goBack();
-  }
-
   return (
     <Wrap>
       <div className='lego-card'>
@@ -120,7 +110,7 @@ export const FormUse = props => {
             <div className='btns-row'>
               <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
               <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />
-              <Button onClick={doBack} value='返回' extClass='btn-outline-secondary' />
+              <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
             </div>
           </>
         )}

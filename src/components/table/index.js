@@ -1,67 +1,96 @@
-import React from 'react';
-import { toast } from '../../common/utils';
+import React, { useState, useEffect, useContext } from 'react';
+import { SettingContext } from '../../config/context';
+import { axios, toast, buildUrl, findByPath } from '../../common/utils';
+import './index.scss';
 
 const icons = ['file-alt', 'podcast', 'paper-plane', 'database', 'columns', 'cube'];
 
 export const Table = props => {
-  const renderTds = row =>
-    props.th.map(item => {
-      if (item.key === 'handles') {
-        return (
-          <td key={item.key}>
-            {row.handles.map((handle, idx) => (
-              <span
-                key={idx}
-                className='handle'
-                onClick={() => {
-                  if (typeof props.handle === 'function') {
-                    props.handle(handle.action, row);
-                  } else {
-                    toast('无法处理，请检查配置');
-                  }
-                }}>
-                <i className={'fas fa-' + (handle.icon || icons[idx])} />
-                <em>{handle.name || handle.key}</em>
-              </span>
-            ))}
-          </td>
-        );
-      } else {
-        return <td key={item.key}>{row[item.key] || '--'}</td>;
+  const { config } = props;
+  const checked = config && config.base && config.cols;
+  const context = useContext(SettingContext);
+  const [tableList, setTableList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (checked && context.baseUrl !== void 0) {
+      axios('GET', buildUrl(context.baseUrl + config.base.api))
+        .then(res => {
+          setLoading(false);
+          setTableList(findByPath(res, config.base.path));
+        })
+        .catch(err => {
+          toast('加载失败');
+          console.log(err);
+        });
+    }
+  }, [checked, context.baseUrl, config.base]);
+
+  if (!checked) return <div>data or config error...</div>;
+
+  const { cols = [], handles = [] } = config;
+  const hasHandle = handles.length > 0;
+
+  function onClickHandle(row, handle) {
+    if (handle.action === 'open') {
+      window.open(buildUrl(handle.url, row));
+    } else {
+      if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
+        axios('POST', buildUrl(context.baseUrl + handle.url, row))
+          .then(res => {
+            toast(`${handle.name}成功`);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2e3);
+            console.log(res);
+          })
+          .catch(err => {
+            toast(`${handle.name}失败\n${String(err)}`);
+            console.warn(err);
+          });
       }
-    });
+    }
+  }
 
   return (
     <div>
       <table className='table-list'>
         <thead className='table-thead'>
           <tr>
-            {props.th.map(item => (
-              <th key={item.key} style={{ width: item.width ? item.width + 'px' : undefined }}>
-                {item.name}
+            {cols.map(col => (
+              <th key={col.key} width={col.width ? col.width : undefined}>
+                {col.name}
               </th>
             ))}
+            {hasHandle && <th width={handles.length * 80}>操作</th>}
           </tr>
         </thead>
         <tbody className='table-tbody'>
-          {props.list.length === 0 ? (
+          {tableList.length === 0 ? (
             <tr>
-              <td colSpan={props.th.length}>暂无数据</td>
+              <td colSpan={cols.length + (hasHandle ? 1 : 0)}>{loading ? '加载中...' : '暂无数据'}</td>
             </tr>
           ) : (
-            props.list.map((row, idx) => <tr key={idx}>{renderTds(row)}</tr>)
+            tableList.map((row, idx) => (
+              <tr key={idx}>
+                {cols.map(item => (
+                  <td key={item.key}>{row[item.key] || '--'}</td>
+                ))}
+                {hasHandle && (
+                  <td>
+                    {handles.map((handle, i) => (
+                      <span onClick={() => onClickHandle(row, handle)} key={i} className='handle'>
+                        <i className={'fas fa-' + (handle.icon || icons[i])} />
+                        <em>{handle.name}</em>
+                      </span>
+                    ))}
+                  </td>
+                )}
+              </tr>
+            ))
           )}
         </tbody>
       </table>
-      {/* <div className="lego-pagination">
-        <span>上一页</span>
-        <span className="cur">1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span>
-        <span>下一页</span>
-      </div> */}
     </div>
   );
 };

@@ -49,4 +49,23 @@
   .schema-show {
     transform: translateX(0);
   }
+  .table-bordered {
+    margin-bottom: 15px;
+  }
+  .json-editor-btn-collapse {
+    width: 30px;
+  }
+  .json-editor-btn-collapse:focus {
+    box-shadow: none;
+  }
+  .checkbox {
+    margin-right: 12px !important;
+    label {
+      margin: 0;
+    }
+    input {
+      float: none !important;
+      margin-left: 3px;
+    }
+  }
 }
