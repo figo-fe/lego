@@ -10,6 +10,7 @@ import { FormEdit } from './pages/form/edit';
 import { FormUse } from './pages/form/use';
 import { TableEdit } from './pages/table';
 import { TableList } from './pages/table/list';
+import { TableUse } from './pages/table/use';
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
@@ -65,6 +66,7 @@ const App = () => {
             <Route path='/htm/table/create' component={TableEdit} />
             <Route path='/htm/table/edit/:id' component={TableEdit} />
             <Route path='/htm/table/list' component={TableList} />
+            <Route path='/htm/table/use/:id' component={TableUse} />
           </div>
         </Router>
       </section>

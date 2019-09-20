@@ -44,8 +44,10 @@ export const TableEdit = props => {
       const id = props.match.params.id;
       axios('GET', TABLE, { id }).then(res => {
         const { config, ext } = res.data;
-        if (config && ext) {
+        if (config) {
           formRef.current.setValue(JSON.parse(config));
+        }
+        if (ext) {
           extRef.current.setValue(ext);
         }
       });

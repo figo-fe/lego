@@ -14,7 +14,8 @@ export const Table = props => {
 
   useEffect(() => {
     if (checked && context.baseUrl !== void 0) {
-      axios('GET', buildUrl(context.baseUrl + config.base.api))
+      const prefix = config.base.api.indexOf('http') === 0 ? '' : context.baseUrl;
+      axios('GET', buildUrl(prefix + config.base.api))
         .then(res => {
           setLoading(false);
           setTableList(findByPath(res, config.base.path));
@@ -36,7 +37,8 @@ export const Table = props => {
       window.open(buildUrl(handle.url, row));
     } else {
       if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
-        axios('POST', buildUrl(context.baseUrl + handle.url, row))
+        const prefix = handle.url.indexOf('http') === 0 ? '' : context.baseUrl;
+        axios('POST', buildUrl(prefix + handle.url, row))
           .then(res => {
             toast(`${handle.name}成功`);
             setTimeout(() => {
