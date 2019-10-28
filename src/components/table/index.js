@@ -29,9 +29,11 @@ export const Table = props => {
           setTableList(findByPath(res, config.base.path) || []);
 
           // 分页数据
-          if (res.data.page) {
-            setPage(res.data.page);
-          }
+          const pageFix = window.__pageFix__ || function() {};
+          setPage(pageFix(res.data) || res.data.page);
+
+          // 滚动置顶
+          document.querySelector('.main-content').scrollTop = 0;
         })
         .catch(err => {
           toast('加载失败');
@@ -139,7 +141,7 @@ export const Table = props => {
                   if (typeof window.__colFix__ === 'function') {
                     content = window.__colFix__(item.key, content) || content;
                   }
-                  return <td key={item.key}>{content}</td>;
+                  return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}
                 {hasHandle && (
                   <td>
