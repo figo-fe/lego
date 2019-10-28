@@ -23,8 +23,6 @@ export const Table = props => {
   useEffect(() => {
     if (checked && context.baseUrl !== void 0) {
       const prefix = config.base.api.indexOf('http') === 0 ? '' : context.baseUrl;
-      setLoading(true);
-      setTableList([]);
       axios('GET', buildUrl(prefix + config.base.api, { sort, ...search, pageNo }))
         .then(res => {
           setLoading(false);
@@ -158,7 +156,7 @@ export const Table = props => {
           )}
         </tbody>
       </table>
-      {page && (
+      {page && page.total > page.pageSize && (
         <div className='pages'>
           <Pagination
             onChange={pn => setPageNo(pn)}
