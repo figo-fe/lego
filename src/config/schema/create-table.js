@@ -70,7 +70,7 @@ export const createTable = {
             uniqueItems: true,
             items: {
               type: 'string',
-              enum: ['filter', 'order'],
+              enum: ['search', 'sort'],
               options: {
                 enum_titles: ['搜索', '排序'],
               },

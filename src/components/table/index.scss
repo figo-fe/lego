@@ -10,3 +10,21 @@
     float: right;
   }
 }
+.table-th {
+  span,
+  em {
+    vertical-align: middle;
+  }
+  em {
+    padding: 0 5px;
+    cursor: pointer;
+  }
+}
+.search-row {
+  margin-bottom: 20px;
+  .form-control {
+    float: left;
+    width: 180px;
+    margin-right: 10px;
+  }
+}

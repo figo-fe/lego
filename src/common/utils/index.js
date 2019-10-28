@@ -107,12 +107,13 @@ export const execJs = jsCode => {
 
 // 构建带有模板变量的URL
 export const buildUrl = (url, params) => {
-  if (!params) {
-    params = parseUrl();
+  let data = parseUrl() || {};
+  if (params) {
+    data = Object.assign(data, params);
   }
   return url.replace(/\{\{[^}]+\}\}/g, find => {
     const key = find.slice(2, -2);
-    return `${params[key] || ''}`;
+    return `${data[key] || ''}`;
   });
 };
 
