@@ -3,7 +3,7 @@ import { Wrap, Table } from '../../components';
 
 export const FormList = props => {
   const config = {
-    base: { name: '所有表单', api: '/form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '表单管理', api: '/form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '80', fn: [] },
       { key: 'name', name: '表单名称', width: '240', fn: ['search'] },

@@ -2,9 +2,12 @@ const db = require('../db');
 const { resEnd } = require('../common');
 const ps = 20; // pageSize
 
-const getList = pn => {
+const getList = (name, pn) => {
   const list = db
-    .prepare(`SELECT id, name, desc FROM forms WHERE state = 1 ORDER BY id DESC LIMIT ${ps} OFFSET ${ps * (pn - 1)}`)
+    .prepare(
+      `SELECT id, name, desc FROM forms WHERE state = 1 AND name LIKE '%${name}%' ORDER BY id DESC LIMIT ${ps} OFFSET ${ps *
+        (pn - 1)}`,
+    )
     .all();
   return list;
 };
@@ -14,10 +17,10 @@ const getTotal = () => {
 };
 
 module.exports = ctx => {
-  const { pn = 1 } = ctx.query;
+  const { name = '', pn = 1 } = ctx.query;
   resEnd(ctx, {
     data: {
-      list: getList(pn),
+      list: getList(name, pn),
       page: {
         pageSize: ps,
         pageNo: pn,

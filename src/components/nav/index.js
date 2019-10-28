@@ -15,11 +15,11 @@ export const Nav = () => (
             </Link>
             <Link to='/htm/form/list'>
               <i className='fas fa-list-alt' />
-              <span>所有表单</span>
+              <span>表单管理</span>
             </Link>
             <Link to='/htm/table/list'>
               <i className='fas fa-table' />
-              <span>所有列表</span>
+              <span>列表管理</span>
             </Link>
           </div>
         </div>

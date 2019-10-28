@@ -44,11 +44,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
             <div className='switch-btn' title='编辑schema' onClick={() => setSchemaShow(!schemaShow)}>
               <i className={'fa fa-angle-' + (schemaShow ? 'right' : 'left')} />
             </div>
-            <AceCode
-              type='json'
-              code={JSON.stringify(schema, null, 2)}
-              onReady={ace => (aceEditor.current = ace)}
-            />
+            <AceCode type='json' code={JSON.stringify(schema, null, 2)} onReady={ace => (aceEditor.current = ace)} />
           </div>
         )}
       </div>

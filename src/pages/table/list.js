@@ -3,7 +3,7 @@ import { Wrap, Table } from '../../components';
 
 export const TableList = props => {
   const config = {
-    base: { name: '所有列表', api: '/table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '列表管理', api: '/table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '100', fn: [] },
       { key: 'name', name: '名称', width: '300', fn: ['search'] },
