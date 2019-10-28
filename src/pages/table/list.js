@@ -3,11 +3,11 @@ import { Wrap, Table } from '../../components';
 
 export const TableList = props => {
   const config = {
-    base: { name: '所有列表', api: '/table/list', path: 'data' },
+    base: { name: '所有列表', api: '/table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
-      { key: 'id', name: 'ID', width: '100', fn: ['filter', 'order'] },
-      { key: 'name', name: '名称', width: '300', fn: ['order'] },
-      { key: 'desc', name: '描述', width: '', fn: ['order'] },
+      { key: 'id', name: 'ID', width: '100', fn: [] },
+      { key: 'name', name: '名称', width: '300', fn: ['search'] },
+      { key: 'desc', name: '描述', width: '', fn: [] },
     ],
     handles: [
       { key: 'preview', name: '预览', icon: 'eye', url: '/htm/table/use/{{id}}', action: 'open' },

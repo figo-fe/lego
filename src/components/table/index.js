@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
 import { axios, toast, buildUrl, findByPath } from '../../common/utils';
+
+import 'rc-pagination/assets/index.css';
 import './index.scss';
 
 const icons = ['file-alt', 'podcast', 'paper-plane', 'database', 'columns', 'cube'];
@@ -13,6 +16,8 @@ export const Table = props => {
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState(''); // key-ase, key-desc
   const [search, setSearch] = useState({});
+  const [page, setPage] = useState(null);
+  const [pageNo, setPageNo] = useState(1);
 
   // 初始化数据
   useEffect(() => {
@@ -20,17 +25,22 @@ export const Table = props => {
       const prefix = config.base.api.indexOf('http') === 0 ? '' : context.baseUrl;
       setLoading(true);
       setTableList([]);
-      axios('GET', buildUrl(prefix + config.base.api, { sort, ...search }))
+      axios('GET', buildUrl(prefix + config.base.api, { sort, ...search, pageNo }))
         .then(res => {
           setLoading(false);
-          setTableList(findByPath(res, config.base.path));
+          setTableList(findByPath(res, config.base.path) || []);
+
+          // 分页数据
+          if (res.data.page) {
+            setPage(res.data.page);
+          }
         })
         .catch(err => {
           toast('加载失败');
           console.log(err);
         });
     }
-  }, [checked, context.baseUrl, config.base, sort, search]);
+  }, [checked, context.baseUrl, config.base, sort, search, pageNo]);
 
   if (!checked) return <div>data or config error...</div>;
 
@@ -65,7 +75,12 @@ export const Table = props => {
       {searchBox.length > 0 && (
         <div className='search-row clearfix'>
           {searchBox.map(item => (
-            <input name={`search_${item.key}`} className='form-control' placeholder={`输入${item.name}`} />
+            <input
+              key={item.key}
+              name={`search_${item.key}`}
+              className='form-control'
+              placeholder={`输入${item.name}`}
+            />
           ))}
           <button
             onClick={() => {
@@ -75,7 +90,7 @@ export const Table = props => {
               });
               setSearch(query);
             }}
-            className='btn btn-sm btn-primary'>
+            className='btn btn-sm btn-success'>
             搜索
           </button>
         </div>
@@ -143,6 +158,17 @@ export const Table = props => {
           )}
         </tbody>
       </table>
+      {page && (
+        <div className='pages'>
+          <Pagination
+            onChange={pn => setPageNo(pn)}
+            total={page.total || 0}
+            pageSize={page.pageSize || 20}
+            prevIcon={<i className='fas fa-chevron-left' />}
+            nextIcon={<i className='fas fa-chevron-right' />}
+          />
+        </div>
+      )}
     </div>
   );
 };

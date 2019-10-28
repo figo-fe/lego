@@ -28,3 +28,29 @@
     margin-right: 10px;
   }
 }
+.pages {
+  margin-top: 20px;
+  .rc-pagination-item,
+  .rc-pagination-prev,
+  .rc-pagination-next {
+    border-radius: 4px;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    line-height: 32px;
+    outline: none;
+    font-size: 13px;
+  }
+  .rc-pagination-jump-prev,
+  .rc-pagination-jump-next {
+    outline: none;
+  }
+  .rc-pagination-item:hover {
+    border-color: #007bff;
+  }
+  .rc-pagination-item-active {
+    color: #ffffff;
+    background: #007bff;
+    border-color: #007bff;
+  }
+}

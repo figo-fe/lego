@@ -3,12 +3,11 @@ import { Wrap, Table } from '../../components';
 
 export const FormList = props => {
   const config = {
-    base: { name: '所有表单', api: '/form/list', path: 'data' },
+    base: { name: '所有表单', api: '/form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
-      { key: 'id', name: 'ID', width: '80', fn: ['filter', 'order'] },
-      { key: 'name', name: '表单名称', width: '240', fn: ['order'] },
-      { key: 'desc', name: '描述', width: '', fn: ['order'] },
-      { key: 'url', name: 'URL', width: '300', fn: ['order'] },
+      { key: 'id', name: 'ID', width: '80', fn: [] },
+      { key: 'name', name: '表单名称', width: '240', fn: ['search'] },
+      { key: 'desc', name: '描述', width: '', fn: [] },
     ],
     handles: [
       { key: 'view', name: '预览', icon: 'eye', url: '/htm/form/use/{{id}}', action: 'open' },
