@@ -202,6 +202,9 @@ li {
   height: calc(100vh - 50px);
   overflow-y: auto;
 }
+.main-content-embedded {
+  height: 100vh;
+}
 /* 底部按钮容器 */
 .btns-row {
   padding: 1rem 0;
