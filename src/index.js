@@ -56,7 +56,7 @@ const App = () => {
         <Router>
           {setting.mode === 'standalone' && <Aside />}
           <div className='frame-body'>
-            <Nav />
+            <Nav mode={setting.mode} />
 
             <Route path='/htm/setting' render={() => <Setting updateSetting={setSetting} />} />
             <Route path='/htm/form/create' component={FormCreate} />

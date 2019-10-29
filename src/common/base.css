@@ -4,15 +4,13 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 li {
   list-style: none;
@@ -133,6 +131,24 @@ li {
   position: relative;
   z-index: 15;
 }
+.frame-nav-fixed {
+  position: fixed;
+  top: -50px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transition: 0.2s;
+}
+.frame-nav-fixed:after {
+  content: '\20';
+  position: absolute;
+  bottom: -10px;
+  height: 10px;
+  width: 100%;
+}
+.frame-nav-fixed:hover {
+  top: 0;
+}
 .nav-right {
   position: absolute;
   right: 1.5rem;
@@ -141,51 +157,23 @@ li {
 }
 .nav-right .nav-item {
   float: right;
-  width: 50px;
   height: 50px;
   text-align: center;
   line-height: 50px;
   cursor: pointer;
   position: relative;
 }
+.nav-right .nav-item a {
+  color: #444444;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 0 10px;
+}
+.nav-right .nav-item .fas {
+  margin-right: 5px;
+}
 .nav-right .nav-item:hover {
   background: #f8f8f8;
-}
-.nav-right .nav-item .dropdown {
-  padding: 5px;
-  position: absolute;
-  right: 0;
-  top: 50px;
-  display: none;
-}
-.nav-right .fa-cog {
-  font-size: 20px;
-}
-.nav-right .nav-item:hover .dropdown {
-  display: block;
-}
-.nav-right .dropdown .list-box {
-  width: 140px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  line-height: 35px;
-  padding: 5px 0;
-}
-.nav-right .list-box .fas {
-  margin-right: 10px;
-}
-.nav-right .nav-item .dropdown a {
-  display: block;
-  font-size: 13px;
-  text-decoration: none;
-  color: #444444;
-  text-align: left;
-  padding-left: 15px;
-  transition: all 0.2s;
-}
-.nav-right .nav-item .dropdown a:hover {
-  background: #e6f7ff;
 }
 .frame-body {
   flex: 1;
