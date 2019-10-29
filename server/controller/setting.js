@@ -8,18 +8,27 @@ const saveSetting = data => {
   const row = db.prepare('select * from setting').get();
 
   if (row) {
-    db.prepare(
-      'UPDATE setting set name = ?, baseUrl = ?, sideMenu = ?, uploadFn = ? where id = ?'
-    ).run(data.name, data.baseUrl, data.sideMenu, data.uploadFn, row.id);
+    db.prepare('UPDATE setting set name = ?, baseUrl = ?, mode = ?, sideMenu = ?, uploadFn = ? where id = ?').run(
+      data.name,
+      data.baseUrl,
+      data.mode,
+      data.sideMenu,
+      data.uploadFn,
+      row.id,
+    );
   } else {
-    db.prepare(
-      'INSERT INTO setting (name, baseUrl, sideMenu, uploadFn) VALUES (?, ?, ?, ?)'
-    ).run(data.name, data.baseUrl, data.sideMenu, data.uploadFn);
+    db.prepare('INSERT INTO setting (name, baseUrl, mode, sideMenu, uploadFn) VALUES (?, ?, ?, ?, ?)').run(
+      data.name,
+      data.baseUrl,
+      data.mode,
+      data.sideMenu,
+      data.uploadFn,
+    );
   }
 };
 
 module.exports = ctx => {
-  if (ctx.method.toUpperCase() == 'GET') {
+  if (ctx.method.toUpperCase() === 'GET') {
     const data = readSetting() || {};
     resEnd(ctx, { data });
   } else {

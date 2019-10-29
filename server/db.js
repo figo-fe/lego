@@ -7,6 +7,7 @@ const createSetting = () => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     baseUrl TEXT NOT NULL,
+    mode TEXT NOT NULL,
     sideMenu TEXT NOT NULL,
     uploadFn TEXT NOT NULL
   )`;

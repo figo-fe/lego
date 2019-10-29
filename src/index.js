@@ -24,8 +24,8 @@ const App = () => {
   useEffect(() => {
     axios('GET', SETTING)
       .then(res => {
-        const { name = '后台管理系统', baseUrl, sideMenu, uploadFn } = res.data;
-        setSetting({ name, baseUrl, sideMenu, uploadFn });
+        const { name = '后台管理系统', baseUrl, mode, sideMenu, uploadFn } = res.data;
+        setSetting({ name, baseUrl, mode, sideMenu, uploadFn });
       })
       .catch(err => {
         console.warn(err);
@@ -54,7 +54,7 @@ const App = () => {
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
         <Router>
-          <Aside />
+          {setting.mode === 'standalone' && <Aside />}
           <div className='frame-body'>
             <Nav />
 

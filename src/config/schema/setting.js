@@ -45,7 +45,7 @@ export const setting = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 5,
+        grid_columns: 4,
       },
     },
     baseUrl: {
@@ -53,10 +53,19 @@ export const setting = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 7,
+        grid_columns: 4,
         inputAttributes: {
           placeholder: '如 https:/domain.com/api/ 或 /api/',
         },
+      },
+    },
+    mode: {
+      title: '运行模式',
+      type: 'string',
+      minLength: 1,
+      enum: ['standalone', 'embedded'],
+      options: {
+        grid_columns: 4,
       },
     },
     sideMenu: {
