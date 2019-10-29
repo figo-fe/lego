@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const Nav = ({ mode }) => (
-  <nav className={'frame-nav' + (mode === 'embedded' ? ' frame-nav-fixed' : '')}>
+  <nav className={'frame-nav' + (mode === 'standalone' ? '' : ' frame-nav-fixed')}>
     <div className='nav-right'>
       <div className='nav-item'>
         <Link to='/htm/setting'>

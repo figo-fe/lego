@@ -7,7 +7,7 @@ export const Wrap = ({ children, title = '' }) => {
   return (
     <div className='wrap'>
       {title.length > 0 && <div className='sitepath'>{title}</div>}
-      <div className={'main-content' + (mode === 'embedded' ? ' main-content-embedded' : '')}>{children}</div>
+      <div className={'main-content' + (mode === 'standalone' ? '' : ' main-content-embedded')}>{children}</div>
     </div>
   );
 };
