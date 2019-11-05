@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { Nav, Aside } from './components';
 import { Setting } from './pages/setting';
+import { GuideHome, FormHelp } from './pages/guide';
 import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
@@ -53,22 +54,27 @@ const App = () => {
   return (
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
-        <Router>
+        <BrowserRouter>
           {setting.mode === 'standalone' && <Aside />}
           <div className='frame-body'>
             <Nav mode={setting.mode} />
+            <Switch>
+              <Redirect exact path='/' to='/htm/index' />
+              <Route path='/htm/index' render={GuideHome} />
+              <Route path='/htm/setting' render={() => <Setting updateSetting={setSetting} />} />
+              <Route path='/htm/form/create' component={FormCreate} />
+              <Route path='/htm/form/list' component={FormList} />
+              <Route path='/htm/form/edit/:id' component={FormEdit} />
+              <Route path='/htm/form/use/:id' component={FormUse} />
+              <Route path='/htm/table/create' component={TableEdit} />
+              <Route path='/htm/table/edit/:id' component={TableEdit} />
+              <Route path='/htm/table/list' component={TableList} />
+              <Route path='/htm/table/use/:id' component={TableUse} />
 
-            <Route path='/htm/setting' render={() => <Setting updateSetting={setSetting} />} />
-            <Route path='/htm/form/create' component={FormCreate} />
-            <Route path='/htm/form/list' component={FormList} />
-            <Route path='/htm/form/edit/:id' component={FormEdit} />
-            <Route path='/htm/form/use/:id' component={FormUse} />
-            <Route path='/htm/table/create' component={TableEdit} />
-            <Route path='/htm/table/edit/:id' component={TableEdit} />
-            <Route path='/htm/table/list' component={TableList} />
-            <Route path='/htm/table/use/:id' component={TableUse} />
+              <Route path='/htm/help/form' component={FormHelp} />
+            </Switch>
           </div>
-        </Router>
+        </BrowserRouter>
       </section>
     </SettingContext.Provider>
   );

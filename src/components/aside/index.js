@@ -82,7 +82,7 @@ export const Aside = () => {
   return (
     <aside className='frame-aside'>
       <h1 className={!!context.name ? 'name-show' : ''}>
-        <Link to='/'>
+        <Link to='/htm/index'>
           <i className='fas fa-cubes' />
           <span>{context.name || ''}</span>
         </Link>

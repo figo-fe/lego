@@ -6,7 +6,7 @@ export const TableList = props => {
     base: { name: '列表管理', api: '/table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '100', fn: [] },
-      { key: 'name', name: '名称', width: '300', fn: ['search'] },
+      { key: 'name', name: '列表名称', width: '300', fn: ['search'] },
       { key: 'desc', name: '描述', width: '', fn: [] },
     ],
     handles: [
