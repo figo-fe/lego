@@ -34,7 +34,7 @@ export const createForm = {
       },
     },
     api: {
-      title: '提交接口',
+      title: '提交API',
       type: 'string',
       minLength: 1,
       options: {
@@ -42,14 +42,14 @@ export const createForm = {
       },
     },
     origin: {
-      title: '数据源',
+      title: '数据API',
       type: 'string',
       options: {
         grid_columns: 3,
       },
     },
     desc: {
-      title: '备注',
+      title: '表单备注',
       type: 'string',
       options: {
         grid_columns: 3,

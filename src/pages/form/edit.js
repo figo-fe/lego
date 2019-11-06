@@ -72,13 +72,13 @@ export const FormEdit = props => {
             </div>
             <div className='col-md-3'>
               <div className='form-group'>
-                <label className='form-control-label'>提交接口</label>
+                <label className='form-control-label'>提交API</label>
                 <input type='text' onChange={handleChange} value={formData.api} name='api' className='form-control' />
               </div>
             </div>
             <div className='col-md-3'>
               <div className='form-group'>
-                <label className='form-control-label'>数据接口</label>
+                <label className='form-control-label'>数据API</label>
                 <input
                   type='text'
                   onChange={handleChange}
@@ -90,7 +90,7 @@ export const FormEdit = props => {
             </div>
             <div className='col-md-3'>
               <div className='form-group'>
-                <label className='form-control-label'>备注</label>
+                <label className='form-control-label'>表单备注</label>
                 <input type='text' onChange={handleChange} value={formData.desc} name='desc' className='form-control' />
               </div>
             </div>

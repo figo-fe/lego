@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Wrap, Button, SchemaForm } from '../../components';
 import { axios, toast, parseUrl, execJs, buildUrl } from '../../common/utils';
+import { SettingContext } from '../../config/context';
 import { FORM } from '../../config/apis';
 
 export const FormUse = props => {
+  const context = useContext(SettingContext);
   const [state, setState] = useState({
     api: '',
     origin: '',
@@ -34,8 +36,8 @@ export const FormUse = props => {
       try {
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
-        delete window._dataReady_;
-        delete window._editor_;
+        delete window.__dataReady__;
+        delete window.__editor__;
         delete window[fn];
         script.remove();
       } catch (e) {
@@ -57,8 +59,8 @@ export const FormUse = props => {
               formRef.current.setValue(res.data);
 
               // 通知ext
-              if (typeof window._dataReady_ === 'function') {
-                window._dataReady_(res.data);
+              if (typeof window.__dataReady__ === 'function') {
+                window.__dataReady__(res.data);
               }
             } catch (err) {
               console.warn(err);
@@ -73,11 +75,10 @@ export const FormUse = props => {
     const editor = formRef.current;
     const validates = editor.validate();
     const params = parseUrl();
-
     if (validates.length > 0) {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
-      axios('POST', state.api, {
+      axios('POST', state.api.indexOf('http') === 0 ? state.api : context.baseUrl + state.api, {
         ...params,
         data: JSON.stringify(editor.getValue()),
       })
@@ -105,7 +106,7 @@ export const FormUse = props => {
           <>
             <SchemaForm
               schema={JSON.parse(state.schema)}
-              onReady={editor => (formRef.current = window._editor_ = editor)}
+              onReady={editor => (formRef.current = window.__editor__ = editor)}
             />
             <div className='btns-row'>
               <Button onClick={doSubmit} value='提交' extClass='btn-primary' />

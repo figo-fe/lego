@@ -9,7 +9,7 @@ import './form.scss';
 export const FormCreate = props => {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ schema: {}, data: {} });
-  const [extShow, setExtShow] = useState(true);
+  const [extShow, setExtShow] = useState(false);
   const configRef = useRef(null);
   const previewRef = useRef(null);
   const extRef = useRef(null);
@@ -34,7 +34,7 @@ export const FormCreate = props => {
   }
 
   function doConsole() {
-    console.log(previewRef.current.editor.getValue());
+    console.log(previewRef.current.getValue());
   }
 
   function doSave() {
@@ -86,12 +86,22 @@ export const FormCreate = props => {
         <div className='btns-row'>
           {step === 1 && [
             <Button key='next' value='下一步' onClick={doNext} extClass='btn-primary' />,
-            <Button key='help' value='帮助' extClass='btn-outline-primary' />,
+            <Button
+              key='help'
+              onClick={() => window.open('/htm/help/form')}
+              value='帮助'
+              extClass='btn-outline-primary'
+            />,
           ]}
           {step === 2 && [
             <Button key='save' value='保存' onClick={doSave} extClass='btn-success' />,
             <Button key='log' value='console.log' onClick={doConsole} extClass='btn-outline-primary' />,
-            <Button key='help' value='帮助' extClass='btn-outline-primary' />,
+            <Button
+              key='help'
+              onClick={() => window.open('/htm/help/form')}
+              value='帮助'
+              extClass='btn-outline-primary'
+            />,
             <Button key='back' value='返回' onClick={() => setStep(1)} extClass='btn-outline-secondary' />,
           ]}
         </div>
