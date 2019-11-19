@@ -30,9 +30,17 @@ export const GuideHome = () => (
           <p className='desc'>通过简单配置即可生成折线图、柱状图、饼状图等多种数据图表</p>
         </div>
       </div>
+      <div className='info lnks'>
+        帮助文档：<Link to='/htm/help/general'>通用说明</Link>
+        <Link to='/htm/help/form'>创建表单</Link>
+        <Link to='/htm/help/table'>创建列表</Link>
+        <Link to=''>创建图表</Link>
+      </div>
       <div className='info'>Driven by React, JSON-Editor, Koa, Sqlite3. Powered by hanlongfei@sogou-inc.com</div>
     </div>
   </div>
 );
 
 export { FormHelp } from './form-help';
+export { TableHelp } from './table-help';
+export { GeneralDesc } from './general';

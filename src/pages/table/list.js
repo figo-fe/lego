@@ -2,8 +2,10 @@ import React from 'react';
 import { Wrap, Table } from '../../components';
 
 export const TableList = props => {
+  const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
+  const api = `//${host}/_api/table/list?name={{name}}&pn={{pageNo}}`;
   const config = {
-    base: { name: '列表管理', api: '/table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '列表管理', api, path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '100', fn: [] },
       { key: 'name', name: '列表名称', width: '300', fn: ['search'] },

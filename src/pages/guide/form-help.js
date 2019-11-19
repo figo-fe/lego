@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const FormHelp = () => (
   <div className='guide-main'>
@@ -9,8 +10,7 @@ export const FormHelp = () => (
         </h2>
         <div className='help-content'>
           <p>
-            以JSON数据为模型，自动生成<a href=''>JSON-Schema</a>
-            ，并渲染表单界面。后台开发人员首先要明确表单的内容和数据结构，自行构造出JSON数据。为使表单拥有更好的体验和易用性，需编写少量代码，这将使你创建的表单更强大，下面详细介绍如何使用。
+            以JSON数据为模型，自动生成表单，并提供高度扩展和定制。为使表单拥有更好的体验和丰富的功能，需编写少量代码，下面详细介绍如何使用。
           </p>
         </div>
       </div>
@@ -20,9 +20,10 @@ export const FormHelp = () => (
           <a className='hash' href='#step-1'>
             <i className='fas fa-link'></i>
           </a>
-          <span>第一步：填写表单基本信息和数据结构</span>
+          <span>第一步：构造数据结构，填写表单基本信息</span>
         </h2>
         <div className='help-content'>
+          <p>后台开发人员首先要明确表单的内容、功能和数据结构，自行构造出JSON数据</p>
           <ul>
             <li>
               <label>表单名称</label>
@@ -32,14 +33,15 @@ export const FormHelp = () => (
               <label>提交API</label>
               <p>
                 表单以<code>POST</code>
-                方式提交到此API，支持完整路径和相对路径，填写相对路径时会自动拼接系统设置里的「接口前缀」
+                方式提交到此API（支持<Link to='/htm/help/general#url-variable'>URL变量</Link>
+                ），支持完整路径和相对路径，填写相对路径时会自动拼接系统设置里的「接口前缀」
               </p>
             </li>
             <li>
               <label>数据API</label>
               <p>
-                编辑表单时回填数据的API（支持<a href=''>URL变量</a>
-                ），数据结构必须与表单结构相匹配，否则会发生不可预期的错误。
+                编辑表单时回填数据的API（支持<Link to='/htm/help/general#url-variable'>URL变量</Link>
+                ），数据结构必须与表单相匹配，否则会发生不可预期的错误。
               </p>
             </li>
             <li>
@@ -68,25 +70,26 @@ export const FormHelp = () => (
           <ul>
             <li>
               <label>预览</label>
-              <p>系统根据用户提供的数据示例自动生成表单，如果此时表单符合你的需求，可跳过下面步骤，直接保存即可。</p>
+              <p>系统根据用户提供的数据示例自动生成表单，如果此时表单符合你的需求，可跳过下面步骤，直接保存。</p>
             </li>
             <li>
               <label>完善和扩展</label>
               <p>当表单不符合需求时，通过两方面进行完善：</p>
               <ul>
                 <li>
-                  1. 点击表单右上角蓝色箭头查看和编辑生成的JSON-Schema，参考
-                  <a target='_blank' href='https://github.com/json-editor/json-editor'>
-                    JSON-Schema用法
+                  1. 通过「<Link to='/htm/help/general#json-schema'>JSON-Schema</Link>
+                  」，点击表单右上角蓝色箭头查看和编辑生成的JSON-Schema，参考
+                  <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
+                    JSON-Editor文档
                   </a>
                   进行编辑， 完成后点击「更新至表单」进行预览。
                 </li>
                 <li>
-                  2. 在「表单扩展」编写JavaScript进行扩展。
+                  2. 通过「表单扩展」，编写JavaScript进行扩展。
                   <br />
-                  2.1 通过<code>window.__editor__</code>可获取编辑器实例，参考
-                  <a target='_blank' href='https://github.com/json-editor/json-editor'>
-                    JSON-Schema用法
+                  2.1 <code>window.__editor__</code>可获取编辑器实例，参考
+                  <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
+                    JSON-Editor文档
                   </a>
                   对表单进行扩展。
                   <br />
@@ -96,7 +99,7 @@ export const FormHelp = () => (
               </ul>
               <p></p>
               <blockquote>
-                常见用法和使用技巧见<a href=''>文档附录</a>
+                常见问题和使用技巧见<a href='#supplement'>附录</a>
               </blockquote>
             </li>
             <li>
@@ -113,9 +116,14 @@ export const FormHelp = () => (
           <a className='hash' href='#supplement'>
             <i className='fas fa-link'></i>
           </a>
-          <span>附录</span>
+          <span>附：</span>
         </h2>
-        <div className='help-content'>记录使用技巧和常见问题，待补充...</div>
+        <div className='help-content'>
+          <p>
+            <b>1. 如何处理文件上传？</b>
+            <br />在<Link to='/htm/setting'>系统设置</Link>配置文件上传方法<code>FileUploader</code>即可。
+          </p>
+        </div>
       </div>
     </div>
   </div>

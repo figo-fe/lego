@@ -78,7 +78,8 @@ export const FormUse = props => {
     if (validates.length > 0) {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
-      axios('POST', state.api.indexOf('http') === 0 ? state.api : context.baseUrl + state.api, {
+      const api = (/^(http|\/\/)/.test(state.api) ? '' : context.baseUrl) + state.api;
+      axios('POST', buildUrl(api), {
         ...params,
         data: JSON.stringify(editor.getValue()),
       })

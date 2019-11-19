@@ -1,4 +1,9 @@
 const Database = require('better-sqlite3');
+const fs = require('fs');
+const { printLog } = require('./common');
+
+// 检查并创建db目录
+if (!fs.existsSync('db')) fs.mkdirSync('db')
 
 const db = new Database('./db/lego.db', { verbose: console.log });
 
@@ -44,8 +49,8 @@ const createTable = () => {
 };
 
 // 创建表单
-console.log(createSetting());
-console.log(createForm());
-console.log(createTable());
+createSetting();
+createForm();
+createTable();
 
 module.exports = db;

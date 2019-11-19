@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { Nav, Aside } from './components';
 import { Setting } from './pages/setting';
-import { GuideHome, FormHelp } from './pages/guide';
+import { GuideHome, FormHelp, TableHelp, GeneralDesc } from './pages/guide';
 import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
@@ -72,6 +72,8 @@ const App = () => {
               <Route path='/htm/table/use/:id' component={TableUse} />
 
               <Route path='/htm/help/form' component={FormHelp} />
+              <Route path='/htm/help/table' component={TableHelp} />
+              <Route path='/htm/help/general' component={GeneralDesc} />
             </Switch>
           </div>
         </BrowserRouter>

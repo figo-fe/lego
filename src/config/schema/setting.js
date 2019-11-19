@@ -7,7 +7,7 @@ const uploadFnDemo = `/**
  * 
  * cbs.progress: 更新进度, int, 值为0-100（success时自动设为100）
  * cbs.fail: 失败回调, string, 值为失败说明
- * cbs.success: 成功回调, string, 值为文件URL
+ * cbs.success: 成功回调, string, 值为文件URI
  */
 window.FileUploader = function (file, cbs) {
   setTimeout(() => {

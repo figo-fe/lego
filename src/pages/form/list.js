@@ -2,8 +2,10 @@ import React from 'react';
 import { Wrap, Table } from '../../components';
 
 export const FormList = props => {
+  const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
+  const api = `//${host}/_api/form/list?name={{name}}&pn={{pageNo}}`;
   const config = {
-    base: { name: '表单管理', api: '/form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '表单管理', api, path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '80', fn: [] },
       { key: 'name', name: '表单名称', width: '240', fn: ['search'] },
