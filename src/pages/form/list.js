@@ -3,9 +3,9 @@ import { Wrap, Table } from '../../components';
 
 export const FormList = props => {
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
-  const api = `//${host}/_api/form/list?name={{name}}&pn={{pageNo}}`;
+  const prefix = `//${host}/_api/`;
   const config = {
-    base: { name: '表单管理', api, path: 'data.list' },
+    base: { name: '表单管理', api: prefix + 'form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '80', fn: [] },
       { key: 'name', name: '表单名称', width: '240', fn: ['search'] },
@@ -14,7 +14,7 @@ export const FormList = props => {
     handles: [
       { key: 'view', name: '预览', icon: 'eye', url: '/htm/form/use/{{id}}', action: 'open' },
       { key: 'edit', name: '编辑', icon: 'edit', url: '/htm/form/edit/{{id}}', action: 'open' },
-      { key: 'delete', name: '删除', icon: 'trash-alt', url: '/form/delete?id={{id}}', action: 'api' },
+      { key: 'delete', name: '删除', icon: 'trash-alt', url: prefix + 'form/delete?id={{id}}', action: 'api' },
     ],
   };
 
