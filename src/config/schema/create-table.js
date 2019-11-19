@@ -98,7 +98,7 @@ export const createTable = {
             type: 'string',
           },
           url: {
-            title: '链接（支持参数）',
+            title: 'URL',
             type: 'string',
           },
           action: {

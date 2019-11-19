@@ -64,7 +64,7 @@ export const TableEdit = props => {
             <div className='col-md-12'>
               <div className='form-group'>
                 <label className='form-control-label'>常规功能无法满足时，利用JavaScript进行扩展</label>
-                <div style={{ height: 350 }}>
+                <div style={{ height: 300 }}>
                   <AceCode type='javascript' onReady={ace => (extRef.current = ace)} />
                 </div>
               </div>
@@ -74,7 +74,7 @@ export const TableEdit = props => {
 
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open('/htm/help/table')} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
       </div>

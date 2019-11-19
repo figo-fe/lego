@@ -52,7 +52,7 @@ export const Table = props => {
     if (handle.action === 'open') {
       window.open(buildUrl(handle.url, row));
     } else {
-      if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
+      if (window.confirm(`是否${handle.name}${row.name ? ' [' + (row.name || row.key) + '] ' : ''}？`)) {
         const api = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
         axios('POST', buildUrl(api, row))
           .then(res => {
@@ -114,7 +114,7 @@ export const Table = props => {
 
               return (
                 <th className='table-th' key={key} width={col.width ? col.width : undefined}>
-                  <span>{col.name}</span>
+                  <span>{col.name || key}</span>
                   {sortIcon && (
                     <em
                       onClick={() => setSort(sort === `${key}-desc` ? `${key}-asc` : `${key}-desc`)}

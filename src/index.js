@@ -39,7 +39,7 @@ const App = () => {
       // 挂载上传方法
       if (setting.uploadFn) {
         fn = execJs(setting.uploadFn);
-        console.log('UploadFn mounted!');
+        console.log('FileUploader mounted!');
       }
     } catch (err) {
       console.warn(err);

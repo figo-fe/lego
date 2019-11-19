@@ -10,6 +10,7 @@
   .subtitle {
     margin: 15px 0 30px;
     color: #888888;
+    font-size: 15px;
   }
   .entry {
     display: flex;
@@ -105,6 +106,7 @@
     line-height: 1.6;
     overflow-x: auto;
     border-radius: 2px;
+    padding: 10px;
   }
   ul {
     padding-left: 20px;
