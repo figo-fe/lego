@@ -75,18 +75,18 @@ export const TableHelp = () => (
             为列展示，按以下方式配置：
           </p>
           <pre>
-            {`window.__colFix__ = function (key, value) {
+            {`window.__colFix__ = function (key, value, row) {
   switch (key) {
     case 'price':
       return value / 100;
 
-    default:
-      return value;
+    case 'name':
+      return '<a href="/product/?id='+ row.id +'">'+ value +'</a>';
   }
 }`}
           </pre>
           <blockquote>
-            可同时修正多列数据，注意<b>必须保留default分支</b>，否则数据无法正常显示。
+            可通过<code>switch-case</code>同时修正多列数据，若使用ES6语法，请确保LEGO运行在支持的浏览器中。
           </blockquote>
           <p>
             修正分页数据：声明<code>window.__pageFix__</code>对分页数据进行修正并返回<b>数据总数 total</b>和

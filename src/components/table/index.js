@@ -92,7 +92,7 @@ export const Table = props => {
               setSearch(query);
             }}
             className='btn btn-sm btn-success'>
-            搜索
+            查询
           </button>
         </div>
       )}
@@ -140,7 +140,7 @@ export const Table = props => {
                 {cols.map(item => {
                   let content = row[item.key] || '--';
                   if (typeof window.__colFix__ === 'function') {
-                    content = window.__colFix__(item.key, content) || content;
+                    content = window.__colFix__(item.key, content, row) || content;
                   }
                   return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}
