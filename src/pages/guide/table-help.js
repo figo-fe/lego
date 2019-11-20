@@ -70,15 +70,12 @@ export const TableHelp = () => (
         <div className='help-content'>
           <p>当配置无法满足需求时，通过JavaScript进行扩展。</p>
           <p>
-            修正列数据：声明<code>{'window.__colFix__ = function(key, value){ return value }'}</code>
-            对列数据进行修正使其满足要求。
+            修正列数据：声明<code>window.__colFix__</code>
+            对列数据进行修正使其满足要求。例如某列的key=price，value=1500（单位分），以<b>价格（元）</b>
+            为列展示，按以下方式配置：
           </p>
-          <blockquote>
-            <p>
-              例如某列的key=price，value=1500（单位分），以<b>价格（元）</b>为列展示，按以下方式配置：
-            </p>
-            <pre>
-              {`window.__colFix__ = function (key, value) {
+          <pre>
+            {`window.__colFix__ = function (key, value) {
   switch (key) {
     case 'price':
       return value / 100;
@@ -87,10 +84,24 @@ export const TableHelp = () => (
       return value;
   }
 }`}
-            </pre>
-            <p>
-              可同时修正多列数据，注意<b>必须保留default分支</b>，否则数据无法正常显示。
-            </p>
+          </pre>
+          <blockquote>
+            可同时修正多列数据，注意<b>必须保留default分支</b>，否则数据无法正常显示。
+          </blockquote>
+          <p>
+            修正分页数据：声明<code>window.__pageFix__</code>对分页数据进行修正并返回<b>数据总数 total</b>和
+            <b>分页大小 pageSize</b>。
+          </p>
+          <pre>
+            {`window.__pageFix__ = function (data) {
+  return {
+    total: data.pageInfo.total,
+    pageSize: data.pageInfo.size
+  }
+}`}
+          </pre>
+          <blockquote>
+            若接口数据中包含<code>{'data.page = {total, pageSize}'}</code>可忽略
           </blockquote>
         </div>
       </div>
