@@ -66,6 +66,7 @@ export const setting = {
       minLength: 1,
       enum: ['standalone', 'embedded'],
       options: {
+        enum_titles: ['独立模式', '嵌入模式'],
         grid_columns: 4,
       },
     },
