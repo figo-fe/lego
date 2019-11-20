@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Wrap } from '../../components';
 
 export const FormHelp = () => (
-  <div className='guide-main'>
+  <Wrap>
     <div className='guide-help'>
       <div className='guide-node'>
         <h2 className='help-title help-title-main'>
@@ -93,8 +94,11 @@ export const FormHelp = () => (
                   </a>
                   对表单进行扩展。
                   <br />
-                  2.2 声明<code>{'window.__dataReady__ = function(data) {}'}</code>
-                  ，此方在数据回填完成时执行，并将回填数据作为参数传入。
+                  2.2 声明<code>window.onDataReady</code>监听数据回填
+                  ，此方法在数据回填完成时执行，并将回填数据作为参数传入。
+                  <br />
+                  2.3 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
+                  （见<Link to='/htm/help/general#file-upload'>文件上传</Link>）
                 </li>
               </ul>
               <p></p>
@@ -120,11 +124,13 @@ export const FormHelp = () => (
         </h2>
         <div className='help-content'>
           <p>
-            <b>1. 如何处理文件上传？</b>
-            <br />在<Link to='/htm/setting'>系统设置</Link>配置文件上传方法<code>FileUploader</code>即可。
+            <b>1. 如何进入表单编辑模式？</b>
+            <br />
+            只要在表单URL上追加参数<code>do=edit</code>即可，例如 <code>http://lego.com/htm/form/use/1?do=edit</code>
+            ，编辑模式下系统会请求<b>数据API</b>进行数据回填。
           </p>
         </div>
       </div>
     </div>
-  </div>
+  </Wrap>
 );

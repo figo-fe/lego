@@ -52,7 +52,7 @@ export const Table = props => {
     if (handle.action === 'open') {
       window.open(buildUrl(handle.url, row));
     } else {
-      if (window.confirm(`是否${handle.name}${row.name ? ' [' + (row.name || row.key) + '] ' : ''}？`)) {
+      if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
         const api = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
         axios('POST', buildUrl(api, row))
           .then(res => {

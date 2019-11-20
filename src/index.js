@@ -16,11 +16,15 @@ import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
 
+import { isInFrame } from './common/utils';
+
 import './common/bootstrap.css';
-import './common/base.css';
+import './common/base.scss';
 
 const App = () => {
   const [setting, setSetting] = useState({});
+  const showNav = !isInFrame;
+  const showAside = !isInFrame && setting.mode === 'standalone';
 
   useEffect(() => {
     axios('GET', SETTING)
@@ -55,9 +59,9 @@ const App = () => {
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
         <BrowserRouter>
-          {setting.mode === 'standalone' && <Aside />}
+          {showAside && <Aside />}
           <div className='frame-body'>
-            <Nav mode={setting.mode} />
+            {showNav && <Nav mode={setting.mode} />}
             <Switch>
               <Redirect exact path='/' to='/htm/index' />
               <Route path='/htm/index' render={GuideHome} />

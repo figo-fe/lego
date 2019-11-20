@@ -132,3 +132,7 @@ export const findByPath = (object, path) => {
   }
   return obj;
 };
+
+export const isInFrame = window.self !== window.top;
+
+export { default as Popup } from './popup';

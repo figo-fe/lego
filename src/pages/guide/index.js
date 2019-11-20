@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Wrap } from '../../components';
 import './guide.scss';
 
 export const GuideHome = () => (
-  <div className='guide-main'>
+  <Wrap>
     <div className='guide-home'>
       <h1>使用LEGO快速搭建后台</h1>
       <div className='subtitle'>LEGO拥有丰富的内建模块，可在数分钟内搭建强大的后台界面</div>
@@ -38,7 +39,7 @@ export const GuideHome = () => (
       </div>
       <div className='info'>Driven by React, JSON-Editor, Koa, Sqlite3. Powered by hanlongfei@sogou-inc.com</div>
     </div>
-  </div>
+  </Wrap>
 );
 
 export { FormHelp } from './form-help';

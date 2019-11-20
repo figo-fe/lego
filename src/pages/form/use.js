@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Wrap, Button, SchemaForm } from '../../components';
-import { axios, toast, parseUrl, execJs, buildUrl } from '../../common/utils';
+import { axios, toast, parseUrl, execJs, buildUrl, isInFrame } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { FORM } from '../../config/apis';
 
@@ -36,7 +36,7 @@ export const FormUse = props => {
       try {
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
-        delete window.__dataReady__;
+        delete window.onDataReady;
         delete window.__editor__;
         delete window[fn];
         script.remove();
@@ -59,8 +59,8 @@ export const FormUse = props => {
               formRef.current.setValue(res.data);
 
               // 通知ext
-              if (typeof window.__dataReady__ === 'function') {
-                window.__dataReady__(res.data);
+              if (typeof window.onDataReady === 'function') {
+                window.onDataReady(res.data);
               }
             } catch (err) {
               console.warn(err);
@@ -99,23 +99,19 @@ export const FormUse = props => {
   }
 
   return (
-    <Wrap>
+    <Wrap loading={state.loading}>
       <div className='lego-card'>
-        {state.loading ? (
-          'loading...'
-        ) : (
-          <>
-            <SchemaForm
-              schema={JSON.parse(state.schema)}
-              onReady={editor => (formRef.current = window.__editor__ = editor)}
-            />
-            <div className='btns-row'>
-              <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-              <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />
-              <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
-            </div>
-          </>
-        )}
+        <SchemaForm
+          schema={JSON.parse(state.schema)}
+          onReady={editor => (formRef.current = window.__editor__ = editor)}
+        />
+        <div className='btns-row'>
+          <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
+          <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />
+          {!isInFrame && (
+            <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
+          )}
+        </div>
       </div>
     </Wrap>
   );

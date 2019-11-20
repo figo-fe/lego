@@ -19,8 +19,8 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
         editor && editor.destroy();
       };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, startval]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(schema)]);
 
   function updateSchema() {
     if (typeof onSchemaUpdate === 'function') {

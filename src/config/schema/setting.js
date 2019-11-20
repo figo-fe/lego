@@ -1,15 +1,16 @@
 // 全局配置
 const uploadFnDemo = `/**
- * 实现 window.FileUploader
+ * 实现 window.fileUploader
  * 
  * file 文件对象
+ * path 上传表单在schema中的路径，如 root.info.image
  * cbs 定义回调
  * 
  * cbs.progress: 更新进度, int, 值为0-100（success时自动设为100）
  * cbs.fail: 失败回调, string, 值为失败说明
  * cbs.success: 成功回调, string, 值为文件URI
  */
-window.FileUploader = function (file, cbs) {
+window.fileUploader = function (file, path, cbs) {
   setTimeout(() => {
     cbs.progress(30);
   }, 500);

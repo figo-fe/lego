@@ -341,3 +341,47 @@ li {
   border-color: #1890ff;
   color: #1890ff;
 }
+
+/* popup */
+.popup-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  z-index: 999;
+  .popup-main {
+    min-height: 300px;
+    max-height: 800px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba($color: #000000, $alpha: 0.3);
+  }
+  .popup-hide {
+    width: 30px;
+    height: 30px;
+    background: #444;
+    border-radius: 15px;
+    text-align: center;
+    line-height: 30px;
+    position: absolute;
+    right: -28px;
+    top: -28px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  .popup-hide:hover {
+    transform: rotate(270deg);
+  }
+  iframe {
+    border-radius: 4px;
+  }
+}

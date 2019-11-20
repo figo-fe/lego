@@ -65,9 +65,11 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
     this.input.parentNode.style.marginBottom = '10px';
   },
   uploadFile: function(file) {
-    if (window.FileUploader) {
+    const uploader = window.formUploader || window.fileUploader;
+    if (uploader) {
       const self = this;
-      window.FileUploader(file, {
+      const { path } = self;
+      uploader(file, path, {
         progress: function(percent) {
           self.progress.style.opacity = '1';
           self.progress.style.width = `${percent}%`;
@@ -80,7 +82,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
           }, 600);
           self.setValue(url);
         },
-        error: function(msg) {
+        fail: function(msg) {
           self.progress.style.width = '0';
           alert(msg);
         },
@@ -132,16 +134,17 @@ export default (el, schema = {}, opts = {}) => {
       allowedTypes: ['image/jpeg', 'image/png', 'image/gif'],
       handleFile: (file, createPlaceholder) => {
         // https://www.sceditor.com/documentation/plugins/dragdrop/
-        if (window.FileUploader) {
+        const uploader = window.formUploader || window.fileUploader;
+        if (uploader) {
           const placeholder = createPlaceholder();
-          window.FileUploader(file, {
+          uploader(file, 'wysiwyg', {
             success: function(url) {
               placeholder.insert(`<img src="${url}" />`);
             },
             progress: function(percent) {
               console.log(percent);
             },
-            error: function(msg) {
+            fail: function(msg) {
               placeholder.cancel();
               alert(msg);
             },

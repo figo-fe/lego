@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Wrap } from '../../components';
 
 export const TableHelp = () => (
-  <div className='guide-main'>
+  <Wrap>
     <div className='guide-help'>
       <div className='guide-node'>
         <h2 className='help-title help-title-main'>
@@ -94,5 +95,5 @@ export const TableHelp = () => (
         </div>
       </div>
     </div>
-  </div>
+  </Wrap>
 );

@@ -8,9 +8,10 @@ export const FormEdit = props => {
     name: '',
     api: '',
     origin: '',
-    schema: '{"title":"loading","properties":{},"options":{"disable_collapse":true}}',
+    schema: '{}',
     desc: '',
     ext: '',
+    loading: true,
   });
   const formRef = useRef(null);
   const extRef = useRef(null);
@@ -19,7 +20,7 @@ export const FormEdit = props => {
     const id = props.match.params.id;
     axios('GET', FORM, { id }).then(res => {
       const { name, api, origin, desc, schema, ext } = res.data;
-      setFormData({ name, api, origin, desc, schema, ext });
+      setFormData({ name, api, origin, desc, schema, ext, loading: false });
     });
   }, [props.match.params.id]);
 
@@ -54,7 +55,7 @@ export const FormEdit = props => {
   }
 
   return (
-    <Wrap>
+    <Wrap loading={formData.loading}>
       <div className='lego-card'>
         <SchemaForm
           schema={JSON.parse(formData.schema)}
@@ -107,6 +108,12 @@ export const FormEdit = props => {
         <div className='btns-row'>
           <Button value='保存' onClick={doSave} extClass='btn-success' />
           <Button value='console.log' onClick={doConsole} extClass='btn-outline-primary' />
+          <Button
+            key='help'
+            onClick={() => window.open('/htm/help/form')}
+            value='帮助'
+            extClass='btn-outline-primary'
+          />
           <Button value='返回' onClick={doBack} extClass='btn-outline-secondary' />
         </div>
       </div>

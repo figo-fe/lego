@@ -1,8 +1,9 @@
 import React from 'react';
+import { Wrap } from '../../components';
 // import { Link } from 'react-router-dom';
 
 export const GeneralDesc = () => (
-  <div className='guide-main'>
+  <Wrap>
     <div className='guide-help'>
       <div className='guide-node'>
         <h2 className='help-title help-title-main'>
@@ -50,6 +51,24 @@ export const GeneralDesc = () => (
           </p>
         </div>
       </div>
+      <div className='guide-node' id='show-popup'>
+        <h2 className='help-title help-title-sub'>
+          <a className='hash' href='#file-upload'>
+            <i className='fas fa-link'></i>
+          </a>
+          <span>自定义弹窗</span>
+        </h2>
+        <div className='help-content'>
+          <p>为方便部分操作在当前页进行，LEGO支持自定义弹窗，支持iframe和html渲染，用法如下：</p>
+          <pre>{`popupShow(
+  src: "xxx", // url或html，可嵌入表单或其他页面
+  width: 700, // 弹窗宽度，默认700
+  height: 400 // 弹窗高度，默认400，最大不得超过800
+);
+
+popupShow() // 关闭弹窗`}</pre>
+        </div>
+      </div>
       <div className='guide-node' id='file-upload'>
         <h2 className='help-title help-title-sub'>
           <a className='hash' href='#file-upload'>
@@ -59,10 +78,34 @@ export const GeneralDesc = () => (
         </h2>
         <div className='help-content'>
           <p>
-            全局默认使用「系统设置-上传方法」上传文件或图片，开发者根据后端提供的上传接口实现
-            <code>window.FileUploader</code>，通过<code>file</code>获取文件对象完成上传，通过<code>cbs</code>
-            回调上传结果，将文件URI回传给LEGO。
+            系统默认使用「系统设置-上传方法」上传文件或图片，开发者根据后端提供的上传接口实现
+            <code>window.fileUploader</code>。<br />
+            如果某表单需要自定义上传方法，在表单扩展中声明
+            <code>window.formUploader</code>，用法相同。参数及用法Demo：
           </p>
+          <pre>
+            {`/**
+ * 实现 window.fileUploader
+ * 
+ * file 文件对象
+ * path 上传表单在schema中的路径，如 "root.info.image"，富文本编辑器的path为常量 "wysiwyg"
+ * cbs 按需执行回调，将上传结果回传
+ * 
+ * cbs.progress: 更新进度, int, 值为0-100（success时自动设为100）
+ * cbs.fail: 失败回调, string, 值为失败说明
+ * cbs.success: 成功回调, string, 值为文件URI
+ */
+window.fileUploader = function (file, path, cbs) {
+  console.log(path);
+  setTimeout(() => {
+    cbs.progress(30);
+  }, 500);
+
+  setTimeout(() => {
+    cbs.success('//www.sogo.com/web/index/images/logo_440x140.v.4.png');
+  }, 2e3);
+};`}
+          </pre>
         </div>
       </div>
       <div className='guide-node' id='icon-font'>
@@ -83,5 +126,5 @@ export const GeneralDesc = () => (
         </div>
       </div>
     </div>
-  </div>
+  </Wrap>
 );

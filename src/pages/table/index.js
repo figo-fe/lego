@@ -32,7 +32,7 @@ export const TableEdit = props => {
     axios('POST', TABLE, postData)
       .then(() => {
         toast('保存成功');
-        // props.history.push('/htm/table/list');
+        props.history.push('/htm/table/list');
       })
       .catch(err => {
         toast(err.msg);
