@@ -1,9 +1,13 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 如何构建
 
-## Available Scripts
+1. 确保服务器已安装**nodejs**和**yarn**
+2. 在根目录执行`yarn build`完成构建，生成`build`目录
 
-In the project directory, you can run:
+## 启动服务
 
-### `yarn start`
+1. 确保服务器已安装**nodejs**和**pm2**
+2. 在项目根目录执行`pm2 server`启动服务
 
-### `yarn build`
+## dev
+
+run `yarn start` and `node server` to develop
