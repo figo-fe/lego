@@ -10,4 +10,4 @@
 
 ## dev
 
-run `yarn start` and `node server` to develop
+run `yarn start` and `node server` for develop
