@@ -17,7 +17,8 @@ export const Table = props => {
   const [sort, setSort] = useState(''); // key-ase, key-desc
   const [search, setSearch] = useState({});
   const [page, setPage] = useState(null);
-  const [pageNo, setPageNo] = useState(1);
+  const defaultPageNo = (window.location.search.match(/pageNo=(\d+)/) || []).pop() || 1;
+  const [pageNo, setPageNo] = useState(defaultPageNo);
 
   // 初始化数据
   useEffect(() => {
@@ -164,6 +165,7 @@ export const Table = props => {
             onChange={pn => setPageNo(pn)}
             total={page.total || 0}
             pageSize={page.pageSize || 20}
+            defaultCurrent={+pageNo}
             prevIcon={<i className='fas fa-chevron-left' />}
             nextIcon={<i className='fas fa-chevron-right' />}
           />
