@@ -9,7 +9,7 @@ export const Wrap = ({ children, title = '', loading = false }) => {
     <div className='wrap'>
       {title.length > 0 && <div className='sitepath'>{title}</div>}
       <div
-        className={'main-content' + (mode === 'standalone' ? '' : ' main-content-embedded')}
+        className={'main-content' + (mode === 'standalone' && !isInFrame ? '' : ' main-content-embedded')}
         style={{ padding: isInFrame ? 0 : null }}>
         {loading ? <div className='lego-card'>loading...</div> : children}
       </div>
