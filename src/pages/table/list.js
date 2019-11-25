@@ -3,18 +3,30 @@ import { Wrap, Table } from '../../components';
 
 export const TableList = props => {
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
-  const prefix = `//${host}/_api/`;
+  const apiPrefix = `//${host}/_api/`;
   const config = {
-    base: { name: '列表管理', api: prefix + 'table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '列表管理', api: apiPrefix + 'table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '100', fn: [] },
       { key: 'name', name: '列表名称', width: '300', fn: ['search'] },
       { key: 'desc', name: '描述', width: '', fn: [] },
     ],
     handles: [
-      { key: 'preview', name: '预览', icon: 'eye', url: '/htm/table/use/{{id}}', action: 'open' },
-      { key: 'edit', name: '编辑', icon: 'edit', url: '/htm/table/edit/{{id}}', action: 'open' },
-      { key: 'delete', name: '删除', icon: 'trash-alt', url: prefix + 'table/delete?id={{id}}', action: 'api' },
+      {
+        key: 'preview',
+        name: '预览',
+        icon: 'eye',
+        url: `//${window.location.host}/htm/table/use/{{id}}`,
+        action: 'open',
+      },
+      {
+        key: 'edit',
+        name: '编辑',
+        icon: 'edit',
+        url: `//${window.location.host}/htm/table/edit/{{id}}`,
+        action: 'open',
+      },
+      { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'table/delete?id={{id}}', action: 'api' },
     ],
   };
 

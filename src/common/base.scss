@@ -27,7 +27,7 @@ li {
   font-size: 15px;
   position: fixed;
   left: 50%;
-  margin-left: -100px;
+  transform: translateX(-50%);
   top: 30%;
   z-index: 99;
 }
@@ -314,32 +314,6 @@ li {
   font-style: normal;
   font-size: 14px;
   vertical-align: middle;
-}
-.lego-pagination {
-  width: 100%;
-  text-align: right;
-  margin-top: 30px;
-  height: 32px;
-}
-.lego-pagination span {
-  display: inline-block;
-  cursor: pointer;
-  padding: 0 6px;
-  min-width: 30px;
-  height: 30px;
-  border-radius: 4px;
-  font-family: Arial;
-  margin-left: 8px;
-  border: 1px solid #d9d9d9;
-  text-align: center;
-  line-height: 30px;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-.lego-pagination span:hover,
-.lego-pagination .cur {
-  border-color: #1890ff;
-  color: #1890ff;
 }
 
 /* popup */

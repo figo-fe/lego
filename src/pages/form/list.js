@@ -3,18 +3,30 @@ import { Wrap, Table } from '../../components';
 
 export const FormList = props => {
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
-  const prefix = `//${host}/_api/`;
+  const apiPrefix = `//${host}/_api/`;
   const config = {
-    base: { name: '表单管理', api: prefix + 'form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
+    base: { name: '表单管理', api: apiPrefix + 'form/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
       { key: 'id', name: 'ID', width: '80', fn: [] },
       { key: 'name', name: '表单名称', width: '240', fn: ['search'] },
       { key: 'desc', name: '描述', width: '', fn: [] },
     ],
     handles: [
-      { key: 'view', name: '预览', icon: 'eye', url: '/htm/form/use/{{id}}', action: 'open' },
-      { key: 'edit', name: '编辑', icon: 'edit', url: '/htm/form/edit/{{id}}', action: 'open' },
-      { key: 'delete', name: '删除', icon: 'trash-alt', url: prefix + 'form/delete?id={{id}}', action: 'api' },
+      {
+        key: 'view',
+        name: '预览',
+        icon: 'eye',
+        url: `//${window.location.host}/htm/form/use/{{id}}`,
+        action: 'open',
+      },
+      {
+        key: 'edit',
+        name: '编辑',
+        icon: 'edit',
+        url: `//${window.location.host}/htm/form/edit/{{id}}`,
+        action: 'open',
+      },
+      { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'form/delete?id={{id}}', action: 'api' },
     ],
   };
 

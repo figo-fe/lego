@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
-import { axios, toast, buildUrl, findByPath } from '../../common/utils';
+import { axios, toast, buildUrl, findByPath, Popup } from '../../common/utils';
 
 import 'rc-pagination/assets/index.css';
 import './index.scss';
@@ -50,12 +50,13 @@ export const Table = props => {
   const searchBox = cols.filter(col => col.fn.indexOf('search') !== -1);
 
   function onClickHandle(row, handle) {
+    let url = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
+    url = buildUrl(url, row);
     if (handle.action === 'open') {
-      window.open(buildUrl(handle.url, row));
-    } else {
+      window.open(url);
+    } else if (handle.action === 'api') {
       if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
-        const api = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
-        axios('POST', buildUrl(api, row))
+        axios('POST', url)
           .then(res => {
             toast(`${handle.name}成功`);
             setTimeout(() => {
@@ -68,6 +69,8 @@ export const Table = props => {
             console.warn(err);
           });
       }
+    } else if (handle.action === 'popup') {
+      Popup.show(url);
     }
   }
 
@@ -164,6 +167,7 @@ export const Table = props => {
           <Pagination
             onChange={pn => setPageNo(pn)}
             total={page.total || 0}
+            showTotal={all => `共${all}条数据`}
             pageSize={page.pageSize || 20}
             defaultCurrent={+pageNo}
             prevIcon={<i className='fas fa-chevron-left' />}
