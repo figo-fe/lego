@@ -56,7 +56,7 @@ app.use(async (ctx, next) => {
   }
 
   // controllers
-  if (ctx.url.indexOf('/_api/') == 0) {
+  if (ctx.url.indexOf('/_lego_api_/') === 0) {
     handleApi(ctx);
   }
 });

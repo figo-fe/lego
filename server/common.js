@@ -2,17 +2,17 @@ const fs = require('fs');
 
 exports.API = {
   // 全局设置
-  SETTING: '/_api/setting',
+  SETTING: '/_lego_api_/setting',
 
   // 表单
-  FORM: '/_api/form',
-  FORM_DELETE: '/_api/form/delete',
-  FORM_LIST: '/_api/form/list',
+  FORM: '/_lego_api_/form',
+  FORM_DELETE: '/_lego_api_/form/delete',
+  FORM_LIST: '/_lego_api_/form/list',
 
   // 列表
-  TABLE: '/_api/table',
-  TABLE_DELETE: '/_api/table/delete',
-  Table_LIST: '/_api/table/list',
+  TABLE: '/_lego_api_/table',
+  TABLE_DELETE: '/_lego_api_/table/delete',
+  Table_LIST: '/_lego_api_/table/list',
 };
 
 exports.resEnd = (ctx, ret = {}) => {
