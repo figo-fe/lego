@@ -104,28 +104,35 @@ export const Table = props => {
           <tr>
             {cols.map(col => {
               let key = col.key;
-              let sortIcon = '';
+              let showSort = false;
+              let sortIcon = 'sort';
 
-              if (col.fn.indexOf('sort') !== -1) {
-                if (sort === `${key}-asc`) {
-                  sortIcon = 'caret-up';
-                } else if (sort === `${key}-desc`) {
-                  sortIcon = 'caret-down';
-                } else {
-                  sortIcon = 'sort';
+              if (/sort/.test(col.fn)) {
+                showSort = true;
+                switch (sort) {
+                  case `${key}-asc`:
+                    sortIcon = 'caret-up';
+                    break;
+
+                  case `${key}-desc`:
+                    sortIcon = 'caret-down';
+                    break;
+
+                  default:
+                    sortIcon = 'sort';
                 }
               }
 
               return (
-                <th className='table-th' key={key} width={col.width ? col.width : undefined}>
+                <th
+                  className={'table-th' + (showSort ? ' th-sort' : '')}
+                  key={key}
+                  width={col.width ? col.width : undefined}
+                  onClick={() => {
+                    showSort && setSort(sort === `${key}-desc` ? `${key}-asc` : `${key}-desc`);
+                  }}>
                   <span>{col.name || key}</span>
-                  {sortIcon && (
-                    <em
-                      onClick={() => setSort(sort === `${key}-desc` ? `${key}-asc` : `${key}-desc`)}
-                      title='排序'
-                      className={'fas fa-' + sortIcon}
-                    />
-                  )}
+                  {showSort && <em title='排序' className={'fas fa-' + sortIcon} />}
                 </th>
               );
             })}

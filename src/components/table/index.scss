@@ -65,8 +65,17 @@
   }
   em {
     padding: 0 5px;
-    cursor: pointer;
   }
+  .fa-sort {
+    color: #999;
+  }
+  .fa-caret-up,
+  .fa-caret-down {
+    color: #007bff;
+  }
+}
+.th-sort {
+  cursor: pointer;
 }
 .search-row {
   margin-bottom: 20px;
