@@ -17,7 +17,7 @@ export const AceCode = ({ code = '', type = 'json', onReady }) => {
 
     aceEditor.current.setValue(code, -1);
     aceEditor.current.resize();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, type]);
 
   return <div style={{ height: '100%' }} ref={codeRef}></div>;

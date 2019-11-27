@@ -69,3 +69,37 @@
     }
   }
 }
+.form-edit {
+  [data-schematype='string'],
+  [data-schematype='number'],
+  [data-schematype='integer'] {
+    position: relative;
+  }
+  [data-schematype='string']:hover:after,
+  [data-schematype='number']:hover:after,
+  [data-schematype='integer']:hover:after {
+    content: '\20';
+    position: absolute;
+    background: rgba($color: #0088ff, $alpha: 0.1);
+    left: 8px;
+    right: 8px;
+    top: -5px;
+    bottom: 5px;
+    z-index: 9;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  [data-schematype='string']:hover:before,
+  [data-schematype='number']:hover:before,
+  [data-schematype='integer']:hover:before {
+    content: '编辑';
+    position: absolute;
+    padding: 2px 5px;
+    background: #007bff;
+    color: #fff;
+    font-size: 12px;
+    right: 8px;
+    top: -5px;
+    border-radius: 0 3px 0 3px;
+  }
+}

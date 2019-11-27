@@ -133,6 +133,46 @@ export const findByPath = (object, path) => {
   return obj;
 };
 
+// 根据path查找schema对应节点
+export const findSchemaByPath = (schema, path) => {
+  if (path === 'root') return schema;
+
+  let tmp = Object.assign({}, schema);
+  let props = path.split('.').slice(1);
+
+  for (let i = 0, len = props.length; i < len; i++) {
+    if (tmp.type === 'object') {
+      tmp = tmp['properties'][props[i]];
+    } else if (tmp.type === 'array') {
+      tmp = tmp['items'];
+    }
+  }
+
+  return tmp;
+};
+
+// 根据path更新schema对应节点
+export const updateSchemaByPath = (schema, path, data) => {
+  if (path === 'root') return data;
+
+  let tmp = Object.assign({}, schema);
+  let cur = tmp;
+  let props = path.split('.').slice(1);
+
+  for (let i = 0, len = props.length; i < len; i++) {
+    if (cur.type === 'object') {
+      cur = cur['properties'][props[i]];
+    } else if (cur.type === 'array') {
+      cur = cur['items'];
+    }
+  }
+
+  cur = data;
+  console.log(cur);
+
+  return tmp;
+};
+
 export const isInFrame = window.self !== window.top;
 
 export { default as Popup } from './popup';

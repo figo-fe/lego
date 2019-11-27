@@ -1,12 +1,15 @@
 import React, { useLayoutEffect, useState, useRef } from 'react';
 import { Button, AceCode } from '../../components';
-import { initEditor, toast } from '../../common/utils';
+import { initEditor, toast, findSchemaByPath, updateSchemaByPath } from '../../common/utils';
+import SchemaEditor from './schema-editor';
 import './index.scss';
 
 export const SchemaForm = ({ schema, startval, show = true, editable = false, onReady, onSchemaUpdate }) => {
   const formRef = useRef(null);
   const aceEditor = useRef(null);
+  const editPathRef = useRef(null);
   const [schemaShow, setSchemaShow] = useState(false);
+  const [editSchema, setEditSchema] = useState(null);
 
   useLayoutEffect(() => {
     if (schema) {
@@ -34,10 +37,28 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     }
   }
 
+  function onFormEdit(evt) {
+    const { target } = evt;
+    const { schematype, schemapath } = target.dataset;
+    if (editable && schemapath && /string|integer|number/.test(schematype)) {
+      const formSchema = findSchemaByPath(schema, schemapath);
+      editPathRef.current = schemapath;
+      setEditSchema(formSchema);
+    }
+  }
+
+  function onFormUpdate(formSchema) {
+    updateSchemaByPath(schema, editPathRef.current, formSchema);
+  }
+
   if (schema) {
     return (
-      <div className='form-view'>
-        <div style={{ display: show ? 'block' : 'none' }} ref={formRef} className='schema-form'></div>
+      <div className={'form-view' + (editable ? ' form-edit' : '')}>
+        <div
+          style={{ display: show ? 'block' : 'none' }}
+          ref={formRef}
+          className='schema-form'
+          onClick={onFormEdit}></div>
         {editable && (
           <div className={'schema-box' + (schemaShow ? ' schema-show' : '')}>
             <Button key='update' value='更新至表单' onClick={updateSchema} />
@@ -45,6 +66,16 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
               <i className={'fa fa-angle-' + (schemaShow ? 'right' : 'left')} />
             </div>
             <AceCode type='json' code={JSON.stringify(schema, null, 2)} onReady={ace => (aceEditor.current = ace)} />
+          </div>
+        )}
+        {editable && editSchema && (
+          <div className='popup-mask'>
+            <div className='popup-main' style={{ width: 600, height: 350, padding: 15 }}>
+              <div className='popup-hide' title='关闭' onClick={() => setEditSchema(null)}>
+                <i className='fas fa-times'></i>
+              </div>
+              <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
+            </div>
           </div>
         )}
       </div>
