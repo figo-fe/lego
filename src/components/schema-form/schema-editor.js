@@ -39,6 +39,12 @@ export default ({ schema, onUpdate }) => {
         tmp.type = 'number';
         break;
 
+      case 'boolean':
+        tmp.type = 'boolean';
+        tmp.enum = [true, false];
+        tmp.options.enum_titles = ['是', '否'];
+        break;
+
       case 'range':
         tmp.type = 'number';
         tmp.minimum = 1;
@@ -93,6 +99,7 @@ export default ({ schema, onUpdate }) => {
             <option value='text'>单行文本</option>
             <option value='textarea'>多行文本</option>
             <option value='number'>数字</option>
+            <option value='boolean'>布尔值</option>
             <option value='password'>密码</option>
             <option value='range'>范围</option>
             <option value='url'>网址</option>

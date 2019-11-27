@@ -40,7 +40,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
   function onFormEdit(evt) {
     const { target } = evt;
     const { schematype, schemapath } = target.dataset;
-    if (editable && schemapath && /string|integer|number/.test(schematype)) {
+    if (editable && schemapath && /string|integer|number|boolean/.test(schematype)) {
       const formSchema = findSchemaByPath(schema, schemapath);
       editPathRef.current = schemapath;
       setEditSchema(formSchema);

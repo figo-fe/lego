@@ -24,7 +24,7 @@ const dict = {
   '(pay|buy)': '支付',
   '(amt|amount)': '金额',
   '(detail)': '详情',
-  '(click)': '点击'
+  '(click)': '点击',
 };
 const getTitle = key => {
   for (var rule in dict) {
@@ -46,17 +46,18 @@ const dataHandle = {
     type: 'number',
     title: getTitle(key),
     options: {
-      grid_columns: 3
-    }
+      grid_columns: 3,
+    },
   }),
   boolean: key => ({
-    type: 'integer',
+    type: 'boolean',
+    format: 'boolean',
     title: getTitle(key),
-    enum: [1, 0],
+    enum: [true, false],
     options: {
       enum_titles: ['是', '否'],
-      grid_columns: 3
-    }
+      grid_columns: 3,
+    },
   }),
   string: function(key, data) {
     const schema = {};
@@ -64,7 +65,7 @@ const dataHandle = {
     schema.title = getTitle(key);
     schema.format = 'text';
     schema.options = {
-      grid_columns: 3
+      grid_columns: 3,
     };
 
     switch (true) {
@@ -74,8 +75,8 @@ const dataHandle = {
           {
             rel: '',
             href: '{{self}}',
-            mediaType: 'image'
-          }
+            mediaType: 'image',
+          },
         ];
         break;
 
@@ -90,8 +91,8 @@ const dataHandle = {
           {
             rel: '',
             href: '{{self}}',
-            mediaType: 'video/mp4'
-          }
+            mediaType: 'video/mp4',
+          },
         ];
         break;
 
@@ -101,7 +102,7 @@ const dataHandle = {
           wrap: true,
           showClearButton: true,
           time_24hr: true,
-          allowInput: false
+          allowInput: false,
         };
         break;
 
@@ -133,7 +134,7 @@ const dataHandle = {
       schema.items = dataHandle[getType(data[0])](key, data[0]);
     }
     return schema;
-  }
+  },
 };
 
 export default (json, name = '表单标题') => {
@@ -144,7 +145,7 @@ export default (json, name = '表单标题') => {
     console.warn(err);
     return {
       title: '数据解析出错，请返回重试',
-      properties: {}
+      properties: {},
     };
   }
 };

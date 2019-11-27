@@ -72,12 +72,14 @@
 .form-edit {
   [data-schematype='string'],
   [data-schematype='number'],
-  [data-schematype='integer'] {
+  [data-schematype='integer'],
+  [data-schematype='boolean'] {
     position: relative;
   }
   [data-schematype='string']:hover:after,
   [data-schematype='number']:hover:after,
-  [data-schematype='integer']:hover:after {
+  [data-schematype='integer']:hover:after,
+  [data-schematype='boolean']:hover:after {
     content: '\20';
     position: absolute;
     background: rgba($color: #0088ff, $alpha: 0.1);
@@ -91,7 +93,8 @@
   }
   [data-schematype='string']:hover:before,
   [data-schematype='number']:hover:before,
-  [data-schematype='integer']:hover:before {
+  [data-schematype='integer']:hover:before,
+  [data-schematype='boolean']:hover:before {
     content: '编辑';
     position: absolute;
     padding: 2px 5px;
