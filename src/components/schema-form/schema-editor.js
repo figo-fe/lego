@@ -132,6 +132,11 @@ export default ({ schema, onUpdate }) => {
         <button className='btn btn-sm btn-success' onClick={() => onUpdate(JSON.parse(aceRef.current.getValue()))}>
           保存
         </button>
+        <button
+          className='btn btn-sm btn-outline-primary'
+          onClick={() => window.open('https://github.com/json-editor/json-editor')}>
+          帮助
+        </button>
       </div>
     </div>
   );
