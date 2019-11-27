@@ -131,7 +131,7 @@ export default ({ schema, onUpdate }) => {
       <div className='col-md-12' style={{ textAlign: 'right' }}>
         <button
           className='btn btn-sm btn-outline-primary'
-          onClick={() => window.open('https://github.com/json-editor/json-editor')}>
+          onClick={() => window.open('https://github.com/json-editor/json-editor#json-editor')}>
           帮助
         </button>
         <button
