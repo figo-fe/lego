@@ -128,14 +128,17 @@ export default ({ schema, onUpdate }) => {
           <AceCode type='json' code={JSON.stringify(formSchema, null, 2)} onReady={ace => (aceRef.current = ace)} />
         </div>
       </div>
-      <div className='col-md-12'>
-        <button className='btn btn-sm btn-success' onClick={() => onUpdate(JSON.parse(aceRef.current.getValue()))}>
-          保存
-        </button>
+      <div className='col-md-12' style={{ textAlign: 'right' }}>
         <button
           className='btn btn-sm btn-outline-primary'
           onClick={() => window.open('https://github.com/json-editor/json-editor')}>
           帮助
+        </button>
+        <button
+          className='btn btn-sm btn-success'
+          style={{ marginLeft: 10 }}
+          onClick={() => onUpdate(JSON.parse(aceRef.current.getValue()))}>
+          保存
         </button>
       </div>
     </div>
