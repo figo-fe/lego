@@ -154,23 +154,17 @@ export const findSchemaByPath = (schema, path) => {
 // 根据path更新schema对应节点
 export const updateSchemaByPath = (schema, path, data) => {
   if (path === 'root') return data;
-
-  let tmp = Object.assign({}, schema);
-  let cur = tmp;
   let props = path.split('.').slice(1);
 
-  for (let i = 0, len = props.length; i < len; i++) {
-    if (cur.type === 'object') {
-      cur = cur['properties'][props[i]];
-    } else if (cur.type === 'array') {
-      cur = cur['items'];
+  for (var i = 0, len = props.length - 1; i < len; i++) {
+    if (schema.type === 'object') {
+      schema = schema['properties'][props[i]];
+    } else if (schema.type === 'array') {
+      schema = schema['items'];
     }
   }
 
-  cur = data;
-  console.log(cur);
-
-  return tmp;
+  schema['properties'][props[i]] = data;
 };
 
 export const isInFrame = window.self !== window.top;

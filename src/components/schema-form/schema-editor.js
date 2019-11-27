@@ -1,10 +1,20 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { AceCode } from '../../components';
 
 export default ({ schema, onUpdate }) => {
   const [formSchema, setFormSchema] = useState(schema);
+  const aceRef = useRef(null);
+  const choiceRef = useRef(null);
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => {
+    choiceRef.current = new window.Choices('#formTypeSelect', {
+      position: 'bottom',
+      shouldSort: false,
+    });
+    return () => {
+      choiceRef.current.destroy();
+    };
+  }, []);
 
   function onGridChange(evt) {
     const { value } = evt.target;
@@ -79,7 +89,7 @@ export default ({ schema, onUpdate }) => {
       <div className='col-md-6'>
         <div className='form-group'>
           <label className='form-control-label'>表单类型</label>
-          <select className='form-control' value={formSchema.format} onChange={onTypeChange}>
+          <select id='formTypeSelect' className='form-control' value={formSchema.format} onChange={onTypeChange}>
             <option value='text'>单行文本</option>
             <option value='textarea'>多行文本</option>
             <option value='number'>数字</option>
@@ -88,7 +98,7 @@ export default ({ schema, onUpdate }) => {
             <option value='url'>网址</option>
             <option value='select'>下拉框</option>
             <option value='datetime-local'>时间</option>
-            <option value='upload'>图片</option>
+            <option value='upload'>上传图片</option>
             <option value='html'>编辑器</option>
           </select>
         </div>
@@ -108,11 +118,11 @@ export default ({ schema, onUpdate }) => {
       </div>
       <div className='col-md-12'>
         <div className='form-group' style={{ height: 200 }}>
-          <AceCode type='json' code={JSON.stringify(formSchema, null, 2)} />
+          <AceCode type='json' code={JSON.stringify(formSchema, null, 2)} onReady={ace => (aceRef.current = ace)} />
         </div>
       </div>
       <div className='col-md-12'>
-        <button className='btn btn-sm btn-success' onClick={() => onUpdate(formSchema)}>
+        <button className='btn btn-sm btn-success' onClick={() => onUpdate(JSON.parse(aceRef.current.getValue()))}>
           保存
         </button>
       </div>

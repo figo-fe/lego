@@ -49,6 +49,8 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
 
   function onFormUpdate(formSchema) {
     updateSchemaByPath(schema, editPathRef.current, formSchema);
+    onSchemaUpdate(schema);
+    setEditSchema(null);
   }
 
   if (schema) {
