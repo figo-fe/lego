@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { AceCode } from '../../components';
+import { AceCode } from '..';
 
 export default ({ schema, onUpdate }) => {
   const [formSchema, setFormSchema] = useState(schema);

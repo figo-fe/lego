@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useRef } from 'react';
-import { Button, AceCode } from '../../components';
+import { Button, AceCode } from '..';
 import { initEditor, toast, findSchemaByPath, updateSchemaByPath } from '../../common/utils';
 import SchemaEditor from './schema-editor';
 import './index.scss';
