@@ -25,6 +25,7 @@ const dict = {
   '(amt|amount)': '金额',
   '(detail)': '详情',
   '(click)': '点击',
+  '(rank)': '排行',
 };
 const getTitle = key => {
   for (var rule in dict) {
@@ -44,6 +45,7 @@ const getType = function(data) {
 const dataHandle = {
   number: key => ({
     type: 'number',
+    format: 'number',
     title: getTitle(key),
     options: {
       grid_columns: 3,
