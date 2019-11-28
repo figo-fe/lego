@@ -326,3 +326,7 @@
 .choices[data-type*='select-one'] .choices__input {
   padding: 5px 10px;
 }
+.choices__list--multiple .choices__item {
+  padding: 1px 6px;
+  border-radius: 3px;
+}

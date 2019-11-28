@@ -119,6 +119,11 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.plugins.sceditor.icons = 'monocons';
     JSONEditor.plugins.sceditor.height = 400;
 
+    // config choices
+    JSONEditor.plugins.choices = {
+      shouldSort: false,
+    };
+
     // 富文本编辑器默认工具栏
     JSONEditor.plugins.sceditor.toolbar = [
       'bold,italic,underline',

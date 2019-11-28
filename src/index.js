@@ -12,6 +12,7 @@ import { FormUse } from './pages/form/use';
 import { TableEdit } from './pages/table';
 import { TableList } from './pages/table/list';
 import { TableUse } from './pages/table/use';
+import { ChartsEdit } from './pages/charts';
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
@@ -66,14 +67,19 @@ const App = () => {
               <Redirect exact path='/' to='/htm/index' />
               <Route path='/htm/index' render={GuideHome} />
               <Route path='/htm/setting' render={() => <Setting updateSetting={setSetting} />} />
+
               <Route path='/htm/form/create' component={FormCreate} />
               <Route path='/htm/form/list' component={FormList} />
               <Route path='/htm/form/edit/:id' component={FormEdit} />
               <Route path='/htm/form/use/:id' component={FormUse} />
+
               <Route path='/htm/table/create' component={TableEdit} />
               <Route path='/htm/table/edit/:id' component={TableEdit} />
               <Route path='/htm/table/list' component={TableList} />
               <Route path='/htm/table/use/:id' component={TableUse} />
+
+              <Route path='/htm/charts/create' component={ChartsEdit} />
+              <Route path='/htm/charts/edit/:id' component={ChartsEdit} />
 
               <Route path='/htm/help/form' component={FormHelp} />
               <Route path='/htm/help/table' component={TableHelp} />
