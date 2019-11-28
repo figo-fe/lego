@@ -322,6 +322,7 @@
 .choices__list--dropdown {
   z-index: 99;
 }
-.choices__list--dropdown .choices__item {
+.choices__list--dropdown .choices__item,
+.choices[data-type*='select-one'] .choices__input {
   padding: 5px 10px;
 }

@@ -113,7 +113,7 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.plugins.ace.theme = 'monokai';
 
     // config sceditor
-    JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/sceditor/themes/content.min.css';
+    JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/lib/sceditor/themes/content.min.css';
     JSONEditor.plugins.sceditor.plugins = 'dragdrop';
     JSONEditor.plugins.sceditor.emoticonsEnabled = false;
     JSONEditor.plugins.sceditor.icons = 'monocons';
