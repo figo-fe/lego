@@ -1,7 +1,17 @@
-exports.setting = require('./setting');
-exports.form = require('./form');
-exports.formDelete = require('./form-delete');
-exports.formList = require('./form-list');
-exports.table = require('./table');
-exports.tableDelete = require('./table-delete');
-exports.tableList = require('./table-list');
+const setting = require('./setting');
+const { form, formDelete, formList } = require('./form');
+const { table, tableDelete, tableList } = require('./table');
+const { chart, chartDelete, chartList } = require('./chart');
+
+module.exports = {
+  setting,
+  form,
+  formDelete,
+  formList,
+  table,
+  tableDelete,
+  tableList,
+  chart,
+  chartDelete,
+  chartList,
+};

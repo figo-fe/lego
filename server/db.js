@@ -1,9 +1,8 @@
 const Database = require('better-sqlite3');
 const fs = require('fs');
-const { printLog } = require('./common');
 
 // 检查并创建db目录
-if (!fs.existsSync('db')) fs.mkdirSync('db')
+if (!fs.existsSync('db')) fs.mkdirSync('db');
 
 const db = new Database('./db/lego.db', { verbose: console.log });
 
@@ -48,9 +47,23 @@ const createTable = () => {
   return db.prepare(sql).run();
 };
 
+const createChart = () => {
+  const sql = `CREATE TABLE IF NOT EXISTS charts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    desc TEXT,
+    config TEXT,
+    ext TEXT DEFAULT '',
+    state INTEGER DEFAULT 1
+  )`;
+
+  return db.prepare(sql).run();
+};
+
 // 创建表单
 createSetting();
 createForm();
 createTable();
+createChart();
 
 module.exports = db;

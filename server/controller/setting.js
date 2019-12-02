@@ -8,7 +8,7 @@ const saveSetting = data => {
   const row = db.prepare('select * from setting').get();
 
   if (row) {
-    db.prepare('UPDATE setting set name = ?, baseUrl = ?, mode = ?, sideMenu = ?, uploadFn = ? where id = ?').run(
+    db.prepare('UPDATE setting SET name = ?, baseUrl = ?, mode = ?, sideMenu = ?, uploadFn = ? WHERE id = ?').run(
       data.name,
       data.baseUrl,
       data.mode,

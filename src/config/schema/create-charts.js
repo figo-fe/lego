@@ -14,7 +14,7 @@ export const createCharts = {
       },
     },
     theme: {
-      title: '颜色主题',
+      title: '配色',
       type: 'string',
       format: 'choices',
       enum: ['default', 'light', 'dart'],
@@ -29,7 +29,7 @@ export const createCharts = {
       title: '备注',
       type: 'string',
       options: {
-        grid_columns: 3,
+        grid_columns: 6,
       },
     },
     list: {
@@ -104,8 +104,8 @@ export const createCharts = {
             format: 'select',
             items: {
               type: 'string',
-              enum: ['saveAsImage', 'restore', 'dataZoom', 'magicType'],
-              enum_titles: ['1', '2', '3', '4'],
+              enum: ['saveAsImage', 'dataZoom', 'magicType', 'restore'],
+              enum_titles: ['保存为图片', '区域缩放', '类型切换', '配置还原'],
             },
             enum_titles: [1, 2, 3, 4],
             options: {

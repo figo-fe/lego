@@ -12,7 +12,12 @@ exports.API = {
   // 列表
   TABLE: '/_lego_api_/table',
   TABLE_DELETE: '/_lego_api_/table/delete',
-  Table_LIST: '/_lego_api_/table/list',
+  TABLE_LIST: '/_lego_api_/table/list',
+
+  // 图表
+  CHART: '/_lego_api_/chart',
+  CHART_DELETE: '/_lego_api_/chart/delete',
+  CHART_LIST: '/_lego_api_/chart/list',
 };
 
 exports.resEnd = (ctx, ret = {}) => {

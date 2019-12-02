@@ -3,8 +3,20 @@ const url = require('url');
 const staticServ = require('koa-static');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
-const { setting, form, formDelete, formList, table, tableDelete, tableList } = require('./controller');
 const { API } = require('./common');
+
+const {
+  setting,
+  form,
+  formDelete,
+  formList,
+  table,
+  tableDelete,
+  tableList,
+  chart,
+  chartDelete,
+  chartList,
+} = require('./controller');
 
 const app = new Koa();
 
@@ -35,8 +47,20 @@ const handleApi = ctx => {
       tableDelete(ctx);
       break;
 
-    case API.Table_LIST:
+    case API.TABLE_LIST:
       tableList(ctx);
+      break;
+
+    case API.CHART:
+      chart(ctx);
+      break;
+
+    case API.CHART_DELETE:
+      chartDelete(ctx);
+      break;
+
+    case API.CHART_LIST:
+      chartList(ctx);
       break;
 
     default:
