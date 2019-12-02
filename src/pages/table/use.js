@@ -16,6 +16,9 @@ export const TableUse = props => {
 
     return () => {
       try {
+        // 重置
+        setConfig(null);
+
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
         delete window[fn];
