@@ -9,7 +9,7 @@ export const TableList = props => {
     cols: [
       { key: 'id', name: 'ID', width: '100', fn: [] },
       { key: 'name', name: '列表名称', width: '300', fn: ['search'] },
-      { key: 'desc', name: '描述', width: '', fn: [] },
+      { key: 'desc', name: '备注', width: '', fn: [] },
     ],
     handles: [
       {

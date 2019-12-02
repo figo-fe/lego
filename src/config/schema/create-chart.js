@@ -1,4 +1,4 @@
-export const createCharts = {
+export const createChart = {
   title: '创建图表',
   type: 'object',
   format: 'grid',
@@ -9,6 +9,7 @@ export const createCharts = {
     name: {
       title: '名称',
       type: 'string',
+      minLength: 1,
       options: {
         grid_columns: 3,
       },
@@ -36,6 +37,7 @@ export const createCharts = {
       title: '图表集',
       type: 'array',
       format: 'tabs-top',
+      minItems: 1,
       options: {
         disable_collapse: true,
       },
@@ -116,6 +118,7 @@ export const createCharts = {
             type: 'array',
             format: 'table',
             title: '系列',
+            minItems: 1,
             options: {
               disable_collapse: true,
             },

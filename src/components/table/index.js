@@ -12,13 +12,14 @@ export const Table = props => {
   const { config } = props;
   const checked = config && config.base && config.cols;
   const context = useContext(SettingContext);
+  const defaultPageNo = (window.location.search.match(/pageNo=(\d+)/) || []).pop() || 1;
   const [tableList, setTableList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState(''); // key-ase, key-desc
   const [search, setSearch] = useState({});
   const [page, setPage] = useState(null);
-  const defaultPageNo = (window.location.search.match(/pageNo=(\d+)/) || []).pop() || 1;
   const [pageNo, setPageNo] = useState(defaultPageNo);
+  const [hack, setHack] = useState(true);
 
   // 初始化数据
   useEffect(() => {
@@ -41,7 +42,7 @@ export const Table = props => {
           console.log(err);
         });
     }
-  }, [checked, context.baseUrl, config.base, sort, search, pageNo]);
+  }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
   if (!checked) return <div>data or config error...</div>;
 
@@ -59,9 +60,8 @@ export const Table = props => {
         axios('POST', url)
           .then(res => {
             toast(`${handle.name}成功`);
-            setTimeout(() => {
-              window.location.reload();
-            }, 2e3);
+            // 刷新当前数据
+            setTimeout(() => setHack(!hack), 1500);
             console.log(res);
           })
           .catch(err => {

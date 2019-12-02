@@ -2,3 +2,4 @@ export const BASEURL = (process.env.NODE_ENV === 'production' ? '/' : 'http://lo
 export const SETTING = BASEURL + '/setting';
 export const FORM = BASEURL + '/form';
 export const TABLE = BASEURL + '/table';
+export const CHART = BASEURL + '/chart';

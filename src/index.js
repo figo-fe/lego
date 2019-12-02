@@ -12,7 +12,8 @@ import { FormUse } from './pages/form/use';
 import { TableEdit } from './pages/table';
 import { TableList } from './pages/table/list';
 import { TableUse } from './pages/table/use';
-import { ChartsEdit } from './pages/charts';
+import { ChartEdit } from './pages/chart';
+import { ChartList } from './pages/chart/list';
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
@@ -78,8 +79,9 @@ const App = () => {
               <Route path='/htm/table/list' component={TableList} />
               <Route path='/htm/table/use/:id' component={TableUse} />
 
-              <Route path='/htm/charts/create' component={ChartsEdit} />
-              <Route path='/htm/charts/edit/:id' component={ChartsEdit} />
+              <Route path='/htm/chart/create' component={ChartEdit} />
+              <Route path='/htm/chart/edit/:id' component={ChartEdit} />
+              <Route path='/htm/chart/list' component={ChartList} />
 
               <Route path='/htm/help/form' component={FormHelp} />
               <Route path='/htm/help/table' component={TableHelp} />

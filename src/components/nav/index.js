@@ -11,6 +11,12 @@ export const Nav = ({ mode }) => (
         </Link>
       </div>
       <div className='nav-item'>
+        <Link to='/htm/chart/list'>
+          <i className='fas fa-chart-line' />
+          <span>图表管理</span>
+        </Link>
+      </div>
+      <div className='nav-item'>
         <Link to='/htm/table/list'>
           <i className='fas fa-table' />
           <span>列表管理</span>
@@ -18,7 +24,7 @@ export const Nav = ({ mode }) => (
       </div>
       <div className='nav-item'>
         <Link to='/htm/form/list'>
-          <i className='fas fa-list-alt' />
+          <i className='fas fa-th-list' />
           <span>表单管理</span>
         </Link>
       </div>

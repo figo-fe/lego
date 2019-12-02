@@ -14,6 +14,7 @@ export const createTable = {
         name: {
           title: '名称',
           type: 'string',
+          minLength: 1,
           options: {
             grid_columns: 3,
           },
@@ -46,6 +47,7 @@ export const createTable = {
       type: 'array',
       title: '列表字段',
       format: 'table',
+      minItems: 1,
       options: {
         collapsed: true,
       },

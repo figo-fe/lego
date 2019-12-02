@@ -98,21 +98,21 @@ export default ({ schema, onUpdate }) => {
           <select id='formTypeSelect' className='form-control' value={formSchema.format} onChange={onTypeChange}>
             <option value='text'>单行文本</option>
             <option value='textarea'>多行文本</option>
-            <option value='number'>数字</option>
+            <option value='number'>数值</option>
             <option value='boolean'>布尔值</option>
             <option value='password'>密码</option>
-            <option value='range'>范围</option>
+            <option value='datetime-local'>时间</option>
+            <option value='upload'>图片</option>
             <option value='url'>网址</option>
             <option value='select'>下拉框</option>
-            <option value='datetime-local'>时间</option>
-            <option value='upload'>上传图片</option>
-            <option value='html'>编辑器</option>
+            <option value='range'>滑动条</option>
+            <option value='html'>富文本编辑器</option>
           </select>
         </div>
       </div>
       <div className='col-md-6'>
         <div className='form-group'>
-          <label className='form-control-label'>布局Grid</label>
+          <label className='form-control-label'>Grid</label>
           <input
             className='form-control'
             type='number'
