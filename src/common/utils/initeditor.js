@@ -113,7 +113,7 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.plugins.ace.theme = 'monokai';
 
     // config sceditor
-    JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/lib/sceditor/themes/content.min.css';
+    JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/lib/sceditor/content.min.css';
     JSONEditor.plugins.sceditor.plugins = 'dragdrop';
     JSONEditor.plugins.sceditor.emoticonsEnabled = false;
     JSONEditor.plugins.sceditor.icons = 'monocons';
@@ -158,12 +158,12 @@ export default (el, schema = {}, opts = {}) => {
       },
     };
 
-    return new JSONEditor(el, {
+    return (window._JsonEditor_ = new JSONEditor(el, {
       disable_edit_json: true,
       disable_properties: true,
       ...opts,
       schema,
-    });
+    }));
   } else {
     return null;
   }

@@ -117,17 +117,36 @@ export const buildUrl = (url, params) => {
   });
 };
 
-// 根据path查找object中的值
+/**
+ * 根据path查找object中的值
+ * @param {object} object
+ * @param {string} path 如 data.list..name，「..」用map取得相应数据并返回
+ */
 export const findByPath = (object, path) => {
-  let obj = Object.assign({}, object);
-  let props = path.split('.');
+  // 容错
+  if (!object || path.length === 0) return undefined;
 
-  for (let i = 0; i < props.length; i++) {
-    let p = props[i];
-    if (obj && obj.hasOwnProperty(p)) {
-      obj = obj[p];
+  // 查找相应属性
+  path = path.indexOf('.') === 0 ? path : `.${path}`;
+  let obj = Object.assign({}, object);
+  let splits = path.match(/\.{1,2}[^.]+/g);
+
+  for (let i = 0; i < splits.length; i++) {
+    let v = splits[i];
+    let k = v.replace(/\./g, '');
+
+    if (v.indexOf('..') === 0) {
+      if (Array.isArray(obj)) {
+        obj = obj.map(o => o[k]);
+      } else {
+        return undefined;
+      }
     } else {
-      return undefined;
+      if (obj && obj.hasOwnProperty(k)) {
+        obj = obj[k];
+      } else {
+        return undefined;
+      }
     }
   }
   return obj;

@@ -11,25 +11,25 @@ export const GuideHome = () => (
       <div className='entry'>
         <Link to='/htm/form/create' className='item'>
           <p>
-            <i className='fas fa-list-alt'></i>
+            <i className='fas fa-th-list'></i>
           </p>
           <h2>创建表单</h2>
           <p className='desc'>以JSON数据为模型自动创建表单，支持日期、上传、编辑器等多种表单模型</p>
         </Link>
         <Link to='/htm/table/create' className='item'>
           <p>
-            <i className='fas fa-border-all'></i>
+            <i className='fas fa-table'></i>
           </p>
           <h2>创建列表</h2>
           <p className='desc'>提供API和表头，一键生成列表页，支持字段排序、搜索、分页等列表常用功能</p>
         </Link>
-        <div className='item'>
+        <Link to='/htm/chart/create' className='item'>
           <p>
-            <i className='fas fa-signal'></i>
+            <i className='fas fa-chart-line'></i>
           </p>
           <h2>创建图表</h2>
           <p className='desc'>通过简单配置即可生成折线图、柱状图、饼状图等多种数据图表</p>
-        </div>
+        </Link>
       </div>
       <div className='info lnks'>
         帮助文档：<Link to='/htm/help/general'>通用说明</Link>

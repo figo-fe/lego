@@ -41,8 +41,6 @@ export default ({ schema, onUpdate }) => {
 
       case 'boolean':
         tmp.type = 'boolean';
-        tmp.enum = [true, false];
-        tmp.options.enum_titles = ['是', '否'];
         break;
 
       case 'range':

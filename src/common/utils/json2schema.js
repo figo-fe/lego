@@ -53,11 +53,8 @@ const dataHandle = {
   }),
   boolean: key => ({
     type: 'boolean',
-    format: 'boolean',
     title: getTitle(key),
-    enum: [true, false],
     options: {
-      enum_titles: ['是', '否'],
       grid_columns: 3,
     },
   }),
