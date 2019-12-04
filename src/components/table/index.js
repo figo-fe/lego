@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
 import { axios, toast, buildUrl, findByPath, Popup } from '../../common/utils';
@@ -8,7 +9,7 @@ import './index.scss';
 
 const icons = ['file-alt', 'podcast', 'paper-plane', 'database', 'columns', 'cube'];
 
-export const Table = props => {
+const _Table = props => {
   const { config } = props;
   const checked = config && config.base && config.cols;
   const context = useContext(SettingContext);
@@ -51,7 +52,7 @@ export const Table = props => {
   const searchBox = cols.filter(col => col.fn.indexOf('search') !== -1);
 
   function onClickHandle(row, handle) {
-    let url = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
+    let url = buildUrl(handle.url, row);
     url = buildUrl(url, row);
     switch (handle.action) {
       case 'open':
@@ -59,10 +60,15 @@ export const Table = props => {
         break;
 
       case 'link':
-        window.location.assign(url);
+        if (/^http|\/\//.test(url)) {
+          window.location.assign(url);
+        } else {
+          props.history.push(url);
+        }
         break;
 
       case 'api':
+        url = /^(http|\/\/)/.test(url) ? url : context.baseUrl + url;
         if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
           axios('POST', url)
             .then(res => {
@@ -198,3 +204,4 @@ export const Table = props => {
     </div>
   );
 };
+export const Table = withRouter(_Table);
