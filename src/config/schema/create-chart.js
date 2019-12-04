@@ -95,7 +95,7 @@ export const createChart = {
             type: 'number',
             format: 'number',
             title: '高度',
-            default: 200,
+            default: 350,
             options: {
               grid_columns: 3,
             },
@@ -103,13 +103,11 @@ export const createChart = {
           toolbox: {
             title: '工具栏',
             type: 'array',
-            format: 'select',
+            uniqueItems: true,
             items: {
               type: 'string',
-              enum: ['saveAsImage', 'dataZoom', 'magicType', 'restore'],
-              enum_titles: ['保存为图片', '区域缩放', '类型切换', '配置还原'],
+              enum: ['saveAsImage', 'dataZoom', 'magicType'],
             },
-            enum_titles: [1, 2, 3, 4],
             options: {
               grid_columns: 6,
             },
@@ -144,7 +142,7 @@ export const createChart = {
                 type: {
                   type: 'string',
                   title: '类型',
-                  enum: ['bar', 'line', 'pie'],
+                  enum: ['line', 'bar', 'pie'],
                   options: {
                     enum_titles: ['折线图', '柱状图', '饼状图'],
                     input_width: '160px',
@@ -164,9 +162,9 @@ export const createChart = {
                   },
                 },
                 label: {
-                  type: 'boolean',
+                  type: 'string',
                   title: '显示数值',
-                  enum: [true, false],
+                  enum: ['1', '0'],
                   options: {
                     enum_titles: ['显示', '隐藏'],
                     input_width: '150px',

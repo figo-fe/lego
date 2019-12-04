@@ -112,17 +112,17 @@ export default (el, schema = {}, opts = {}) => {
     JSONEditor.defaults.options.iconlib = 'fontawesome5';
     JSONEditor.plugins.ace.theme = 'monokai';
 
+    // config choices
+    JSONEditor.plugins.choices = {
+      shouldSort: false,
+    };
+
     // config sceditor
     JSONEditor.plugins.sceditor.style = process.env.PUBLIC_URL + '/lib/sceditor/content.min.css';
     JSONEditor.plugins.sceditor.plugins = 'dragdrop';
     JSONEditor.plugins.sceditor.emoticonsEnabled = false;
     JSONEditor.plugins.sceditor.icons = 'monocons';
     JSONEditor.plugins.sceditor.height = 400;
-
-    // config choices
-    JSONEditor.plugins.choices = {
-      shouldSort: false,
-    };
 
     // 富文本编辑器默认工具栏
     JSONEditor.plugins.sceditor.toolbar = [
