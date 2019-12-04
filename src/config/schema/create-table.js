@@ -109,6 +109,10 @@ export const createTable = {
             enum: ['link', 'open', 'popup', 'api'],
             options: {
               enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求'],
+              input_width: '180px',
+              choices_options: {
+                searchEnabled: false,
+              },
             },
           },
         },

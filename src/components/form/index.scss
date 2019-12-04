@@ -1,6 +1,5 @@
 .form-view {
   position: relative;
-  overflow: hidden;
 
   .schema-box {
     position: absolute;
@@ -73,6 +72,8 @@
   }
 }
 .form-edit {
+  overflow: hidden;
+
   [data-schematype='string'],
   [data-schematype='number'],
   [data-schematype='integer'],
