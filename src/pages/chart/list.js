@@ -24,7 +24,7 @@ export const ChartList = props => {
         name: '编辑',
         icon: 'edit',
         url: `//${window.location.host}/htm/chart/edit/{{id}}`,
-        action: 'open',
+        action: 'link',
       },
       { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'chart/delete?id={{id}}', action: 'api' },
     ],

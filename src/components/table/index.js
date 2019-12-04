@@ -53,24 +53,37 @@ export const Table = props => {
   function onClickHandle(row, handle) {
     let url = (/^(http|\/\/)/.test(handle.url) ? '' : context.baseUrl) + handle.url;
     url = buildUrl(url, row);
-    if (handle.action === 'open') {
-      window.open(url);
-    } else if (handle.action === 'api') {
-      if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
-        axios('POST', url)
-          .then(res => {
-            toast(`${handle.name}成功`);
-            // 刷新当前数据
-            setTimeout(() => setHack(!hack), 1500);
-            console.log(res);
-          })
-          .catch(err => {
-            toast(`${handle.name}失败\n${String(err)}`);
-            console.warn(err);
-          });
-      }
-    } else if (handle.action === 'popup') {
-      Popup.show(url);
+    switch (handle.action) {
+      case 'open':
+        window.open(url);
+        break;
+
+      case 'link':
+        window.location.assign(url);
+        break;
+
+      case 'api':
+        if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
+          axios('POST', url)
+            .then(res => {
+              toast(`${handle.name}成功`);
+              // 刷新当前数据
+              setTimeout(() => setHack(!hack), 1500);
+              console.log(res);
+            })
+            .catch(err => {
+              toast(`${handle.name}失败\n${String(err)}`);
+              console.warn(err);
+            });
+        }
+        break;
+
+      case 'popup':
+        Popup.show(url);
+        break;
+
+      default:
+        console.log(handle);
     }
   }
 
