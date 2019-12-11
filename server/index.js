@@ -1,9 +1,17 @@
 const Koa = require('koa');
 const url = require('url');
+const fs = require('fs');
 const staticServ = require('koa-static');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
 const { API } = require('./common');
+
+const ENV = fs.readFileSync(`${process.cwd()}/.env`).toString();
+const PREPATH = (ENV.match(/REACT_APP_PRE=([^\n]+)/) || []).pop();
+
+if (!PREPATH) {
+  return console.log('Must config .env REACT_APP_PRE!');
+}
 
 const {
   setting,
@@ -67,8 +75,7 @@ const handleApi = ctx => {
       console.log(ctx);
   }
 };
-
-app.use(rewrite('/htm/(.*)', '/index.html'));
+app.use(rewrite(`${PREPATH}/(.*)`, '/index.html'));
 app.use(staticServ('build'));
 app.use(bodyParser());
 

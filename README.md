@@ -15,7 +15,7 @@
 1. 确保已安装 Nodejs 、Yarn 和项目依赖（根目录执行`yarn`安装依赖）
 2. 修改`.env`配置
 
-- `REACT_APP_PRE` 页面前缀
+- `REACT_APP_PRE` 页面前缀，必须以`/`开头，结尾没有
 - `PUBLIC_URL` 静态资源前缀，可以将`build`目录下`static`和`lib`部署到其他目录或 CDN
 
 修改后执行`yarn build`进行构建，之后再通过`pm2 start server`启动服务
