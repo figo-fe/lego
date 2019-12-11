@@ -16,14 +16,14 @@ export const ChartList = props => {
         key: 'preview',
         name: '预览',
         icon: 'eye',
-        url: '/htm/chart/use/{{id}}',
-        action: 'open',
+        url: '/chart/use/{{id}}',
+        action: 'link',
       },
       {
         key: 'edit',
         name: '编辑',
         icon: 'edit',
-        url: '/htm/chart/edit/{{id}}',
+        url: '/chart/edit/{{id}}',
         action: 'link',
       },
       { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'chart/delete?id={{id}}', action: 'api' },
@@ -39,7 +39,7 @@ export const ChartList = props => {
             <button
               type='button'
               className='btn btn-primary btn-sm'
-              onClick={() => props.history.push('/htm/chart/create')}>
+              onClick={() => props.history.push('/chart/create')}>
               <i className='fas fa-plus' />
               <span>创建图表</span>
             </button>

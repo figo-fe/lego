@@ -42,6 +42,11 @@ const _Table = props => {
           toast('加载失败');
           console.log(err);
         });
+
+      return () => {
+        delete window.__colFix__;
+        delete window.__pageFix__;
+      };
     }
   }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 

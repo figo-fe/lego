@@ -34,14 +34,14 @@ export const FormHelp = () => (
               <label>提交API</label>
               <p>
                 表单以<code>POST</code>
-                方式提交到此API（支持<Link to='/htm/help/general#url-variable'>URL变量</Link>
+                方式提交到此API（支持<Link to='/help/general#url-variable'>URL变量</Link>
                 ），支持完整路径和相对路径，填写相对路径时会自动拼接系统设置里的「接口前缀」
               </p>
             </li>
             <li>
               <label>数据API</label>
               <p>
-                编辑表单时回填数据的API（支持<Link to='/htm/help/general#url-variable'>URL变量</Link>
+                编辑表单时回填数据的API（支持<Link to='/help/general#url-variable'>URL变量</Link>
                 ），数据结构必须与表单相匹配，否则会发生不可预期的错误。
               </p>
             </li>
@@ -78,7 +78,7 @@ export const FormHelp = () => (
               <p>当表单不符合需求时，通过两方面进行完善：</p>
               <ul>
                 <li>
-                  1. 通过「<Link to='/htm/help/general#json-schema'>JSON-Schema</Link>
+                  1. 通过「<Link to='/help/general#json-schema'>JSON-Schema</Link>
                   」，点击表单右上角蓝色箭头查看和编辑生成的JSON-Schema，参考
                   <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
                     JSON-Editor文档
@@ -98,7 +98,7 @@ export const FormHelp = () => (
                   ，此方法在数据回填完成时执行，并将回填数据作为参数传入。
                   <br />
                   2.3 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
-                  （见<Link to='/htm/help/general#file-upload'>文件上传</Link>）
+                  （见<Link to='/help/general#file-upload'>文件上传</Link>）
                 </li>
               </ul>
               <p></p>

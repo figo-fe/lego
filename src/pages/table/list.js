@@ -16,14 +16,14 @@ export const TableList = props => {
         key: 'preview',
         name: '预览',
         icon: 'eye',
-        url: '/htm/table/use/{{id}}',
-        action: 'open',
+        url: '/table/use/{{id}}',
+        action: 'link',
       },
       {
         key: 'edit',
         name: '编辑',
         icon: 'edit',
-        url: '/htm/table/edit/{{id}}',
+        url: '/table/edit/{{id}}',
         action: 'link',
       },
       { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'table/delete?id={{id}}', action: 'api' },
@@ -39,7 +39,7 @@ export const TableList = props => {
             <button
               type='button'
               className='btn btn-primary btn-sm'
-              onClick={() => props.history.push('/htm/table/create')}>
+              onClick={() => props.history.push('/table/create')}>
               <i className='fas fa-plus' />
               <span>创建列表</span>
             </button>

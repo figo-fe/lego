@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Wrap, SchemaForm, AceCode, Button } from '../../components';
 import { axios, toast } from '../../common/utils';
-import { FORM } from '../../config/apis';
+import { FORM, PREPATH } from '../../config/apis';
 
 export const FormEdit = props => {
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ export const FormEdit = props => {
     })
       .then(() => {
         toast('保存成功');
-        props.history.push('/htm/form/list');
+        props.history.push('/form/list');
       })
       .catch(err => {
         toast(err.msg);
@@ -110,7 +110,7 @@ export const FormEdit = props => {
           <Button value='console.log' onClick={doConsole} extClass='btn-outline-primary' />
           <Button
             key='help'
-            onClick={() => window.open('/htm/help/form')}
+            onClick={() => window.open(`${PREPATH}/help/form`)}
             value='帮助'
             extClass='btn-outline-primary'
           />

@@ -41,13 +41,61 @@ export const GeneralDesc = () => (
         </h2>
         <div className='help-content'>
           <p>
-            URL变量是一种定制URL参数的方式，用在表单提交、表单回填、列表数据等模块。开发者根据需要提供带变量的URL，实现对API的定制，系统中大部分API都支持URL变量。
+            URL变量是一种定制URL参数的方式，用在表单提交、表单回填、列表、图表数据等模块。开发者根据需要提供带变量的URL，实现对API的定制，系统所有API都支持URL变量。
           </p>
           <p>
             格式如：<code>{'https://example.com/api/{{model}}/?id={{orderid}}&state={{state}}'}</code>，变量
             <code>{'{{key}}'}</code>会被替换为当前页面URL中同名参数的值，若找不到对应参数则替换为空。例如当前页URL为
             https://lego.com/htm/form/use/1?orderid=123&model=order，则API被替换为
             {'https://example.com/api/order/?id=123&state='}
+          </p>
+        </div>
+      </div>
+      <div className='guide-node' id='path-map'>
+        <h2 className='help-title help-title-sub'>
+          <a className='hash' href='#path-map'>
+            <i className='fas fa-link'></i>
+          </a>
+          <span>PathMap</span>
+        </h2>
+        <div className='help-content'>
+          <p>
+            PathMap是LEGO特有的一种获取接口数据的方式，一般获取JSON相应节点数据时可使用Path，但萃取列表中某字段时，就要用到PathMap了。例如：
+            <pre>{`{
+  "code": 0,
+  "data": {
+    "list": [
+      {
+        "price": 125,
+        "day": "2019-12-11",
+        "view": 218
+      },
+      {
+        "price": 116,
+        "day": "2019-12-12",
+        "view": 1116
+      },
+      {
+        "price": 126,
+        "day": "2019-12-13",
+        "view": 519
+      }
+    ],
+    "userInfo": {
+      "uid": 623241545,
+      "nickName": "FIGO",
+      "lastLogin": ["2019-12-11 14:25:59", "2019-12-07 10:16:06", "2019-12-12 08:06:28"]
+    }
+  }
+}`}</pre>
+            按照如下方式取值可得到：
+            <br />
+            <code>data.userInfo.nickName</code> => <code>"FIGO"</code>
+            <br />
+            <code>data.userInfo.lastLogin</code> =>{' '}
+            <code>["2019-12-11 14:25:59", "2019-12-07 10:16:06", "2019-12-12 08:06:28"]</code>
+            <br />
+            <code>data.list..view</code> => <code>[218, 1116, 519]</code>
           </p>
         </div>
       </div>
@@ -60,13 +108,13 @@ export const GeneralDesc = () => (
         </h2>
         <div className='help-content'>
           <p>为方便部分操作在当前页进行，LEGO支持自定义弹窗，支持iframe和html渲染，用法如下：</p>
-          <pre>{`popupShow(
-  src: "xxx", // url或html，可嵌入表单或其他页面
+          <pre>{`window.popupShow(
+  src: "https://xxx.com/htm/somepage.html", // url或html，可嵌入表单或其他页面
   width: 700, // 弹窗宽度，默认700
   height: 400 // 弹窗高度，默认400，最大不得超过800
 );
 
-popupShow() // 关闭弹窗`}</pre>
+window.popupShow() // 关闭弹窗`}</pre>
         </div>
       </div>
       <div className='guide-node' id='file-upload'>

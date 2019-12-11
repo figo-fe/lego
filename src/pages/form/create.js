@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { createForm } from '../../config/schema';
 import { axios, toast, json2schema } from '../../common/utils';
 import { Wrap, Button, SchemaForm, AceCode } from '../../components';
-import { FORM } from '../../config/apis';
+import { FORM, PREPATH } from '../../config/apis';
 
 import './form.scss';
 
@@ -52,7 +52,7 @@ export const FormCreate = props => {
     })
       .then(() => {
         toast('保存成功');
-        props.history.push('/htm/form/list');
+        props.history.push('/form/list');
       })
       .catch(err => {
         toast(err.msg);
@@ -88,7 +88,7 @@ export const FormCreate = props => {
             <Button key='next' value='下一步' onClick={doNext} extClass='btn-primary' />,
             <Button
               key='help'
-              onClick={() => window.open('/htm/help/form')}
+              onClick={() => window.open(`${PREPATH}/help/form`)}
               value='帮助'
               extClass='btn-outline-primary'
             />,
@@ -98,7 +98,7 @@ export const FormCreate = props => {
             <Button key='log' value='console.log' onClick={doConsole} extClass='btn-outline-primary' />,
             <Button
               key='help'
-              onClick={() => window.open('/htm/help/form')}
+              onClick={() => window.open(`${PREPATH}/help/form`)}
               value='帮助'
               extClass='btn-outline-primary'
             />,

@@ -16,14 +16,14 @@ export const FormList = props => {
         key: 'view',
         name: '预览',
         icon: 'eye',
-        url: '/htm/form/use/{{id}}',
-        action: 'open',
+        url: '/form/use/{{id}}',
+        action: 'link',
       },
       {
         key: 'edit',
         name: '编辑',
         icon: 'edit',
-        url: '/htm/form/edit/{{id}}',
+        url: '/form/edit/{{id}}',
         action: 'link',
       },
       { key: 'delete', name: '删除', icon: 'trash-alt', url: apiPrefix + 'form/delete?id={{id}}', action: 'api' },
@@ -39,7 +39,7 @@ export const FormList = props => {
             <button
               type='button'
               className='btn btn-primary btn-sm'
-              onClick={() => props.history.push('/htm/form/create')}>
+              onClick={() => props.history.push('/form/create')}>
               <i className='fas fa-plus' />
               <span>创建表单</span>
             </button>

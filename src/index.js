@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import { Nav, Aside } from './components';
 import { Setting } from './pages/setting';
-import { GuideHome, FormHelp, TableHelp, GeneralDesc } from './pages/guide';
+import { GuideHome, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
 import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
@@ -61,33 +61,33 @@ const App = () => {
   return (
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.REACT_APP_PRE}>
           {showAside && <Aside />}
           <div className='frame-body'>
             {showNav && <Nav mode={setting.mode} />}
             <Switch>
-              <Redirect exact path='/' to='/htm/index' />
-              <Route path='/htm/index' render={GuideHome} />
-              <Route path='/htm/setting' render={() => <Setting updateSetting={setSetting} />} />
+              <Route exact path={['/index', '/']} render={GuideHome} />
+              <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
 
-              <Route path='/htm/form/create' component={FormCreate} />
-              <Route path='/htm/form/list' component={FormList} />
-              <Route path='/htm/form/edit/:id' component={FormEdit} />
-              <Route path='/htm/form/use/:id' component={FormUse} />
+              <Route path='/form/create' component={FormCreate} />
+              <Route path='/form/list' component={FormList} />
+              <Route path='/form/edit/:id' component={FormEdit} />
+              <Route path='/form/use/:id' component={FormUse} />
 
-              <Route path='/htm/table/create' component={TableEdit} />
-              <Route path='/htm/table/edit/:id' component={TableEdit} />
-              <Route path='/htm/table/list' component={TableList} />
-              <Route path='/htm/table/use/:id' component={TableUse} />
+              <Route path='/table/create' component={TableEdit} />
+              <Route path='/table/edit/:id' component={TableEdit} />
+              <Route path='/table/list' component={TableList} />
+              <Route path='/table/use/:id' component={TableUse} />
 
-              <Route path='/htm/chart/create' component={ChartEdit} />
-              <Route path='/htm/chart/edit/:id' component={ChartEdit} />
-              <Route path='/htm/chart/list' component={ChartList} />
-              <Route path='/htm/chart/use/:id' component={ChartUse} />
+              <Route path='/chart/create' component={ChartEdit} />
+              <Route path='/chart/edit/:id' component={ChartEdit} />
+              <Route path='/chart/list' component={ChartList} />
+              <Route path='/chart/use/:id' component={ChartUse} />
 
-              <Route path='/htm/help/form' component={FormHelp} />
-              <Route path='/htm/help/table' component={TableHelp} />
-              <Route path='/htm/help/general' component={GeneralDesc} />
+              <Route path='/help/form' component={FormHelp} />
+              <Route path='/help/table' component={TableHelp} />
+              <Route path='/help/chart' component={ChartHelp} />
+              <Route path='/help/general' component={GeneralDesc} />
             </Switch>
           </div>
         </BrowserRouter>

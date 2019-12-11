@@ -2,14 +2,16 @@ import React, { useRef, useEffect } from 'react';
 import { Wrap, SchemaForm, Button } from '../../components';
 import { createChart } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
-import { CHART } from '../../config/apis';
+import { CHART, PREPATH } from '../../config/apis';
 
 export const ChartEdit = props => {
-  const isEdit = props.match.path === '/htm/chart/edit/:id';
+  const isEdit = props.match.path === '/chart/edit/:id';
   const chartEditor = useRef(null);
 
   if (isEdit) {
     createChart.title = '编辑图表';
+  } else {
+    createChart.title = '创建图表';
   }
 
   function doSubmit() {
@@ -39,7 +41,7 @@ export const ChartEdit = props => {
     axios('POST', CHART, postData)
       .then(() => {
         toast('保存成功');
-        props.history.push('/htm/chart/list');
+        props.history.push('/chart/list');
       })
       .catch(err => {
         toast(err.msg);
@@ -64,7 +66,7 @@ export const ChartEdit = props => {
         <SchemaForm onReady={editor => (chartEditor.current = editor)} schema={createChart} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' onClick={() => window.open('/htm/help/chart')} extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/chart`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
       </div>

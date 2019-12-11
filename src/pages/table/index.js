@@ -2,15 +2,17 @@ import React, { useRef, useEffect } from 'react';
 import { Wrap, SchemaForm, Button, AceCode } from '../../components';
 import { createTable } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
-import { TABLE } from '../../config/apis';
+import { TABLE, PREPATH } from '../../config/apis';
 
 export const TableEdit = props => {
-  const isEdit = props.match.path === '/htm/table/edit/:id';
+  const isEdit = props.match.path === '/table/edit/:id';
   const formEditor = useRef(null);
   const extEditor = useRef(null);
 
   if (isEdit) {
     createTable.title = '编辑列表';
+  } else {
+    createTable.title = '创建列表';
   }
 
   function doSubmit() {
@@ -41,7 +43,7 @@ export const TableEdit = props => {
     axios('POST', TABLE, postData)
       .then(() => {
         toast('保存成功');
-        props.history.push('/htm/table/list');
+        props.history.push('/table/list');
       })
       .catch(err => {
         toast(err.msg);
@@ -83,7 +85,7 @@ export const TableEdit = props => {
 
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' onClick={() => window.open('/htm/help/table')} extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/table`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
       </div>
