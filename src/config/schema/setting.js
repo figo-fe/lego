@@ -27,7 +27,6 @@ const sideMenu = `[
   },
   {
     "name": "一级菜单",
-    "url": "/v1/link/",
     "sub": [
       {
         "name": "二级菜单",
@@ -46,13 +45,12 @@ export const setting = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 4,
+        grid_columns: 3,
       },
     },
     baseUrl: {
       title: '接口前缀',
       type: 'string',
-      minLength: 1,
       options: {
         grid_columns: 4,
         inputAttributes: {

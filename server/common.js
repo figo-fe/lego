@@ -18,6 +18,11 @@ exports.API = {
   CHART: '/_lego_api_/chart',
   CHART_DELETE: '/_lego_api_/chart/delete',
   CHART_LIST: '/_lego_api_/chart/list',
+
+  // 面板
+  BOARD: '/_lego_api_/board',
+  BOARD_DELETE: '/_lego_api_/board/delete',
+  BOARD_LIST: '/_lego_api_/board/list',
 };
 
 exports.resEnd = (ctx, ret = {}) => {
@@ -30,13 +35,13 @@ exports.resEnd = (ctx, ret = {}) => {
 };
 
 // 日志
-const fixTimeNum = num => num > 10 ? num : '0' + num;
+const fixTimeNum = num => (num > 10 ? num : '0' + num);
 exports.printLog = log => {
   console.log(log);
   const date = new Date();
   const time = `${fixTimeNum(date.getHours())}:${fixTimeNum(date.getMinutes())}:${fixTimeNum(date.getSeconds())}`;
   const file = `${date.getFullYear()}${fixTimeNum(date.getMonth() + 1)}.log`;
-  if (!fs.existsSync('log')) fs.mkdirSync('log')
+  if (!fs.existsSync('log')) fs.mkdirSync('log');
 
-  fs.appendFile(`./log/${file}`, `${time} - ${log.toString()}\n`, () => { });
+  fs.appendFile(`./log/${file}`, `${time} - ${log.toString()}\n`, () => {});
 };

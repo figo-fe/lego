@@ -60,10 +60,24 @@ const createChart = () => {
   return db.prepare(sql).run();
 };
 
+const createBoard = () => {
+  const sql = `CREATE TABLE IF NOT EXISTS boards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    desc TEXT,
+    config TEXT,
+    ext TEXT DEFAULT '',
+    state INTEGER DEFAULT 1
+  )`;
+
+  return db.prepare(sql).run();
+};
+
 // 创建表单
 createSetting();
 createForm();
 createTable();
 createChart();
+createBoard();
 
 module.exports = db;

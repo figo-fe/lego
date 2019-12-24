@@ -18,7 +18,7 @@ export const createChart = {
       title: '配色',
       type: 'string',
       format: 'choices',
-      enum: ['default', 'light', 'dart'],
+      enum: ['light', 'dart'],
       options: {
         grid_columns: 3,
         choices_options: {

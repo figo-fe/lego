@@ -24,6 +24,9 @@ const {
   chart,
   chartDelete,
   chartList,
+  board,
+  boardDelete,
+  boardList,
 } = require('./controller');
 
 const app = new Koa();
@@ -69,6 +72,18 @@ const handleApi = ctx => {
 
     case API.CHART_LIST:
       chartList(ctx);
+      break;
+
+    case API.BOARD:
+      board(ctx);
+      break;
+
+    case API.BOARD_DELETE:
+      boardDelete(ctx);
+      break;
+
+    case API.BOARD_LIST:
+      boardList(ctx);
       break;
 
     default:

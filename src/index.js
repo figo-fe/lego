@@ -9,12 +9,17 @@ import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
 import { FormUse } from './pages/form/use';
+
 import { TableEdit } from './pages/table';
 import { TableList } from './pages/table/list';
 import { TableUse } from './pages/table/use';
+
 import { ChartEdit } from './pages/chart';
 import { ChartList } from './pages/chart/list';
 import { ChartUse } from './pages/chart/use';
+
+import { BoardEdit } from './pages/board';
+
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
 import { SETTING } from './config/apis';
@@ -32,7 +37,7 @@ const App = () => {
   useEffect(() => {
     axios('GET', SETTING)
       .then(res => {
-        const { name = '后台管理系统', baseUrl, mode, sideMenu, uploadFn } = res.data;
+        const { name = '后台管理系统', baseUrl = '', mode = '', sideMenu, uploadFn } = res.data;
         setSetting({ name, baseUrl, mode, sideMenu, uploadFn });
       })
       .catch(err => {
@@ -83,6 +88,8 @@ const App = () => {
               <Route path='/chart/edit/:id' component={ChartEdit} />
               <Route path='/chart/list' component={ChartList} />
               <Route path='/chart/use/:id' component={ChartUse} />
+
+              <Route path='/board/create' component={BoardEdit} />
 
               <Route path='/help/form' component={FormHelp} />
               <Route path='/help/table' component={TableHelp} />

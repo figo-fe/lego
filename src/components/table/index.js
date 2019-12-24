@@ -42,11 +42,6 @@ const _Table = props => {
           toast('加载失败');
           console.log(err);
         });
-
-      return () => {
-        delete window.__colFix__;
-        delete window.__pageFix__;
-      };
     }
   }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
@@ -79,7 +74,7 @@ const _Table = props => {
             .then(res => {
               toast(`${handle.name}成功`);
               // 刷新当前数据
-              setTimeout(() => setHack(!hack), 1500);
+              setHack(!hack);
               console.log(res);
             })
             .catch(err => {
