@@ -60,10 +60,10 @@ const _Table = props => {
         break;
 
       case 'link':
-        if (/^http|\/\//.test(url)) {
-          window.location.assign(url);
-        } else {
+        if (/^\/table|chart|board|form\//.test(url)) {
           props.history.push(url);
+        } else {
+          window.location.assign(url);
         }
         break;
 
@@ -86,6 +86,10 @@ const _Table = props => {
 
       case 'popup':
         Popup.show(url);
+        break;
+
+      case 'script':
+        window.location.assign(`javascript:${url}`);
         break;
 
       default:

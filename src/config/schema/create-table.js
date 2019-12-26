@@ -106,9 +106,9 @@ export const createTable = {
           action: {
             title: '行为',
             type: 'string',
-            enum: ['link', 'open', 'popup', 'api'],
+            enum: ['link', 'open', 'popup', 'api', 'script'],
             options: {
-              enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求'],
+              enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求', '执行脚本'],
               input_width: '180px',
               choices_options: {
                 searchEnabled: false,

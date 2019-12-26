@@ -19,6 +19,8 @@ import { ChartList } from './pages/chart/list';
 import { ChartUse } from './pages/chart/use';
 
 import { BoardEdit } from './pages/board';
+import { BoardList } from './pages/board/list';
+import { BoardUse } from './pages/board/use';
 
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
@@ -90,6 +92,9 @@ const App = () => {
               <Route path='/chart/use/:id' component={ChartUse} />
 
               <Route path='/board/create' component={BoardEdit} />
+              <Route path='/board/edit/:id' component={BoardEdit} />
+              <Route path='/board/list' component={BoardList} />
+              <Route path='/board/use/:id' component={BoardUse} />
 
               <Route path='/help/form' component={FormHelp} />
               <Route path='/help/table' component={TableHelp} />
