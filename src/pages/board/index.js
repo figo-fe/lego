@@ -38,6 +38,8 @@ export const BoardEdit = props => {
       postData.id = props.match.params.id;
     }
 
+    console.log(data.list[0]);
+
     axios('POST', BOARD, postData)
       .then(() => {
         toast('保存成功');
@@ -59,21 +61,28 @@ export const BoardEdit = props => {
       });
     }
     window.JSONEditor.defaults.callbacks.updateModules = (editor, vars, cb) => {
-      axios('GET', `${BASEURL}/${vars.type}/list`).then(res => {
-        const { list } = res.data;
-        if (list.length > 0) {
-          editor.value = `/${vars.type}/use/${list[0].id}`;
-          cb(
-            list.map(({ id, name }) => ({
-              value: `/${vars.type}/use/${id}`,
-              label: `${name}`,
-            })),
-          );
-        } else {
-          editor.value = undefined;
-          cb([]);
-        }
-      });
+      const { type } = vars;
+      if (type !== 'none') {
+        axios('GET', `${BASEURL}/${type}/list`).then(res => {
+          const { list } = res.data;
+          if (list.length > 0) {
+            console.log(editor.value)
+            cb(
+              list.map(({ id, name }) => ({
+                value: `/${type}/use/${id}`,
+                label: `${name}`,
+              })),
+            );
+          } else {
+            editor.value = undefined;
+            cb([]);
+          }
+        });
+      }
+    };
+
+    return () => {
+      delete window.JSONEditor.defaults.callbacks.updateModules;
     };
   }, [isEdit, props.match.params.id]);
 
