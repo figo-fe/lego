@@ -21,9 +21,6 @@ export const createChart = {
       enum: ['light', 'dart'],
       options: {
         grid_columns: 3,
-        choices_options: {
-          searchEnabled: false,
-        },
       },
     },
     desc: {
@@ -77,9 +74,6 @@ export const createChart = {
             enum: [0, 5, 15, 30, 60],
             options: {
               grid_columns: 3,
-              choices_options: {
-                searchEnabled: false,
-              },
             },
           },
           grid: {
@@ -146,9 +140,6 @@ export const createChart = {
                   options: {
                     enum_titles: ['折线图', '柱状图', '饼状图'],
                     input_width: '160px',
-                    choices_options: {
-                      searchEnabled: false,
-                    },
                   },
                 },
                 color: {

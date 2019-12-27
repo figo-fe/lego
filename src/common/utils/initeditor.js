@@ -115,6 +115,8 @@ export default (el, schema = {}, opts = {}) => {
     // config choices
     JSONEditor.plugins.choices = {
       shouldSort: false,
+      searchEnabled: false,
+      itemSelectText: '',
     };
 
     // config sceditor

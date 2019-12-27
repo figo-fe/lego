@@ -1,7 +1,9 @@
 import _axios from 'axios';
 import qs from 'qs';
+import popup from './popup';
 export { default as json2schema } from './json2schema';
 export { default as initEditor } from './initeditor';
+export { popup };
 
 export const loadJs = url => {
   return new Promise(resolve => {
@@ -186,6 +188,48 @@ export const updateSchemaByPath = (schema, path, data) => {
   schema['properties'][props[i]] = data;
 };
 
+export const dateFormat = (ms, fmt) => {
+  /**
+   * 时间格式化，将13位时间戳格式化为时间字符串
+   * @param {number/string} [ms] 需要转换的毫秒值
+   * @param {string} [fmt] 输出格式，不传默认为 {yyyy-MM-dd hh:mm:ss}
+   * @return {string} 返回转换后的时间字符串
+   */
+  var date = new Date(parseInt(ms));
+  fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+
+  var o = {
+    'M+': date.getMonth() + 1, //月份
+    'd+': date.getDate(), //日
+    'h+': date.getHours(), //小时
+    'm+': date.getMinutes(), //分
+    's+': date.getSeconds(), //秒
+    'q+': Math.floor((date.getMonth() + 3) / 3), //季度
+    S: date.getMilliseconds(), //毫秒
+  };
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp('(' + k + ')').test(fmt))
+      fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+  return fmt;
+};
+
+export const copy = text => {
+  const $ = window.$;
+  const $el = $(`<textarea style='width:0;height:0'>${text}</textarea>`);
+  $('body').append($el);
+  $el[0].select();
+  document.execCommand('Copy');
+  $el.remove();
+  toast(`复制成功「${text}」`)
+};
+
 export const isInFrame = window.self !== window.top;
 
-export { default as Popup } from './popup';
+window._LEGO_UTILS_ = {
+  popup,
+  parseUrl,
+  toast,
+  copy,
+  dateFormat,
+};

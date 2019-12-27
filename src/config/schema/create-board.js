@@ -58,9 +58,6 @@ export const createBoard = {
               options: {
                 enum_titles: ['选择类型', '列表', '图表'],
                 input_width: '180px',
-                choices_options: {
-                  searchEnabled: false,
-                },
               },
             },
             module: {
@@ -81,9 +78,6 @@ export const createBoard = {
               enum: [4, 6, 8, 12],
               options: {
                 input_width: '150px',
-                choices_options: {
-                  searchEnabled: false,
-                },
               },
             },
           },

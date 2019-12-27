@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Wrap, Charts } from '../../components';
-import { CHART } from '../../config/apis';
-import { axios } from '../../common/utils';
+import React from 'react';
+import { Wrap } from '../../components';
 
 export const BoardUse = props => {
   return (

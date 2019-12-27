@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
-import { axios, toast, buildUrl, findByPath, Popup } from '../../common/utils';
+import { axios, toast, buildUrl, findByPath, popup, dateFormat } from '../../common/utils';
 
 import 'rc-pagination/assets/index.css';
 import './index.scss';
@@ -85,7 +85,7 @@ const _Table = props => {
         break;
 
       case 'popup':
-        Popup.show(url);
+        popup.show(url);
         break;
 
       case 'script':
@@ -94,6 +94,34 @@ const _Table = props => {
 
       default:
         console.log(handle);
+    }
+  }
+
+  function fmt(fmt, value) {
+    switch (fmt) {
+      case 'image':
+        return `<a href="${value}" target="_blank"><img src="${value}" style="height:120px;margin:10px 0;" /></a>`;
+
+      case 'datetime':
+        return dateFormat(value);
+
+      case 'date':
+        return dateFormat(value, 'yyyy-MM-dd');
+
+      case 'time':
+        return dateFormat(value, 'hh:mm:ss');
+
+      case 'cny':
+        return (value / 100).toFixed(2);
+
+      case 'audio':
+        return `<audio src="${value}">浏览器不支持</audio>`;
+
+      case 'video':
+        return `<video src="${value}" >浏览器不支持</video>`;
+
+      default:
+        return value;
     }
   }
 
@@ -159,7 +187,9 @@ const _Table = props => {
                 </th>
               );
             })}
-            {hasHandle && <th width={handles.length * 80}>操作</th>}
+            {hasHandle && (
+              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 15}>操作</th>
+            )}
           </tr>
         </thead>
         <tbody className='table-tbody'>
@@ -171,7 +201,7 @@ const _Table = props => {
             tableList.map((row, idx) => (
               <tr key={idx}>
                 {cols.map(item => {
-                  let content = row[item.key] || '--';
+                  let content = fmt(item.fmt, row[item.key] || '--');
                   if (typeof window.__colFix__ === 'function') {
                     content = window.__colFix__(item.key, content, row) || content;
                   }

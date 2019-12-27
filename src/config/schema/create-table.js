@@ -62,6 +62,14 @@ export const createTable = {
             title: '名称',
             type: 'string',
           },
+          fmt: {
+            title: '格式化',
+            type: 'string',
+            enum: ['none', 'image', 'datetime', 'date', 'time', 'cny', 'audio', 'video'],
+            options: {
+              input_width: '120px',
+            },
+          },
           width: {
             title: '列宽（为空时自适应）',
             type: 'string',
@@ -110,9 +118,6 @@ export const createTable = {
             options: {
               enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求', '执行脚本'],
               input_width: '180px',
-              choices_options: {
-                searchEnabled: false,
-              },
             },
           },
         },
