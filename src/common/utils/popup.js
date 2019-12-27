@@ -1,12 +1,12 @@
 const renderIframe = (url, width, height) => `
 <div class="popup-main" style="width:${width}px;height:${height}px">
-  <div class="popup-hide" onClick="window.popupHide()" title="关闭"><i class="fas fa-times"></i></div>
+  <div class="popup-hide" onClick="_LEGO_UTILS_.popup.hide()" title="关闭"><i class="fas fa-times"></i></div>
   <iframe src="${url}" frameborder="0" style="width:100%;height:100%;border:none"></iframe>
 </div>
 `;
 const renderHtml = (html, width, height) => `
 <div class="popup-main" style="width:${width}px;height:${height}px">
-<div class="popup-hide" onClick="window.popupHide()" title="关闭"><i class="fas fa-times"></i></div>
+<div class="popup-hide" onClick="_LEGO_UTILS_.popup.hide()" title="关闭"><i class="fas fa-times"></i></div>
   <div class="popup-box">${html}</div>
 </div>
 `;
