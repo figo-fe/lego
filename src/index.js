@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import { Nav, Aside } from './components';
+import { Frame } from './components';
 import { Setting } from './pages/setting';
 import { GuideHome, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
 import { FormCreate } from './pages/form/create';
@@ -21,6 +21,8 @@ import { ChartUse } from './pages/chart/use';
 import { BoardEdit } from './pages/board';
 import { BoardList } from './pages/board/list';
 import { BoardUse } from './pages/board/use';
+
+import { Login } from './pages/ext';
 
 import { SettingContext } from './config/context';
 import { axios, execJs } from './common/utils';
@@ -69,10 +71,9 @@ const App = () => {
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
         <BrowserRouter basename={process.env.REACT_APP_PRE}>
-          {showAside && <Aside />}
-          <div className='frame-body'>
-            {showNav && <Nav mode={setting.mode} />}
-            <Switch>
+          <Switch>
+            <Route path='/login' component={Login} />
+            <Frame showAside={showAside} showNav={showNav} mode={setting.mode}>
               <Route exact path={['/index', '/']} render={GuideHome} />
               <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
 
@@ -100,8 +101,8 @@ const App = () => {
               <Route path='/help/table' component={TableHelp} />
               <Route path='/help/chart' component={ChartHelp} />
               <Route path='/help/general' component={GeneralDesc} />
-            </Switch>
-          </div>
+            </Frame>
+          </Switch>
         </BrowserRouter>
       </section>
     </SettingContext.Provider>

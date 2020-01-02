@@ -1,3 +1,4 @@
+export { Frame } from './frame';
 export { Wrap } from './wrap';
 export { Nav } from './nav';
 export { Aside } from './aside';

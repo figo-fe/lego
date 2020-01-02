@@ -68,6 +68,13 @@ export const axios = (method = 'GET', api, params = {}) => {
         if (data.code === 0) {
           resolve(data);
         } else {
+          if (String(data.code) === process.env.REACT_APP_LOGIN_CODE) {
+            if (process.env.REACT_APP_LOGIN_URL) {
+              window.location.assign(process.env.REACT_APP_LOGIN_URL);
+            } else {
+              window.location.assign(process.env.REACT_APP_PRE + '/login');
+            }
+          }
           reject(data);
         }
       })
@@ -221,7 +228,7 @@ export const copy = text => {
   $el[0].select();
   document.execCommand('Copy');
   $el.remove();
-  toast(`复制成功「${text}」`)
+  toast(`复制成功「${text}」`);
 };
 
 export const isInFrame = window.self !== window.top;
