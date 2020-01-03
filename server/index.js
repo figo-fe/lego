@@ -8,6 +8,7 @@ const { API } = require('./common');
 
 const ENV = fs.readFileSync(`${process.cwd()}/.env`).toString();
 const PREPATH = (ENV.match(/REACT_APP_PRE=([^\n]+)/) || []).pop();
+const PUBLIC_URL = (ENV.match(/PUBLIC_URL=([^\n]+)/) || []).pop();
 
 if (!PREPATH) {
   return console.log('Must config .env REACT_APP_PRE!');
@@ -90,7 +91,10 @@ const handleApi = ctx => {
       console.log(ctx);
   }
 };
+
 app.use(rewrite(`${PREPATH}/(.*)`, '/index.html'));
+app.use(rewrite(`${PUBLIC_URL}/(.*)`, '/$1'));
+
 app.use(staticServ('build'));
 app.use(bodyParser());
 

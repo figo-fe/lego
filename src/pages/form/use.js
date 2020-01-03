@@ -49,8 +49,9 @@ export const FormUse = props => {
   useEffect(() => {
     const params = parseUrl();
     // do = edit且配置数据源时进入编辑模式
-    if (params && params.do === 'edit' && state.origin) {
-      const originUrl = buildUrl(state.origin, params);
+    if (params && params.do === 'edit' && state.origin && context.baseUrl !== void 0) {
+      const origin = (/^(http|\/\/)/.test(state.origin) ? '' : context.baseUrl) + state.origin;
+      const originUrl = buildUrl(origin, params);
 
       axios('GET', originUrl)
         .then(res => {
@@ -69,7 +70,7 @@ export const FormUse = props => {
         })
         .catch(err => console.log(err));
     }
-  }, [state.origin]);
+  }, [state.origin, context.baseUrl]);
 
   function doSubmit() {
     const editor = formRef.current;
@@ -79,10 +80,18 @@ export const FormUse = props => {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
       const api = (/^(http|\/\/)/.test(state.api) ? '' : context.baseUrl) + state.api;
-      axios('POST', buildUrl(api), {
-        ...params,
-        data: JSON.stringify(editor.getValue()),
-      })
+
+      // 消除干扰参数
+      delete params.do;
+
+      // 自定义提交数据
+      if (typeof window.__submitFix__ === 'function') {
+        Object.assign(params, window.__submitFix__(editor.getValue()) || {});
+      } else {
+        params.data = JSON.stringify(editor.getValue());
+      }
+
+      axios('POST', buildUrl(api), params)
         .then(res => {
           if (res.code === 0) {
             toast('提交成功');

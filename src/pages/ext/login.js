@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { axios } from '../../common/utils';
+import { axios, md5, toast } from '../../common/utils';
 import './login.scss';
 
 export const Login = props => {
@@ -8,13 +8,17 @@ export const Login = props => {
 
   function doLogin() {
     const params = {};
-    params[process.env.REACT_APP_LOGIN_USRNAME] = usr.current.value;
-    params[process.env.REACT_APP_LOGIN_PWDNAME] = pwd.current.value;
+    if (usr.current.value && pwd.current.value) {
+      params[process.env.REACT_APP_LOGIN_USRNAME] = usr.current.value;
+      params[process.env.REACT_APP_LOGIN_PWDNAME] = md5(pwd.current.value);
 
-    axios('POST', process.env.REACT_APP_LOGIN_API, params).then(data => {
-      console.log('login', data);
-      window.location.assign(process.env.REACT_APP_PRE);
-    });
+      axios('POST', process.env.REACT_APP_LOGIN_API, params).then(data => {
+        console.log('login', data);
+        window.location.assign(`${process.env.REACT_APP_PRE}/`);
+      });
+    } else {
+      toast('用户名和密码不得为空');
+    }
   }
   return (
     <div className='lego-login'>

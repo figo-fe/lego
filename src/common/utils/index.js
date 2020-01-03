@@ -1,5 +1,6 @@
 import _axios from 'axios';
 import qs from 'qs';
+import MD5 from 'md5.js';
 import popup from './popup';
 export { default as json2schema } from './json2schema';
 export { default as initEditor } from './initeditor';
@@ -39,7 +40,7 @@ export const parseUrl = url => {
     url = window.location.search;
   }
   if (url.length < 2) {
-    return null;
+    return {};
   }
   url
     .replace(/^\?/, '')
@@ -231,6 +232,8 @@ export const copy = text => {
   toast(`复制成功「${text}」`);
 };
 
+export const md5 = text => new MD5().update(text).digest('hex');
+
 export const isInFrame = window.self !== window.top;
 
 window._LEGO_UTILS_ = {
@@ -238,5 +241,6 @@ window._LEGO_UTILS_ = {
   parseUrl,
   toast,
   copy,
+  md5,
   dateFormat,
 };
