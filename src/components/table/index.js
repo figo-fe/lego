@@ -188,7 +188,7 @@ const _Table = props => {
               );
             })}
             {hasHandle && (
-              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 15}>操作</th>
+              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>操作</th>
             )}
           </tr>
         </thead>
@@ -201,7 +201,7 @@ const _Table = props => {
             tableList.map((row, idx) => (
               <tr key={idx}>
                 {cols.map(item => {
-                  let content = fmt(item.fmt, row[item.key] || '--');
+                  let content = fmt(item.fmt, row[item.key] === void 0 ? '--' : row[item.key]);
                   if (typeof window._colFix_ === 'function') {
                     content = window._colFix_(item.key, content, row) || content;
                   }

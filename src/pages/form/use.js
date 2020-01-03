@@ -57,11 +57,11 @@ export const FormUse = props => {
         .then(res => {
           if (res.code === 0) {
             try {
-              formRef.current.setValue(res.data);
-
-              // 通知ext
+              // 自定义回填表单
               if (typeof window._onDataReady_ === 'function') {
-                window._onDataReady_(res.data);
+                window._onDataReady_(formRef.current, res.data);
+              } else {
+                formRef.current.setValue(res.data);
               }
             } catch (err) {
               console.warn(err);
@@ -104,7 +104,20 @@ export const FormUse = props => {
   }
 
   function doConsole() {
-    console.log(formRef.current.getValue());
+    const editor = formRef.current;
+    const params = parseUrl();
+
+    // 消除干扰参数
+    delete params.do;
+
+    // 自定义提交数据
+    if (typeof window._submitFix_ === 'function') {
+      Object.assign(params, window._submitFix_(editor.getValue()) || {});
+    } else {
+      params.data = JSON.stringify(editor.getValue());
+    }
+
+    console.log(params);
   }
 
   return (

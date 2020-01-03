@@ -94,8 +94,8 @@ export const FormHelp = () => (
                   </a>
                   对表单进行扩展。
                   <br />
-                  2.2 声明<code>window._onDataReady_</code>监听数据回填
-                  ，此方法在数据回填完成时执行，并将回填数据作为参数传入。
+                  2.2 声明<code>window._onDataReady_</code>自定义数据回填
+                  ，此方法在获取到回填数据后执行，接受两个参数：editor实例和回填数据。
                   <br />
                   2.3 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
                   （见<Link to='/help/general#file-upload'>文件上传</Link>）
