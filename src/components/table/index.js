@@ -32,7 +32,7 @@ const _Table = props => {
           setTableList(findByPath(res, config.base.path) || []);
 
           // 分页数据
-          const pageFix = window.__pageFix__ || function() {};
+          const pageFix = window._pageFix_ || function() {};
           setPage(pageFix(res.data) || res.data.page);
 
           // 滚动置顶
@@ -202,8 +202,8 @@ const _Table = props => {
               <tr key={idx}>
                 {cols.map(item => {
                   let content = fmt(item.fmt, row[item.key] || '--');
-                  if (typeof window.__colFix__ === 'function') {
-                    content = window.__colFix__(item.key, content, row) || content;
+                  if (typeof window._colFix_ === 'function') {
+                    content = window._colFix_(item.key, content, row) || content;
                   }
                   return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}

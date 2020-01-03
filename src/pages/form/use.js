@@ -36,8 +36,8 @@ export const FormUse = props => {
       try {
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
-        delete window.onDataReady;
-        delete window.__editor__;
+        delete window._onDataReady_;
+        delete window._editor_;
         delete window[fn];
         script.remove();
       } catch (e) {
@@ -60,8 +60,8 @@ export const FormUse = props => {
               formRef.current.setValue(res.data);
 
               // 通知ext
-              if (typeof window.onDataReady === 'function') {
-                window.onDataReady(res.data);
+              if (typeof window._onDataReady_ === 'function') {
+                window._onDataReady_(res.data);
               }
             } catch (err) {
               console.warn(err);
@@ -85,8 +85,8 @@ export const FormUse = props => {
       delete params.do;
 
       // 自定义提交数据
-      if (typeof window.__submitFix__ === 'function') {
-        Object.assign(params, window.__submitFix__(editor.getValue()) || {});
+      if (typeof window._submitFix_ === 'function') {
+        Object.assign(params, window._submitFix_(editor.getValue()) || {});
       } else {
         params.data = JSON.stringify(editor.getValue());
       }
@@ -112,7 +112,7 @@ export const FormUse = props => {
       <div className='lego-card'>
         <SchemaForm
           schema={JSON.parse(state.schema)}
-          onReady={editor => (formRef.current = window.__editor__ = editor)}
+          onReady={editor => (formRef.current = window._editor_ = editor)}
         />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />

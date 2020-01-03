@@ -88,13 +88,13 @@ export const FormHelp = () => (
                 <li>
                   2. 通过「表单扩展」，编写JavaScript进行扩展。
                   <br />
-                  2.1 <code>window.__editor__</code>可获取编辑器实例，参考
+                  2.1 <code>window._editor_</code>可获取编辑器实例，参考
                   <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
                     JSON-Editor文档
                   </a>
                   对表单进行扩展。
                   <br />
-                  2.2 声明<code>window.onDataReady</code>监听数据回填
+                  2.2 声明<code>window._onDataReady_</code>监听数据回填
                   ，此方法在数据回填完成时执行，并将回填数据作为参数传入。
                   <br />
                   2.3 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
