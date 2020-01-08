@@ -13,7 +13,7 @@ const renderHtml = (html, width, height) => `
 const container = document.createElement('div');
 container.className = 'popup-mask';
 
-const show = (src, width = 750, height = 500) => {
+const show = (src, width = 800, height = 500) => {
   if (!src) return alert('缺少必要参数');
   const isIframe = /^(http|\/)/.test(src);
   container.innerHTML = isIframe ? renderIframe(src, width, height) : renderHtml(src, width, height);

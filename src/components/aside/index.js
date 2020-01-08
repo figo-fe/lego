@@ -93,7 +93,7 @@ export const Aside = () => {
             <FixedLink idx={idx} to={v1.url}>
               <i className={'icon fas fa-' + (v1.icon || icons[idx])} />
               <span>{v1.name}</span>
-              <i className='arr fas fa-chevron-down' />
+              {v1.sub && <i className='arr fas fa-chevron-down' />}
             </FixedLink>
             {v1.sub && renderSub(v1.sub, idx)}
           </li>
