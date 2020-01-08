@@ -89,7 +89,7 @@ export const axios = (method = 'GET', api, params = {}) => {
   });
 };
 
-export const toast = msg => {
+export const toast = (msg, duration = 3000) => {
   const box = document.createElement('div');
   box.className = 'lego-toast';
   box.innerHTML = msg;
@@ -97,7 +97,7 @@ export const toast = msg => {
 
   setTimeout(() => {
     document.body.removeChild(box);
-  }, 3e3);
+  }, duration);
 };
 
 export const execJs = jsCode => {

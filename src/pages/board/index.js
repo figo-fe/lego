@@ -7,6 +7,7 @@ import { BOARD, PREPATH, BASEURL } from '../../config/apis';
 export const BoardEdit = props => {
   const isEdit = props.match.path === '/board/edit/:id';
   const boardEditor = useRef(null);
+  const tmpList = useRef({});
 
   if (isEdit) {
     createBoard.title = '编辑面板';
@@ -38,8 +39,6 @@ export const BoardEdit = props => {
       postData.id = props.match.params.id;
     }
 
-    console.log(data.list[0]);
-
     axios('POST', BOARD, postData)
       .then(() => {
         toast('保存成功');
@@ -50,36 +49,40 @@ export const BoardEdit = props => {
       });
   }
 
+  function fixList(type, list) {
+    return list.map(({ id, name }) => ({
+      value: `/${type}/use/${id}`,
+      label: `${name}`,
+    }));
+  }
+
   useEffect(() => {
+    const editor = boardEditor.current;
+    window._editor_ = editor;
+
+    async function fetchList() {
+      await Promise.all([axios('GET', `${BASEURL}/table/list`), axios('GET', `${BASEURL}/chart/list`)]).then(resp => {
+        tmpList.current.table = fixList('table', resp[0].data.list);
+        tmpList.current.chart = fixList('chart', resp[1].data.list);
+      });
+
+      window.JSONEditor.defaults.callbacks.getModules = (_, vars, cb) => {
+        const { type } = vars;
+        if (type !== 'none' && tmpList.current[type]) {
+          cb(tmpList.current[type]);
+        }
+      };
+    }
+
+    fetchList();
+
     if (isEdit) {
       const id = props.match.params.id;
       axios('GET', BOARD, { id }).then(res => {
         const { config } = res.data;
-        if (config) {
-          boardEditor.current.setValue(JSON.parse(config));
-        }
+        config && editor.setValue(JSON.parse(config));
       });
     }
-    window.JSONEditor.defaults.callbacks.updateModules = (editor, vars, cb) => {
-      const { type } = vars;
-      if (type !== 'none') {
-        axios('GET', `${BASEURL}/${type}/list`).then(res => {
-          const { list } = res.data;
-          if (list.length > 0) {
-            console.log(editor.value)
-            cb(
-              list.map(({ id, name }) => ({
-                value: `/${type}/use/${id}`,
-                label: `${name}`,
-              })),
-            );
-          } else {
-            editor.value = undefined;
-            cb([]);
-          }
-        });
-      }
-    };
 
     return () => {
       delete window.JSONEditor.defaults.callbacks.updateModules;

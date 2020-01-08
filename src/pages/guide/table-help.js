@@ -54,7 +54,8 @@ export const TableHelp = () => (
           <span>数据操作</span>
         </h2>
         <div className='help-content'>
-          添加数据操作如编辑、删除等，支持新窗打开或接口请求，可配置
+          添加数据操作如编辑、删除等，支持内页打开、新窗打开、弹窗浮层、接口请求和
+          <Link to='/help/general#exec-script'>执行脚本</Link>，可配置
           <Link to='/help/general#icon-font'>IconFont</Link>
           ，支持
           <Link to='/help/general#url-variable'>URL变量</Link>

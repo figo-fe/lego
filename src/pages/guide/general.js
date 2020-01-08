@@ -173,6 +173,30 @@ window.fileUploader = function (file, path, cbs) {
           </p>
         </div>
       </div>
+      <div className='guide-node' id='exec-script'>
+        <h2 className='help-title help-title-sub'>
+          <a className='hash' href='#exec-script'>
+            <i className='fas fa-link'></i>
+          </a>
+          <span>执行脚本</span>
+        </h2>
+        <div className='help-content'>
+          <p>
+            指在某些模块配置执行JavaScript脚本，一般用在列表模块的操作中，实现交互复杂的数据操作。LEGO内置了丰富的工具类
+            <code>_LEGO_UTILS_</code>
+          </p>
+          <pre>
+            {`_LEGO_UTILS_ = {
+  popup.show(src, [width, height]), // src 为url或html
+  parseUrl([url]), // url 默认取location.search
+  toast(msg, [duration]), // duration 毫秒，默认 3000
+  copy(text),
+  md5(text),
+  dateFormat(ms, [fmt]), // fmt 默认 yyyy-MM-dd hh:mm:ss
+}`}
+          </pre>
+        </div>
+      </div>
     </div>
   </Wrap>
 );

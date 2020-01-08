@@ -39,45 +39,64 @@ export const createBoard = {
         disable_collapse: true,
       },
       items: {
+        type: 'object',
         title: '区块',
-        type: 'array',
-        format: 'table',
-        minItems: 1,
-        options: {
-          disable_collapse: true,
-        },
-        items: {
-          title: '模块',
-          type: 'object',
-          id: 'mod_item',
-          properties: {
-            type: {
-              type: 'string',
-              title: '类型',
-              enum: ['none', 'table', 'chart'],
-              options: {
-                enum_titles: ['选择类型', '列表', '图表'],
-                input_width: '180px',
-              },
+        format: 'grid',
+        headerTemplate: '{{ self.name }}',
+        properties: {
+          name: {
+            type: 'string',
+            title: '区块名称',
+            options: {
+              grid_columns: 6,
             },
-            module: {
-              type: 'string',
+          },
+          height: {
+            type: 'number',
+            title: '高度',
+            default: 400,
+            options: {
+              grid_columns: 6,
+            },
+          },
+          mods: {
+            type: 'array',
+            title: '模块列表',
+            format: 'table',
+            items: {
               title: '模块',
-              watch: {
-                type: 'mod_item.type',
-              },
-              enumSource: [
-                {
-                  setter: 'updateModules',
+              type: 'object',
+              id: 'mod_item',
+              properties: {
+                type: {
+                  type: 'string',
+                  title: '类型',
+                  enum: ['none', 'table', 'chart'],
+                  options: {
+                    enum_titles: ['选择类型', '列表', '图表'],
+                    input_width: '180px',
+                  },
                 },
-              ],
-            },
-            grid: {
-              type: 'number',
-              title: 'Grid',
-              enum: [4, 6, 8, 12],
-              options: {
-                input_width: '150px',
+                module: {
+                  type: 'string',
+                  title: '模块',
+                  watch: {
+                    type: 'mod_item.type',
+                  },
+                  enumSource: [
+                    {
+                      setter: 'getModules',
+                    },
+                  ],
+                },
+                grid: {
+                  type: 'number',
+                  title: 'Grid',
+                  enum: [4, 6, 8, 12],
+                  options: {
+                    input_width: '150px',
+                  },
+                },
               },
             },
           },
