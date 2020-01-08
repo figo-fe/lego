@@ -28,7 +28,14 @@ export const GuideHome = () => (
             <i className='fas fa-chart-line'></i>
           </p>
           <h2>创建图表</h2>
-          <p className='desc'>通过简单配置即可生成折线图、柱状图、饼状图等多种数据图表</p>
+          <p className='desc'>通过简单配置即可生成折线图、柱状图、饼状图等多种数据图表，支持定时刷新</p>
+        </Link>
+        <Link to='/board/create' className='item'>
+          <p>
+            <i className='fas fa-tachometer-alt'></i>
+          </p>
+          <h2>创建面板</h2>
+          <p className='desc'>任意组合已创建的列表和图表，定制具有丰富展现力的仪表盘，让你的系统绽放光彩</p>
         </Link>
       </div>
       <div className='info lnks'>
@@ -36,6 +43,7 @@ export const GuideHome = () => (
         <Link to='/help/form'>创建表单</Link>
         <Link to='/help/table'>创建列表</Link>
         <Link to='/help/chart'>创建图表</Link>
+        <Link to='/help/board'>创建面板</Link>
       </div>
       <div className='info'>Driven by React, JSON-Editor, Koa, Sqlite3. Powered by hanlongfei@sogou-inc.com</div>
     </div>
