@@ -98,7 +98,7 @@ export const FormUse = props => {
           }
         })
         .catch(err => {
-          toast(err.msg);
+          toast(err.msg || err.desc);
         });
     }
   }

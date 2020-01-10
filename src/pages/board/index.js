@@ -45,7 +45,7 @@ export const BoardEdit = props => {
         props.history.push('/board/list');
       })
       .catch(err => {
-        toast(err.msg);
+        toast(err.msg || err.desc);
       });
   }
 

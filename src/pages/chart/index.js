@@ -44,7 +44,7 @@ export const ChartEdit = props => {
         props.history.push('/chart/list');
       })
       .catch(err => {
-        toast(err.msg);
+        toast(err.msg || err.desc);
       });
   }
 

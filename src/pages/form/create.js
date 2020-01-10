@@ -55,7 +55,7 @@ export const FormCreate = props => {
         props.history.push('/form/list');
       })
       .catch(err => {
-        toast(err.msg);
+        toast(err.msg || err.desc);
       });
   }
 

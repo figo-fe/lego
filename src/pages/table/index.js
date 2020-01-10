@@ -46,7 +46,7 @@ export const TableEdit = props => {
         props.history.push('/table/list');
       })
       .catch(err => {
-        toast(err.msg);
+        toast(err.msg || err.desc);
       });
   }
 
