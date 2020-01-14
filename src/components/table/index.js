@@ -85,7 +85,7 @@ const _Table = props => {
         break;
 
       case 'popup':
-        popup.show(url);
+        popup.show(url).then(() => setHack(!hack));
         break;
 
       case 'script':

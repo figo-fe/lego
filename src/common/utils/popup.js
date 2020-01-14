@@ -13,15 +13,24 @@ const renderHtml = (html, width, height) => `
 const container = document.createElement('div');
 container.className = 'popup-mask';
 
+const cbs = {};
+
 const show = (src, width = 800, height = 500) => {
   if (!src) return alert('缺少必要参数');
   const isIframe = /^(http|\/)/.test(src);
   container.innerHTML = isIframe ? renderIframe(src, width, height) : renderHtml(src, width, height);
   document.body.appendChild(container);
+  return {
+    then: onHide => (cbs.onHide = onHide)
+  }
 };
 
 const hide = () => {
   document.body.removeChild(container);
+  if(typeof cbs.onHide === 'function'){
+    cbs.onHide();
+    delete cbs.onHide;
+  }
 };
 
 export default { show, hide };
