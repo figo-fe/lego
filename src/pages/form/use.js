@@ -70,6 +70,20 @@ export const FormUse = props => {
         })
         .catch(err => console.log(err));
     }
+
+    if (isInFrame) {
+      try {
+        // 更新iframe高度
+        window.parent.postMessage(
+          JSON.stringify({
+            type: 'LEGO_POPUP_HEIGHT',
+            height: document.querySelector('.lego-card').offsetHeight,
+          }),
+        );
+      } catch (e) {
+        console.warn(e);
+      }
+    }
   }, [state.origin, context.baseUrl]);
 
   function doSubmit() {
