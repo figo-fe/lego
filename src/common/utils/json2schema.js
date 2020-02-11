@@ -53,6 +53,7 @@ const dataHandle = {
   }),
   boolean: key => ({
     type: 'boolean',
+    format: 'boolean',
     title: getTitle(key),
     options: {
       grid_columns: 3,
@@ -125,8 +126,8 @@ const dataHandle = {
   },
   array: function(key, data, opts = {}) {
     const schema = {};
-    schema.type = 'array';
     schema.title = getTitle(key);
+    schema.type = 'array';
     schema.items = {};
     schema.options = opts;
     if (data[0] !== undefined) {

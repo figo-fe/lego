@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { AceCode } from '..';
 
 export default ({ schema, onUpdate }) => {
-  const [formSchema, setFormSchema] = useState(schema);
+  const [formSchema, setFormSchema] = useState(Object.assign({ title: '', type: '', format: '', options: {} }, schema));
   const aceRef = useRef(null);
   const choiceRef = useRef(null);
 
@@ -19,7 +19,7 @@ export default ({ schema, onUpdate }) => {
   function onGridChange(evt) {
     const { value } = evt.target;
     const tmp = Object.assign({}, formSchema);
-    tmp.options.grid_columns = +value;
+    tmp.options.grid_columns = parseInt(value) || 3;
     setFormSchema(tmp);
   }
 
@@ -93,7 +93,11 @@ export default ({ schema, onUpdate }) => {
       <div className='col-md-6'>
         <div className='form-group'>
           <label className='form-control-label'>表单类型</label>
-          <select id='formTypeSelect' className='form-control' value={formSchema.format} onChange={onTypeChange}>
+          <select
+            id='formTypeSelect'
+            className='form-control'
+            value={formSchema.format || formSchema.type}
+            onChange={onTypeChange}>
             <option value='text'>单行文本</option>
             <option value='textarea'>多行文本</option>
             <option value='number'>数值</option>
@@ -117,7 +121,7 @@ export default ({ schema, onUpdate }) => {
             min='3'
             max='12'
             onChange={onGridChange}
-            value={formSchema.options.grid_columns}
+            value={formSchema.options.grid_columns || 3}
           />
         </div>
       </div>

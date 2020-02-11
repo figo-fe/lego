@@ -14,7 +14,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
   useLayoutEffect(() => {
     if (schema) {
       const opts = startval ? { startval } : {};
-      const editor = initEditor(formRef.current, schema, opts);
+      const editor = (window._editor_ = initEditor(formRef.current, schema, opts));
       if (editor && typeof onReady === 'function') {
         onReady(editor);
       }
