@@ -80,9 +80,9 @@ export const createTable = {
             uniqueItems: true,
             items: {
               type: 'string',
-              enum: ['search', 'sort'],
+              enum: ['search', 'sort', 'multi'],
               options: {
-                enum_titles: ['搜索', '排序'],
+                enum_titles: ['搜索', '排序', '多选'],
               },
             },
           },
@@ -118,6 +118,127 @@ export const createTable = {
             options: {
               enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求', '执行脚本'],
               input_width: '180px',
+            },
+          },
+        },
+      },
+    },
+    toolbar: {
+      type: 'array',
+      title: '工具栏配置',
+      options: {
+        collapsed: true,
+      },
+      items: {
+        type: 'object',
+        format: 'grid',
+        headerTemplate: '{{ self.name }}',
+        properties: {
+          type: {
+            title: '类型',
+            type: 'string',
+            enum: ['input', 'choices', 'datepicker', 'button', 'custom'],
+            options: {
+              enum_titles: ['输入框', '下拉框', '时间选择', '按钮', '自定义'],
+              grid_columns: 3,
+            },
+          },
+          name: {
+            title: '名称',
+            type: 'string',
+            options: {
+              grid_columns: 3,
+            },
+          },
+          key: {
+            type: 'string',
+            minLength: 1,
+            options: {
+              grid_columns: 3,
+            },
+          },
+          width: {
+            type: 'number',
+            default: 120,
+            options: {
+              grid_columns: 3,
+            },
+          },
+          choices_opts: {
+            title: '配置',
+            type: 'object',
+            options: {
+              disable_collapse: true,
+              grid_columns: 12,
+              dependencies: {
+                type: 'choices',
+              },
+            },
+            properties: {
+              callback: {
+                title: '数据源函数（在扩展中定义）',
+                type: 'string',
+              },
+            },
+          },
+          button_opts: {
+            title: '配置',
+            type: 'object',
+            format: 'grid',
+            options: {
+              disable_collapse: true,
+              dependencies: {
+                type: 'button',
+              },
+            },
+            properties: {
+              style: {
+                title: '风格',
+                type: 'string',
+                enum: [
+                  'primary',
+                  'info',
+                  'success',
+                  'danger',
+                  'outline-primary',
+                  'outline-info',
+                  'outline-success',
+                  'outline-danger',
+                ],
+              },
+              url: {
+                title: 'URL',
+                type: 'string',
+              },
+              action: {
+                title: '行为',
+                type: 'string',
+                enum: ['link', 'open', 'popup', 'api', 'script'],
+                options: {
+                  enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求', '执行脚本'],
+                },
+              },
+            },
+          },
+          custom_opts: {
+            title: '配置',
+            type: 'object',
+            format: 'grid',
+            options: {
+              disable_collapse: true,
+              dependencies: {
+                type: 'custom',
+              },
+            },
+            properties: {
+              html: {
+                title: 'HTML',
+                type: 'string',
+                format: 'textarea',
+                options: {
+                  grid_columns: 12,
+                },
+              },
             },
           },
         },
