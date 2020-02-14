@@ -133,6 +133,9 @@ export const createTable = {
         type: 'object',
         format: 'grid',
         headerTemplate: '{{ self.name }}',
+        options: {
+          collapsed: true,
+        },
         properties: {
           type: {
             title: '类型',

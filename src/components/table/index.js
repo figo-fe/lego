@@ -37,6 +37,20 @@ const _Table = props => {
 
           // 滚动置顶
           document.querySelector('.main-content').scrollTop = 0;
+
+          // 绑定多选事件
+          window.$('.multi-box').on('click', function() {
+            if (this.className.indexOf('check') > 0) {
+              this.classList.remove('fa-check-square');
+              this.classList.add('fa-square');
+            } else {
+              this.classList.remove('fa-square');
+              this.classList.add('fa-check-square');
+            }
+          });
+
+          // 清除多选框状态
+          window.$('.table-thead .fa-check-square').attr('class', 'far fa-square');
         })
         .catch(err => {
           toast('加载失败');
@@ -204,10 +218,21 @@ const _Table = props => {
                     style={{ width: tool.width ? parseInt(tool.width) : undefined, marginRight: 10 }}
                     onClick={() => {
                       const query = {};
+                      const multiReg = url.match(/{{multi-[^}]+}}/g);
+                      const $ = window.$;
                       document.querySelectorAll('.toolbar-row .form-control').forEach(input => {
                         query[input.name] = input.value;
                       });
-                      console.log(query);
+
+                      if (multiReg) {
+                        multiReg.forEach(k => {
+                          const key = k.match(/{{(multi-[^}]+)}}/).pop();
+                          query[key] = $.map($(`.${key}-col`).filter('.fa-check-square'), el =>
+                            el.getAttribute('data'),
+                          ).join(',');
+                        });
+                      }
+
                       onClickHandle(query, { name: tool.name, url, action });
                     }}
                     className={`btn btn-sm btn-${style}`}>
@@ -265,7 +290,7 @@ const _Table = props => {
               let showSort = false;
               let sortIcon = 'sort';
 
-              if (/sort/.test(col.fn)) {
+              if (col.fn.indexOf('sort') >= 0) {
                 showSort = true;
                 switch (sort) {
                   case `${key}-asc`:
@@ -289,6 +314,27 @@ const _Table = props => {
                   onClick={() => {
                     showSort && setSort(sort === `${key}-desc` ? `${key}-asc` : `${key}-desc`);
                   }}>
+                  {col.fn.indexOf('multi') >= 0 && (
+                    <i
+                      className='far fa-square'
+                      onClick={evt => {
+                        const el = evt.target;
+                        const $ = window.$;
+                        if (el.className.indexOf('check') > 0) {
+                          el.className = 'far fa-square';
+                          $(`.multi-${key}-col`)
+                            .removeClass('fa-check-square')
+                            .addClass('fa-square');
+                        } else {
+                          el.className = 'far fa-check-square';
+                          $(`.multi-${key}-col`)
+                            .removeClass('fa-square')
+                            .addClass('fa-check-square');
+                        }
+                        evt.stopPropagation();
+                      }}
+                    />
+                  )}
                   <span>{col.name || key}</span>
                   {showSort && <em title='排序' className={'fas fa-' + sortIcon} />}
                 </th>
@@ -311,6 +357,11 @@ const _Table = props => {
                   let content = fmt(item.fmt, row[item.key] === void 0 ? '--' : row[item.key]);
                   if (typeof window._colFix_ === 'function') {
                     content = window._colFix_(item.key, content, row) || content;
+                  }
+
+                  if (item.fn.indexOf('multi') >= 0) {
+                    content =
+                      `<i class="far fa-square multi-box multi-${item.key}-col" data="${content}"></i>` + content;
                   }
                   return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}
