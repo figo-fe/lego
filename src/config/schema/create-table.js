@@ -137,9 +137,9 @@ export const createTable = {
           type: {
             title: '类型',
             type: 'string',
-            enum: ['input', 'choices', 'datepicker', 'button', 'custom'],
+            enum: ['input', 'choices', 'datepicker', 'button', 'custom', 'break'],
             options: {
-              enum_titles: ['输入框', '下拉框', '时间选择', '按钮', '自定义'],
+              enum_titles: ['输入框', '下拉框', '时间选择', '按钮', '自定义', '换行'],
               grid_columns: 3,
             },
           },
@@ -151,6 +151,8 @@ export const createTable = {
             },
           },
           key: {
+            title: 'Key（必填且不能重复）',
+            description: '查询字段以"search_"开头',
             type: 'string',
             minLength: 1,
             options: {
@@ -158,8 +160,9 @@ export const createTable = {
             },
           },
           width: {
-            type: 'number',
-            default: 120,
+            title: '宽度（为空时自适应）',
+            type: 'string',
+            default: '',
             options: {
               grid_columns: 3,
             },
@@ -175,9 +178,45 @@ export const createTable = {
               },
             },
             properties: {
-              callback: {
-                title: '数据源函数（在扩展中定义）',
+              source_type: {
+                title: '数据源类型',
                 type: 'string',
+                enum: ['list', 'api'],
+                options: {
+                  enum_titles: ['固定列表', '接口读取'],
+                },
+              },
+              source_data: {
+                title: '「固定列表」以多组value:display分号隔开，「接口读取」填写处理函数名（见帮助）',
+                type: 'string',
+              },
+            },
+          },
+          datepicker_opts: {
+            title: '配置',
+            type: 'object',
+            format: 'grid',
+            options: {
+              disable_collapse: true,
+              grid_columns: 12,
+              dependencies: {
+                type: 'datepicker',
+              },
+            },
+            properties: {
+              mode: {
+                title: '模式',
+                type: 'string',
+                enum: ['single', 'range'],
+              },
+              showtime: {
+                title: '选择时间',
+                type: 'boolean',
+              },
+              format: {
+                title: '格式化（Y-m-d H:i:S）',
+                type: 'string',
+                default: 'Y-m-d',
               },
             },
           },

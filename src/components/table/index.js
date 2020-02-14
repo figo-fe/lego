@@ -47,7 +47,7 @@ const _Table = props => {
 
   if (!checked) return <div>data or config error...</div>;
 
-  const { cols = [], handles = [] } = config;
+  const { cols = [], handles = [], toolbar = [] } = config;
   const hasHandle = handles.length > 0;
   const searchBox = cols.filter(col => col.fn.indexOf('search') !== -1);
 
@@ -127,8 +127,111 @@ const _Table = props => {
 
   return (
     <div>
-      {searchBox.length > 0 && (
-        <div className='search-row clearfix'>
+      {(searchBox.length > 0 || toolbar.length > 0) && (
+        <div className='toolbar-row clearfix'>
+          {toolbar.map((tool, idx) => {
+            switch (tool.type) {
+              case 'input':
+                return (
+                  <input
+                    key={`${tool.key}-${idx}`}
+                    name={tool.key}
+                    style={{ width: tool.width ? parseInt(tool.width) : undefined }}
+                    className='form-control'
+                    placeholder={`请输入${tool.name}`}
+                  />
+                );
+
+              case 'choices':
+                if (tool.choices_opts.source_type === 'list') {
+                  const list = tool.choices_opts.source_data.split(';');
+                  setTimeout(() => {
+                    if (loading && context.baseUrl !== void 0) {
+                      new window.Choices(document.getElementById(`toolbar_choices_${tool.key}`), {
+                        itemSelectText: '',
+                        searchEnabled: list.length > 10,
+                        shouldSort: false,
+                      });
+                    }
+                  });
+                  return (
+                    <select
+                      key={`${tool.key}-${idx}`}
+                      id={`toolbar_choices_${tool.key}`}
+                      name={tool.key}
+                      className='form-control'>
+                      {list.map(opt => {
+                        const [value, display] = opt.split(':');
+                        return (
+                          <option key={value} value={value}>
+                            {display}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  );
+                } else {
+                  return <select key={`${tool.key}-${idx}`} name={tool.key} className='form-control' />;
+                }
+
+              case 'datepicker':
+                const { mode, showtime, format } = tool.datepicker_opts;
+                setTimeout(() => {
+                  if (loading && context.baseUrl !== void 0) {
+                    window.flatpickr(`#toolbar_datepicker_${tool.key}`, {
+                      enableTime: showtime,
+                      dateFormat: format,
+                      mode,
+                    });
+                  }
+                });
+                return (
+                  <input
+                    key={`${tool.key}-${idx}`}
+                    name={tool.key}
+                    id={`toolbar_datepicker_${tool.key}`}
+                    style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 100 }}
+                    className='form-control'
+                    autoComplete='off'
+                  />
+                );
+
+              case 'button':
+                const { style, url, action } = tool.button_opts;
+                return (
+                  <button
+                    key={`${tool.key}-${idx}`}
+                    style={{ width: tool.width ? parseInt(tool.width) : undefined, marginRight: 10 }}
+                    onClick={() => {
+                      const query = {};
+                      document.querySelectorAll('.toolbar-row .form-control').forEach(input => {
+                        query[input.name] = input.value;
+                      });
+                      console.log(query);
+                      onClickHandle(query, { name: tool.name, url, action });
+                    }}
+                    className={`btn btn-sm btn-${style}`}>
+                    {tool.name}
+                  </button>
+                );
+
+              case 'custom':
+                return (
+                  <div
+                    className='toolbar-custom'
+                    key={`${tool.key}-${idx}`}
+                    style={{ width: tool.width ? parseInt(tool.width) : undefined }}
+                    dangerouslySetInnerHTML={{ __html: tool.custom_opts.html }}
+                  />
+                );
+
+              case 'break':
+                return <div key={tool.key} style={{ float: 'left', width: '100%' }} />;
+
+              default:
+                return null;
+            }
+          })}
           {searchBox.map(item => (
             <input
               key={item.key}
@@ -137,17 +240,21 @@ const _Table = props => {
               placeholder={`输入${item.name}`}
             />
           ))}
-          <button
-            onClick={() => {
-              const query = {};
-              document.querySelectorAll('.search-row .form-control').forEach(input => {
-                query[input.name.slice(7)] = input.value;
-              });
-              setSearch(query);
-            }}
-            className='btn btn-sm btn-success'>
-            查询
-          </button>
+          {searchBox.length > 0 && (
+            <button
+              onClick={() => {
+                const query = {};
+                document.querySelectorAll('.toolbar-row .form-control').forEach(input => {
+                  if (input.name.indexOf('search_') === 0) {
+                    query[input.name.slice(7)] = input.value;
+                  }
+                });
+                setSearch(query);
+              }}
+              className='btn btn-sm btn-success'>
+              查询
+            </button>
+          )}
         </div>
       )}
       <table className='table-list'>

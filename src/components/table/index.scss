@@ -79,15 +79,38 @@
 .th-sort {
   cursor: pointer;
 }
-.search-row {
+.toolbar-row {
   margin-bottom: 20px;
+  .choices {
+    float: left;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    min-width: 100px;
+    .choices__inner {
+      height: 32px;
+    }
+    .choices__list--single {
+      padding-right: 26px;
+    }
+  }
   .form-control {
     float: left;
     width: 180px;
+    height: 32px;
     margin-right: 10px;
+    margin-bottom: 10px;
   }
   .btn {
+    height: 32px;
+    margin-bottom: 10px;
     float: left;
+    line-height: 1;
+  }
+  .toolbar-custom {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+    line-height: 32px;
   }
 }
 .pages {

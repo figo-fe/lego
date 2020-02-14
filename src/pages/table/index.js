@@ -56,7 +56,9 @@ export const TableEdit = props => {
       axios('GET', TABLE, { id }).then(res => {
         const { config, ext } = res.data;
         if (config) {
-          formEditor.current.setValue(JSON.parse(config));
+          setTimeout(() => {
+            formEditor.current.setValue(Object.assign({ toolbar: [] }, JSON.parse(config)));
+          });
         }
         if (ext) {
           extEditor.current.setValue(ext);
