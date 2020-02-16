@@ -214,7 +214,7 @@ const _Table = props => {
                 );
 
               case 'button':
-                const { style, url, action } = tool.button_opts;
+                const { style, url, icon, action } = tool.button_opts;
                 return (
                   <button
                     key={`${tool.key}-${idx}`}
@@ -239,7 +239,7 @@ const _Table = props => {
                       onClickHandle(query, { name: tool.name, url, action });
                     }}
                     className={`btn btn-sm btn-${style}`}>
-                    {tool.icon && <i style={{ marginRight: 6 }} className={'fas fa-' + tool.icon} />}
+                    {icon && <i style={{ marginRight: 6 }} className={'fas fa-' + icon} />}
                     <span>{tool.name}</span>
                   </button>
                 );
