@@ -50,7 +50,10 @@ const _Table = props => {
           });
 
           // 清除多选框状态
-          window.$('.table-thead .fa-check-square').attr('class', 'far fa-square');
+          window
+            .$('.table-list .fa-check-square')
+            .removeClass('fa-check-square')
+            .addClass('fa-square');
         })
         .catch(err => {
           toast('加载失败');
@@ -236,7 +239,8 @@ const _Table = props => {
                       onClickHandle(query, { name: tool.name, url, action });
                     }}
                     className={`btn btn-sm btn-${style}`}>
-                    {tool.name}
+                    {tool.icon && <i style={{ marginRight: 6 }} className={'fas fa-' + tool.icon} />}
+                    <span>{tool.name}</span>
                   </button>
                 );
 

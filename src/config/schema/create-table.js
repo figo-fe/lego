@@ -247,10 +247,23 @@ export const createTable = {
                   'outline-success',
                   'outline-danger',
                 ],
+                options: {
+                  grid_columns: 3,
+                },
               },
               url: {
                 title: 'URL',
                 type: 'string',
+                options: {
+                  grid_columns: 3,
+                },
+              },
+              icon: {
+                title: '图标（选填）',
+                type: 'string',
+                options: {
+                  grid_columns: 3,
+                },
               },
               action: {
                 title: '行为',
@@ -258,6 +271,7 @@ export const createTable = {
                 enum: ['link', 'open', 'popup', 'api', 'script'],
                 options: {
                   enum_titles: ['内页打开', '新窗打开', '弹窗浮层', '接口请求', '执行脚本'],
+                  grid_columns: 3,
                 },
               },
             },
