@@ -2,6 +2,7 @@ const Koa = require('koa');
 const url = require('url');
 const fs = require('fs');
 const staticServ = require('koa-static');
+const compress = require('koa-compress');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
 const { API } = require('./common');
@@ -92,10 +93,10 @@ const handleApi = ctx => {
   }
 };
 
+app.use(compress());
 app.use(rewrite(`${PREPATH}/(.*)`, '/index.html'));
 app.use(rewrite(`${PUBLIC_URL}/(.*)`, '/$1'));
-
-app.use(staticServ('build'));
+app.use(staticServ('build', { maxage: 2592000000 }));
 app.use(bodyParser());
 
 app.use(async (ctx, next) => {
