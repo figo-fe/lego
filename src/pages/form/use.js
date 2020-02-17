@@ -109,6 +109,16 @@ export const FormUse = props => {
         .then(res => {
           if (res.code === 0) {
             toast('提交成功');
+            if (isInFrame) {
+              // 关闭弹窗
+              setTimeout(() => {
+                try {
+                  window.top._LEGO_UTILS_.popup.hide();
+                } catch (err) {
+                  console.warn(err);
+                }
+              }, 2e3);
+            }
           }
         })
         .catch(err => {
