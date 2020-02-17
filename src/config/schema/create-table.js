@@ -173,6 +173,7 @@ export const createTable = {
           choices_opts: {
             title: '配置',
             type: 'object',
+            format: 'grid',
             options: {
               disable_collapse: true,
               grid_columns: 12,
@@ -187,11 +188,16 @@ export const createTable = {
                 enum: ['list', 'api'],
                 options: {
                   enum_titles: ['固定列表', '接口读取'],
+                  grid_columns: 4,
                 },
               },
               source_data: {
-                title: '「固定列表」以多组value:display分号隔开，「接口读取」填写处理函数名（见帮助）',
+                title: '数据内容',
+                description: '「固定列表」以多组value:display分号隔开，「接口读取」填写函数名（见帮助）',
                 type: 'string',
+                options: {
+                  grid_columns: 8,
+                },
               },
             },
           },

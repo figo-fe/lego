@@ -164,7 +164,7 @@ const _Table = props => {
                   const list = tool.choices_opts.source_data.split(';');
                   setTimeout(() => {
                     if (loading && context.baseUrl !== void 0) {
-                      new window.Choices(document.getElementById(`toolbar_choices_${tool.key}`), {
+                      new window.Choices(`#toolbar_choices_${tool.key}`, {
                         itemSelectText: '',
                         searchEnabled: list.length > 10,
                         shouldSort: false,
@@ -188,7 +188,29 @@ const _Table = props => {
                     </select>
                   );
                 } else {
-                  return <select key={`${tool.key}-${idx}`} name={tool.key} className='form-control' />;
+                  setTimeout(() => {
+                    const fn = tool.choices_opts.source_data;
+                    if (typeof window[fn] === 'function') {
+                      window[fn](
+                        new window.Choices(`#toolbar_choices_${tool.key}`, {
+                          silent: 'select-single',
+                          items: [],
+                          itemSelectText: '',
+                          shouldSort: false,
+                          searchEnabled: false,
+                        }),
+                      );
+                      delete window[fn];
+                    }
+                  });
+                  return (
+                    <select
+                      key={`${tool.key}-${idx}`}
+                      id={`toolbar_choices_${tool.key}`}
+                      name={tool.key}
+                      className='form-control'
+                    />
+                  );
                 }
 
               case 'datepicker':
