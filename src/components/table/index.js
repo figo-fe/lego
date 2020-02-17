@@ -387,7 +387,7 @@ const _Table = props => {
 
                   if (item.fn.indexOf('multi') >= 0) {
                     content =
-                      `<i class="far fa-square multi-box multi-${item.key}-col" data="${content}"></i>` + content;
+                      `<i class="far fa-square multi-box multi-${item.key}-col" data="${encodeURIComponent(row[item.key])}"></i>` + content;
                   }
                   return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}

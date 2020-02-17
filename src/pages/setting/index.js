@@ -16,7 +16,10 @@ export const Setting = props => {
 
   useEffect(() => {
     if (context.name) {
-      configRef.current.setValue(context);
+      const { name, baseUrl, permissionApi, mode, sideMenu, uploadFn } = context;
+
+      // 注意增加配置时，要兼容LEGO老版本
+      configRef.current.setValue({ name, baseUrl, permissionApi, mode, sideMenu, uploadFn });
     }
   }, [context, configRef]);
 
@@ -30,8 +33,12 @@ export const Setting = props => {
       const value = _editor.getValue();
       axios('POST', SETTING, value)
         .then(() => {
-          toast('保存成功');
-          props.updateSetting(value);
+          const { _menu, _admin } = context;
+          props.updateSetting({ _menu, _admin, ...value });
+          toast('保存成功，即将刷新页面');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2e3);
         })
         .catch(err => {
           console.log(err);

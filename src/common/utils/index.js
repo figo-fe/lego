@@ -127,6 +127,9 @@ export const buildUrl = (url, params) => {
   });
 };
 
+// 构建API，按需自动拼接baseUrl
+export const buildApi = (baseUrl, api) => (/^(http|\/\/)/.test(api) ? '' : baseUrl) + api;
+
 /**
  * 根据path查找object中的值
  * @param {object} object

@@ -2,7 +2,7 @@
 - [x] [other] 提升资源加载速度
 - [x] [table] 支持多选批量操作
 - [x] [table] 增加表头可配模块
-- [ ] [setting] 接入权限/菜单API，通过API配置左侧菜单，控制LEGO权限
+- [x] [setting] 接入权限/菜单API，通过API配置左侧菜单，控制LEGO权限
 - [x] [popup] 提交时自动关闭，关闭后自动刷新列表
 - [x] [popup] 加载动画，高度缓冲，优化体验
 - [ ] [other] 显示当前页面标题

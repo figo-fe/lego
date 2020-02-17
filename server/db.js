@@ -13,10 +13,16 @@ const createSetting = () => {
     baseUrl TEXT NOT NULL,
     mode TEXT NOT NULL,
     sideMenu TEXT NOT NULL,
-    uploadFn TEXT NOT NULL
+    uploadFn TEXT NOT NULL,
+    permissionApi VARCHAR(2000) NOT NULL
   )`;
 
-  return db.prepare(sql).run();
+  db.prepare(sql).run();
+
+  // 数据库升级，增加permissionApi字段
+  if (db.pragma('table_info(setting)').filter(({ name }) => name === 'permissionApi').length === 0) {
+    db.prepare('ALTER TABLE setting ADD permissionApi VARCHAR(2000) NOT NULL DEFAULT ""').run();
+  }
 };
 
 const createForm = () => {

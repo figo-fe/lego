@@ -52,10 +52,17 @@ export const setting = {
       title: '接口前缀',
       type: 'string',
       options: {
-        grid_columns: 4,
+        grid_columns: 3,
         inputAttributes: {
           placeholder: '如 https:/domain.com/api/ 或 /api/',
         },
+      },
+    },
+    permissionApi: {
+      title: '权限/菜单接口',
+      type: 'string',
+      options: {
+        grid_columns: 3,
       },
     },
     mode: {
@@ -65,13 +72,13 @@ export const setting = {
       enum: ['standalone', 'embedded'],
       options: {
         enum_titles: ['独立模式', '嵌入模式'],
-        grid_columns: 4,
+        grid_columns: 3,
       },
     },
     sideMenu: {
-      title: '左侧菜单配置',
+      title: '权限/菜单配置',
       type: 'string',
-      format: 'json',
+      format: 'javascript',
       default: sideMenu,
       options: {
         grid_columns: 12,

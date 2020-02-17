@@ -3,15 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
 
 export const Aside = () => {
-  const context = useContext(SettingContext);
+  const { name, _menu } = useContext(SettingContext);
   const [openIdx, setOpenIdx] = useState(null);
-  const parseMenu = () => {
-    try {
-      return JSON.parse(context.sideMenu);
-    } catch (e) {
-      return [];
-    }
-  };
 
   const icons = [
     'edit',
@@ -81,14 +74,14 @@ export const Aside = () => {
 
   return (
     <aside className='frame-aside'>
-      <h1 className={!!context.name ? 'name-show' : ''}>
+      <h1 className={!!name ? 'name-show' : ''}>
         <Link to='/'>
           <i className='fas fa-cubes' />
-          <span>{context.name || ''}</span>
+          <span>{name || ''}</span>
         </Link>
       </h1>
       <ul className='side-menu'>
-        {parseMenu().map((v1, idx) => (
+        {_menu.map((v1, idx) => (
           <li className='item-v1' key={idx}>
             <FixedLink idx={idx} to={v1.url}>
               <i className={'icon fas fa-' + (v1.icon || icons[idx])} />

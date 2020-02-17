@@ -8,18 +8,20 @@ const saveSetting = data => {
   const row = db.prepare('select * from setting').get();
 
   if (row) {
-    db.prepare('UPDATE setting SET name = ?, baseUrl = ?, mode = ?, sideMenu = ?, uploadFn = ? WHERE id = ?').run(
+    db.prepare('UPDATE setting SET name = ?, baseUrl = ?, permissionApi = ?, mode = ?, sideMenu = ?, uploadFn = ? WHERE id = ?').run(
       data.name,
       data.baseUrl,
+      data.permissionApi,
       data.mode,
       data.sideMenu,
       data.uploadFn,
       row.id,
     );
   } else {
-    db.prepare('INSERT INTO setting (name, baseUrl, mode, sideMenu, uploadFn) VALUES (?, ?, ?, ?, ?)').run(
+    db.prepare('INSERT INTO setting (name, baseUrl, permissionApi, mode, sideMenu, uploadFn) VALUES (?, ?, ?, ?, ?, ?)').run(
       data.name,
       data.baseUrl,
+      data.permissionApi,
       data.mode,
       data.sideMenu,
       data.uploadFn,

@@ -25,7 +25,7 @@ import { BoardUse } from './pages/board/use';
 import { Login } from './pages/ext';
 
 import { SettingContext } from './config/context';
-import { axios, execJs } from './common/utils';
+import { axios, execJs, buildApi, toast } from './common/utils';
 import { SETTING } from './config/apis';
 
 import { isInFrame } from './common/utils';
@@ -35,14 +35,59 @@ import './common/base.scss';
 
 const App = () => {
   const [setting, setSetting] = useState({});
-  const showNav = !isInFrame;
   const showAside = !isInFrame && setting.mode === 'standalone';
 
+  // 获取系统配置和权限
   useEffect(() => {
     axios('GET', SETTING)
-      .then(res => {
-        const { name = '后台管理系统', baseUrl = '', mode = '', sideMenu = '', uploadFn = '' } = res.data;
-        setSetting({ name, baseUrl, mode, sideMenu, uploadFn });
+      .then(async res => {
+        let {
+          name = '后台管理系统',
+          baseUrl = '',
+          permissionApi = '',
+          mode = '',
+          sideMenu = '',
+          uploadFn = '',
+        } = res.data;
+
+        let _menu = [];
+        let _admin = false;
+
+        if (permissionApi) {
+          try {
+            // 请求权限接口
+            const resp = await axios('GET', buildApi(baseUrl, permissionApi));
+            if (sideMenu.indexOf('function main') === 0) {
+              // 管理员显示系统菜单
+              // eslint-disable-next-line no-new-func
+              const data = new Function(`return ${sideMenu}`)()(resp.data);
+              _menu = data.menu;
+              _admin = data.admin;
+            } else {
+              toast('请在系统设置中定义权限/菜单配置函数！');
+            }
+          } catch (err) {
+            console.warn('PermissionApi Error:', err);
+          }
+        } else {
+          try {
+            _menu = JSON.parse(sideMenu);
+          } catch (e) {
+            console.warn('Menu config error:', e);
+          }
+          _admin = true;
+        }
+
+        setSetting({
+          name,
+          baseUrl,
+          permissionApi,
+          mode,
+          sideMenu,
+          uploadFn,
+          _menu,
+          _admin,
+        });
       })
       .catch(err => {
         console.warn(err);
@@ -73,7 +118,7 @@ const App = () => {
         <BrowserRouter basename={process.env.REACT_APP_PRE}>
           <Switch>
             <Route path='/login' component={Login} />
-            <Frame showAside={showAside} showNav={showNav} mode={setting.mode}>
+            <Frame showAside={showAside} showNav={setting._admin && !isInFrame} mode={setting.mode}>
               <Route exact path={['/index', '/']} render={GuideHome} />
               <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
 
