@@ -61,8 +61,8 @@ const App = () => {
               // 管理员显示系统菜单
               // eslint-disable-next-line no-new-func
               const data = new Function(`return ${sideMenu}`)()(resp.data);
-              _menu = data.menu;
-              _admin = data.admin;
+              _menu = data.menu || [];
+              _admin = data.admin || false;
             } else {
               toast('请在系统设置中定义权限/菜单配置函数！');
             }
