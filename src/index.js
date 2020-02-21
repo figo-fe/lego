@@ -53,6 +53,9 @@ const App = () => {
         let _menu = [];
         let _admin = false;
 
+        // 设置页面title
+        document.title = name;
+
         if (permissionApi) {
           try {
             // 请求权限接口

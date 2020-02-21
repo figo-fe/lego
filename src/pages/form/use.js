@@ -64,6 +64,7 @@ export const FormUse = props => {
                 formRef.current.setValue(res.data);
               }
             } catch (err) {
+              toast(err.desc || err.msg);
               console.warn(err);
             }
           }
@@ -89,7 +90,7 @@ export const FormUse = props => {
   function doSubmit() {
     const editor = formRef.current;
     const validates = editor.validate();
-    const params = parseUrl();
+    let params = parseUrl();
     if (validates.length > 0) {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
@@ -100,7 +101,7 @@ export const FormUse = props => {
 
       // 自定义提交数据
       if (typeof window._submitFix_ === 'function') {
-        Object.assign(params, window._submitFix_(editor.getValue()) || {});
+        params = window._submitFix_(Object.assign(params, editor.getValue())) || {};
       } else {
         params.data = JSON.stringify(editor.getValue());
       }
@@ -129,14 +130,14 @@ export const FormUse = props => {
 
   function doConsole() {
     const editor = formRef.current;
-    const params = parseUrl();
+    let params = parseUrl();
 
     // 消除干扰参数
     delete params.do;
 
     // 自定义提交数据
     if (typeof window._submitFix_ === 'function') {
-      Object.assign(params, window._submitFix_(editor.getValue()) || {});
+      params = window._submitFix_(Object.assign(params, editor.getValue())) || {};
     } else {
       params.data = JSON.stringify(editor.getValue());
     }

@@ -57,6 +57,7 @@ const _Table = props => {
         })
         .catch(err => {
           toast('加载失败');
+          setLoading(false);
           console.log(err);
         });
     }
@@ -229,7 +230,7 @@ const _Table = props => {
                     key={`${tool.key}-${idx}`}
                     name={tool.key}
                     id={`toolbar_datepicker_${tool.key}`}
-                    style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 100 }}
+                    style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 120 }}
                     className='form-control'
                     autoComplete='off'
                   />
@@ -387,7 +388,9 @@ const _Table = props => {
 
                   if (item.fn.indexOf('multi') >= 0) {
                     content =
-                      `<i class="far fa-square multi-box multi-${item.key}-col" data="${encodeURIComponent(row[item.key])}"></i>` + content;
+                      `<i class="far fa-square multi-box multi-${item.key}-col" data="${encodeURIComponent(
+                        row[item.key],
+                      )}"></i>` + content;
                   }
                   return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
                 })}
