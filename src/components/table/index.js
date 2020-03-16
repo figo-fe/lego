@@ -20,6 +20,7 @@ const _Table = props => {
   const [search, setSearch] = useState({});
   const [page, setPage] = useState(null);
   const [pageNo, setPageNo] = useState(defaultPageNo);
+  const [multiNum, setMultiNum] = useState(0);
   const [hack, setHack] = useState(true);
 
   // 初始化数据
@@ -48,6 +49,9 @@ const _Table = props => {
               this.classList.remove('fa-square');
               this.classList.add('fa-check-square');
             }
+
+            // 更新已选个数
+            setMultiNum($('.table-tbody .fa-check-square').length);
           });
         })
         .catch(err => {
@@ -62,6 +66,7 @@ const _Table = props => {
       $('.multi-box').off('click');
 
       // 清除多选框状态
+      setMultiNum(0);
       $('.table-list .fa-check-square')
         .removeClass('fa-check-square')
         .addClass('fa-square');
@@ -358,11 +363,15 @@ const _Table = props => {
                           $(`.multi-${key}-col`)
                             .removeClass('fa-check-square')
                             .addClass('fa-square');
+
+                          setMultiNum(0);
                         } else {
                           el.className = 'far fa-check-square';
                           $(`.multi-${key}-col`)
                             .removeClass('fa-square')
                             .addClass('fa-check-square');
+
+                          setMultiNum(page.pageSize);
                         }
                         evt.stopPropagation();
                       }}
@@ -420,7 +429,7 @@ const _Table = props => {
           <Pagination
             onChange={pn => setPageNo(pn)}
             total={page.total || 0}
-            showTotal={all => `共${all}条数据`}
+            showTotal={all => `${multiNum > 0 ? '已选' + multiNum + '，' : ''}共${all}条数据`}
             pageSize={page.pageSize || 20}
             current={+pageNo}
             prevIcon={<i className='fas fa-chevron-left' />}
