@@ -81,16 +81,17 @@ export const Aside = () => {
         </Link>
       </h1>
       <ul className='side-menu'>
-        {_menu.map((v1, idx) => (
-          <li className='item-v1' key={idx}>
-            <FixedLink idx={idx} to={v1.url}>
-              <i className={'icon fas fa-' + (v1.icon || icons[idx])} />
-              <span>{v1.name}</span>
-              {v1.sub && <i className='arr fas fa-chevron-down' />}
-            </FixedLink>
-            {v1.sub && renderSub(v1.sub, idx)}
-          </li>
-        ))}
+        {_menu.map &&
+          _menu.map((v1, idx) => (
+            <li className='item-v1' key={idx}>
+              <FixedLink idx={idx} to={v1.url}>
+                <i className={'icon fas fa-' + (v1.icon || icons[idx])} />
+                <span>{v1.name}</span>
+                {v1.sub && <i className='arr fas fa-chevron-down' />}
+              </FixedLink>
+              {v1.sub && renderSub(v1.sub, idx)}
+            </li>
+          ))}
       </ul>
     </aside>
   );

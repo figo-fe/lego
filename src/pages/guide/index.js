@@ -21,14 +21,14 @@ export const GuideHome = () => (
             <i className='fas fa-table'></i>
           </p>
           <h2>创建列表</h2>
-          <p className='desc'>提供API和表头，一键生成列表页，支持字段排序、搜索、分页等列表常用功能</p>
+          <p className='desc'>配置接口和表头，一键生成列表页，支持排序、多选、搜索、分页等列表常用功能</p>
         </Link>
         <Link to='/chart/create' className='item'>
           <p>
             <i className='fas fa-chart-line'></i>
           </p>
           <h2>创建图表</h2>
-          <p className='desc'>通过简单配置即可生成折线图、柱状图、饼状图等多种数据图表，支持定时刷新</p>
+          <p className='desc'>通过简单配置生成折线图、柱状图、饼状图等多种数据图表，支持定时刷新</p>
         </Link>
         <Link to='/board/create' className='item'>
           <p>
@@ -40,6 +40,7 @@ export const GuideHome = () => (
       </div>
       <div className='info lnks'>
         帮助文档：<Link to='/help/general'>通用说明</Link>
+        <Link to='/help/setting'>系统设置</Link>
         <Link to='/help/form'>创建表单</Link>
         <Link to='/help/table'>创建列表</Link>
         <Link to='/help/chart'>创建图表</Link>
@@ -50,6 +51,7 @@ export const GuideHome = () => (
   </Wrap>
 );
 
+export { SettingHelp } from './setting-help';
 export { FormHelp } from './form-help';
 export { TableHelp } from './table-help';
 export { ChartHelp } from './chart-help';

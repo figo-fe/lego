@@ -85,7 +85,7 @@ export const setting = {
       },
     },
     uploadFn: {
-      title: '上传方法实现',
+      title: '上传方法',
       type: 'string',
       format: 'javascript',
       default: uploadFnDemo,

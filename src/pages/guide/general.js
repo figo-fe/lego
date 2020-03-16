@@ -61,7 +61,8 @@ export const GeneralDesc = () => (
         <div className='help-content'>
           <p>
             PathMap是LEGO特有的一种获取接口数据的方式，一般获取JSON相应节点数据时可使用Path，但萃取列表中某字段时，就要用到PathMap了。例如：
-            <pre>{`{
+          </p>
+          <pre>{`{
   "code": 0,
   "data": {
     "list": [
@@ -88,6 +89,7 @@ export const GeneralDesc = () => (
     }
   }
 }`}</pre>
+          <p>
             按照如下方式取值可得到：
             <br />
             <code>data.userInfo.nickName</code> => <code>"FIGO"</code>
@@ -126,8 +128,9 @@ window.popupShow() // 关闭弹窗`}</pre>
         </h2>
         <div className='help-content'>
           <p>
-            系统默认使用「系统设置-上传方法」上传文件或图片，开发者根据后端提供的上传接口实现
-            <code>window.fileUploader</code>。<br />
+            LEGO默认使用「系统设置-上传方法」上传文件或图片，开发者根据上传接口定义<code>window.fileUploader</code>
+            方法来实现，并将上传结果返回给LEGO。
+            <br />
             如果某表单需要自定义上传方法，在表单扩展中声明
             <code>window.formUploader</code>，用法相同。参数及用法Demo：
           </p>
@@ -144,14 +147,23 @@ window.popupShow() // 关闭弹窗`}</pre>
  * cbs.success: 成功回调, string, 值为文件URI
  */
 window.fileUploader = function (file, path, cbs) {
-  console.log(path);
-  setTimeout(() => {
-    cbs.progress(30);
-  }, 500);
+  var formData = new FormData();
+  formData.append('file', file);
 
-  setTimeout(() => {
-    cbs.success('//www.sogo.com/web/index/images/logo_440x140.v.4.png');
-  }, 2e3);
+  $.ajax({
+    url: '/api/file/upload',
+    type: 'post',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(res) {
+      if (res.code === 0) {
+        cbs.success(res.data.imageUrl);
+      } else {
+        window._LEGO_UTILS_.toast(res.errorMsg);
+      }
+    }
+  });
 };`}
           </pre>
         </div>

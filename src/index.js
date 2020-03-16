@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import { Frame } from './components';
 import { Setting } from './pages/setting';
-import { GuideHome, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
+import { GuideHome, SettingHelp, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
 import { FormCreate } from './pages/form/create';
 import { FormList } from './pages/form/list';
 import { FormEdit } from './pages/form/edit';
@@ -145,6 +145,7 @@ const App = () => {
               <Route path='/board/list' component={BoardList} />
               <Route path='/board/use/:id' component={BoardUse} />
 
+              <Route path='/help/setting' component={SettingHelp} />
               <Route path='/help/form' component={FormHelp} />
               <Route path='/help/table' component={TableHelp} />
               <Route path='/help/chart' component={ChartHelp} />

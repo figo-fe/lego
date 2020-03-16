@@ -10,7 +10,7 @@ export const TableHelp = () => (
           <span>创建列表</span>
         </h2>
         <div className='help-content'>
-          <p>根据后端提供的API生成支持分页、搜索、排序的数据列表。</p>
+          <p>根据后端提供的API生成支持分页、搜索、多选、排序的数据列表。</p>
         </div>
       </div>
       <div className='guide-node' id='base'>
@@ -38,11 +38,16 @@ export const TableHelp = () => (
         <div className='help-content'>
           <p>
             用来定义各列数据，点击<code>+列</code>添加一列，填写API中对应的<code>key</code>
-            ，系统据此读取数据，如果后端支持搜索或排序，开发者可按需勾选相应功能。
+            ，系统据此读取数据，可按需添加搜索、排序、多选功能（查询实现依赖后端接口）。
           </p>
           <blockquote>
-            搜索时，系统会在数据接口添加<code>{'{key}={搜索value}'}</code>
-            参数；排序时，系统会在数据接口添加<code>{'sort={key}-{asc|desc}'}</code>参数（仅支持单列排序）
+            搜索：在数据接口添加查询参数，用URL变量表示，例如<code>{'&search_key={{key}}'}</code>，{'{{key}}'}
+            将被替换为对应的查询值；
+            <br />
+            排序：在数据接口添加查询参数，用URL变量表示，例如<code>{'&order={{sort}}'}</code>，{'{{sort}}'}将按照
+            {'{key}-{asc|desc}'}格式进行替换（仅支持单列排序）
+            <br />
+            多选：需配合工具栏-按钮使用，详见工具栏-按钮配置。
           </blockquote>
         </div>
       </div>
@@ -60,6 +65,59 @@ export const TableHelp = () => (
           ，支持
           <Link to='/help/general#url-variable'>URL变量</Link>
           ，变量数据从行数据和页面URL参数中读取，行数据优先级更高。
+        </div>
+      </div>
+      <div className='guide-node' id='handle'>
+        <h2 className='help-title help-title-sub'>
+          <a className='hash' href='#handle'>
+            <i className='fas fa-link'></i>
+          </a>
+          <span>工具栏配置</span>
+        </h2>
+        <div className='help-content'>
+          <p>用来定制表头上方工具栏，可添加输入框、下拉框、时间选择器、按钮等组件。</p>
+          <ul>
+            <li>类型：选择工具类型</li>
+            <li>名称：填写工具名称</li>
+            <li>
+              Key：此工具唯一键，当工具为查询字段时，Key必须以<code>search_</code>开头
+            </li>
+            <li>宽度：工具占位宽度</li>
+            <li>
+              <strong>配置</strong>
+              <ul>
+                <li>
+                  <p>
+                    下拉框：「固定列表」以多组value:display分号隔开，「接口读取」填写函数名，并在扩展中实现此函数，如：
+                  </p>
+                  <pre>{`window._updateChoices_ = function(choices_instance){
+  // async_function 为异步获取数据伪函数
+  async_function().then(function(data){
+    // 使用实例的setChoices方法设置选项，格式如下：
+    choices_instance.setChoices([
+      {
+        value: value1,
+        label: name1
+      },
+      {
+        value: value2,
+        label: name2
+      }
+    ])
+  })
+
+}`}</pre>
+                </li>
+                <li>时间选择：支持单选和时间范围模式，选择时间默认为关，可配置输出格式。</li>
+                <li>
+                  按钮：支持8种风格，按钮功能和行为同「数据操作」，可配合列的多选功能实现多选操作，通过URL变量
+                  <code>{'{{multi-key}}'}</code>获取以逗号分隔的多选数据。
+                </li>
+                <li>自定义：自定义HTML</li>
+              </ul>
+            </li>
+          </ul>
+          <blockquote>工具栏保存后不可修改类型，可删除后重新添加。</blockquote>
         </div>
       </div>
       <div className='guide-node' id='extend'>

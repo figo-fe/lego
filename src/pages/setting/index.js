@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useContext } from 'react';
-import { Wrap } from '../../components';
+import { Wrap, Button } from '../../components';
 import { initEditor, axios, toast } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { setting } from '../../config/schema';
-import { SETTING } from '../../config/apis';
+import { SETTING, PREPATH } from '../../config/apis';
 
 export const Setting = props => {
   const configRef = useCallback(node => {
@@ -51,9 +51,13 @@ export const Setting = props => {
       <div className='lego-card'>
         <div ref={configRef} />
         <div className='btns-row'>
-          <button onClick={doSave} type='button' className='btn btn-success btn-sm'>
-            保存
-          </button>
+          <Button key='save' value='保存' onClick={doSave} extClass='btn-success' />
+          <Button
+            key='help'
+            onClick={() => window.open(`${PREPATH}/help/setting`)}
+            value='帮助'
+            extClass='btn-outline-primary'
+          />
         </div>
       </div>
     </Wrap>

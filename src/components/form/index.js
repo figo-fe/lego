@@ -8,6 +8,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
   const formRef = useRef(null);
   const aceEditor = useRef(null);
   const editPathRef = useRef(null);
+  const onReadyRef = useRef(onReady);
   const [schemaShow, setSchemaShow] = useState(false);
   const [editSchema, setEditSchema] = useState(null);
 
@@ -15,14 +16,14 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     if (schema) {
       const opts = startval ? { startval } : {};
       const editor = (window._editor_ = initEditor(formRef.current, schema, opts));
-      if (editor && typeof onReady === 'function') {
-        onReady(editor);
+      if (editor && typeof onReadyRef.current === 'function') {
+        onReadyRef.current(editor);
       }
       return () => {
         editor && editor.destroy();
       };
     }
-  }, [schema, startval, onReady]);
+  }, [schema, startval]);
 
   function updateSchema() {
     if (typeof onSchemaUpdate === 'function') {
@@ -47,8 +48,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
   }
 
   function onFormUpdate(formSchema) {
-    updateSchemaByPath(schema, editPathRef.current, formSchema);
-    onSchemaUpdate(schema);
+    onSchemaUpdate(updateSchemaByPath(schema, editPathRef.current, formSchema));
     setEditSchema(null);
   }
 

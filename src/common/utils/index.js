@@ -185,18 +185,21 @@ export const findSchemaByPath = (schema, path) => {
 
 // 根据path更新schema对应节点
 export const updateSchemaByPath = (schema, path, data) => {
-  if (path === 'root') return data;
+  let tmp = Object.assign({}, schema);
   let props = path.split('.').slice(1);
+  if (path === 'root') return Object.assign({}, data);
 
   for (var i = 0, len = props.length - 1; i < len; i++) {
-    if (schema.type === 'object') {
-      schema = schema['properties'][props[i]];
-    } else if (schema.type === 'array') {
-      schema = schema['items'];
+    if (tmp.type === 'object') {
+      tmp = tmp['properties'][props[i]];
+    } else if (tmp.type === 'array') {
+      tmp = tmp['items'];
     }
   }
 
-  schema['properties'][props[i]] = data;
+  tmp['properties'][props[i]] = data;
+
+  return tmp;
 };
 
 export const dateFormat = (ms, fmt) => {
