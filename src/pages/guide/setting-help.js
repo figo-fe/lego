@@ -11,11 +11,6 @@ export const SettingHelp = () => (
         </h2>
         <div className='help-content'>
           <p>设置系统名称、运行模式、权限、菜单等基础配置</p>
-        </div>
-      </div>
-
-      <div className='guide-node'>
-        <div className='help-content'>
           <ul>
             <li>
               <label>系统名称</label>
@@ -40,7 +35,7 @@ export const SettingHelp = () => (
               <label>权限/菜单配置</label>
               <ul>
                 <li>
-                  未配置权限/接口菜单时，直接配置菜单内容，格式如下：
+                  <p>未配置权限/接口菜单时，直接配置菜单内容，格式如下：</p>
                   <pre>{`[
   {
     "name": "一级菜单",
@@ -59,7 +54,9 @@ export const SettingHelp = () => (
 ]`}</pre>
                 </li>
                 <li>
-                  当配置权限/接口菜单时，通过配置<code>main</code>函数定制权限和菜单，见示例：
+                  <p>
+                    当配置权限/接口菜单时，通过定义<code>main</code>函数定制权限和菜单，见示例：
+                  </p>
                   <pre>{`function main(data) {
   // data为权限接口返回数据
   if (data.condition1) {
