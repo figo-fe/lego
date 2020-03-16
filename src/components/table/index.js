@@ -24,6 +24,7 @@ const _Table = props => {
 
   // 初始化数据
   useEffect(() => {
+    const $ = window.$;
     if (checked && context.baseUrl !== void 0) {
       const api = (/^(http|\/\/)/.test(config.base.api) ? '' : context.baseUrl) + config.base.api;
       axios('GET', buildUrl(api, { sort, ...search, pageNo }))
@@ -39,7 +40,7 @@ const _Table = props => {
           document.querySelector('.main-content').scrollTop = 0;
 
           // 绑定多选事件
-          window.$('.multi-box').on('click', function() {
+          $('.multi-box').on('click', function() {
             if (this.className.indexOf('check') > 0) {
               this.classList.remove('fa-check-square');
               this.classList.add('fa-square');
@@ -48,12 +49,6 @@ const _Table = props => {
               this.classList.add('fa-check-square');
             }
           });
-
-          // 清除多选框状态
-          window
-            .$('.table-list .fa-check-square')
-            .removeClass('fa-check-square')
-            .addClass('fa-square');
         })
         .catch(err => {
           toast('加载失败');
@@ -61,6 +56,16 @@ const _Table = props => {
           console.log(err);
         });
     }
+
+    return () => {
+      // 取消复选框事件
+      $('.multi-box').off('click');
+
+      // 清除多选框状态
+      $('.table-list .fa-check-square')
+        .removeClass('fa-check-square')
+        .addClass('fa-square');
+    };
   }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
   if (!checked) return <div>data or config error...</div>;
@@ -301,6 +306,7 @@ const _Table = props => {
                     query[input.name.slice(7)] = input.value;
                   }
                 });
+                setPageNo(1);
                 setSearch(query);
               }}
               className='btn btn-sm btn-success'>
@@ -416,7 +422,7 @@ const _Table = props => {
             total={page.total || 0}
             showTotal={all => `共${all}条数据`}
             pageSize={page.pageSize || 20}
-            defaultCurrent={+pageNo}
+            current={+pageNo}
             prevIcon={<i className='fas fa-chevron-left' />}
             nextIcon={<i className='fas fa-chevron-right' />}
           />
