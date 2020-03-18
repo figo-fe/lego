@@ -106,16 +106,37 @@ li {
       position: absolute;
       height: auto !important;
       left: 50px;
-      top: 0;
-      border-radius: 0 4px 4px 0;
-      padding: 10px 0;
+      top: 40px;
+      border-radius: 0 0 4px 0;
+      padding-bottom: 5px;
       display: none;
     }
-    &:hover .sub-list {
-      display: block;
+    &:hover {
+      .icon {
+        background: #000b17;
+      }
+      .link span {
+        display: block;
+        position: absolute;
+        left: 50px;
+        top: 0;
+        width: 160px;
+        height: 40px;
+        margin: 0;
+        border-radius: 0 4px 4px 0;
+        padding-left: 20px;
+        background: #000b17;
+      }
+      div.link span {
+        border-bottom-right-radius: 0;
+      }
+      .sub-list {
+        display: block;
+        background: #041f39;
+      }
     }
   }
-  .item-v2 a {
+  .side-menu .item-v2 a {
     padding-left: 20px;
   }
 }
