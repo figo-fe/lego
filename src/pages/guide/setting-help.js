@@ -62,12 +62,14 @@ export const SettingHelp = () => (
   if (data.condition1) {
     return {
       admin: true, // 是否为管理员，管理员可对LEGO进行编辑，默认为false
+      user: 'account@mail.com', // 登录用户名
       menu: [] // 格式同上
     }
   } else {
     return {
       admin: false,
-      menu: [] // 格式同上
+      user: 'account@mail.com',
+      menu: []
     }
   }
 }`}</pre>
