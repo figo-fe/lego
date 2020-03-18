@@ -45,14 +45,14 @@ export const setting = {
       type: 'string',
       minLength: 1,
       options: {
-        grid_columns: 3,
+        grid_columns: 2,
       },
     },
     baseUrl: {
       title: '接口前缀',
       type: 'string',
       options: {
-        grid_columns: 3,
+        grid_columns: 5,
         inputAttributes: {
           placeholder: '如 https:/domain.com/api/ 或 /api/',
         },
@@ -62,17 +62,7 @@ export const setting = {
       title: '权限/菜单接口',
       type: 'string',
       options: {
-        grid_columns: 3,
-      },
-    },
-    mode: {
-      title: '运行模式',
-      type: 'string',
-      minLength: 1,
-      enum: ['standalone', 'embedded'],
-      options: {
-        enum_titles: ['独立模式', '嵌入模式'],
-        grid_columns: 3,
+        grid_columns: 5,
       },
     },
     sideMenu: {

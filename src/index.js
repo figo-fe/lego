@@ -28,30 +28,21 @@ import { SettingContext } from './config/context';
 import { axios, execJs, buildApi, toast } from './common/utils';
 import { SETTING } from './config/apis';
 
-import { isInFrame } from './common/utils';
-
 import './common/bootstrap.css';
 import './common/base.scss';
 
 const App = () => {
   const [setting, setSetting] = useState({});
-  const showAside = !isInFrame && setting.mode === 'standalone';
 
   // 获取系统配置和权限
   useEffect(() => {
     axios('GET', SETTING)
       .then(async res => {
-        let {
-          name = '后台管理系统',
-          baseUrl = '',
-          permissionApi = '',
-          mode = '',
-          sideMenu = '',
-          uploadFn = '',
-        } = res.data;
+        let { name = '后台管理系统', baseUrl = '', permissionApi = '', sideMenu = '', uploadFn = '' } = res.data;
 
         let _menu = [];
         let _admin = false;
+        let _user = '';
 
         // 设置页面title
         document.title = name;
@@ -66,6 +57,7 @@ const App = () => {
               const data = new Function(`return ${sideMenu}`)()(resp.data);
               _menu = data.menu || [];
               _admin = data.admin || false;
+              _user = data.user || '';
             } else {
               toast('请在系统设置中定义权限/菜单配置函数！');
             }
@@ -85,11 +77,11 @@ const App = () => {
           name,
           baseUrl,
           permissionApi,
-          mode,
           sideMenu,
           uploadFn,
           _menu,
           _admin,
+          _user,
         });
       })
       .catch(err => {
@@ -121,7 +113,7 @@ const App = () => {
         <BrowserRouter basename={process.env.REACT_APP_PRE}>
           <Switch>
             <Route path='/login' component={Login} />
-            <Frame showAside={showAside} showNav={setting._admin && !isInFrame} mode={setting.mode}>
+            <Frame>
               <Route exact path={['/index', '/']} render={GuideHome} />
               <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
 

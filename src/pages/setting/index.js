@@ -16,10 +16,10 @@ export const Setting = props => {
 
   useEffect(() => {
     if (context.name) {
-      const { name, baseUrl, permissionApi, mode, sideMenu, uploadFn } = context;
+      const { name, baseUrl, permissionApi, sideMenu, uploadFn } = context;
 
       // 注意增加配置时，要兼容LEGO老版本
-      configRef.current.setValue({ name, baseUrl, permissionApi, mode, sideMenu, uploadFn });
+      configRef.current.setValue({ name, baseUrl, permissionApi, sideMenu, uploadFn });
     }
   }, [context, configRef]);
 

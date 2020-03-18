@@ -43,6 +43,7 @@ li {
   min-height: 100vh;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
   transition: all 0.2s;
+  overflow: hidden;
 }
 .frame-aside h1 {
   padding-left: 15px;
@@ -51,6 +52,7 @@ li {
   margin: 0;
   opacity: 0;
   transition: all 0.2s;
+  width: 220px;
 }
 .frame-aside .name-show {
   opacity: 1;
@@ -70,9 +72,52 @@ li {
   font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
   vertical-align: middle;
 }
+.frame-aside-fold {
+  width: 50px;
+  overflow: visible;
+  .name-show {
+    padding-left: 12px;
+  }
+  .side-menu {
+    width: 50px;
+  }
+  .item-v1 {
+    position: relative;
+    .link {
+      padding: 0;
+      width: 50px;
+      span,
+      .arr {
+        display: none;
+      }
+      .icon {
+        display: inline-block;
+        width: 50px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+      &.active {
+        background: #000b17;
+      }
+    }
+    .sub-list {
+      width: 160px;
+      position: absolute;
+      height: auto !important;
+      left: 50px;
+      top: 0;
+      border-radius: 0 4px 4px 0;
+      display: none;
+    }
+    &:hover .sub-list {
+      display: block;
+    }
+  }
+}
 .side-menu {
   padding: 16px 0;
-  width: 100%;
+  width: 220px;
   line-height: 40px;
   font-size: 14px;
   color: #ffffff;
@@ -130,53 +175,74 @@ li {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: relative;
   z-index: 15;
+  display: flex;
+  padding: 0 1.5rem 0 0;
+  .nav-switch-aside {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .nav-user {
+    line-height: 50px;
+    font-size: 14px;
+    margin-right: 5px;
+    color: #555;
+    .fa-user {
+      margin-right: 6px;
+    }
+  }
+  .nav-dropdown {
+    position: relative;
+  }
+  .dropdown-icon {
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 18px;
+    color: #555;
+    cursor: pointer;
+  }
+  .dropdown-icon:hover {
+    background: #f8f8f8;
+  }
+  .nav-dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    line-height: 40px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    display: none;
+    a {
+      display: block;
+      width: 120px;
+      height: 40px;
+      color: #444444;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: 0.2s;
+      .fas {
+        margin-right: 5px;
+      }
+    }
+    a:hover {
+      background: #f8f8f8;
+      color: #007bee;
+    }
+  }
+  .nav-dropdown:hover .nav-dropdown-menu {
+    display: block;
+  }
 }
-.frame-nav-fixed {
-  position: fixed;
-  top: -50px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  transition: 0.2s;
-}
-.frame-nav-fixed:after {
-  content: '\20';
-  position: absolute;
-  bottom: -10px;
-  height: 10px;
-  width: 100%;
-}
-.frame-nav-fixed:hover {
-  top: 0;
-}
-.nav-right {
-  position: absolute;
-  right: 1.5rem;
-  top: 0;
-  height: 50px;
-}
-.nav-right .nav-item {
-  float: right;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  cursor: pointer;
-  position: relative;
-}
-.nav-right .nav-item a {
-  display: block;
-  height: 50px;
-  color: #444444;
-  font-size: 14px;
-  text-decoration: none;
-  padding: 0 10px;
-}
-.nav-right .nav-item .fas {
-  margin-right: 5px;
-}
-.nav-right .nav-item:hover {
-  background: #f8f8f8;
-}
+
 .frame-body {
   flex: 1;
   min-height: 100vh;

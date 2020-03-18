@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
 
-export const Aside = () => {
-  const { name, _menu } = useContext(SettingContext);
+export const Aside = ({ fold }) => {
+  const { name, _menu = [] } = useContext(SettingContext);
   const [openIdx, setOpenIdx] = useState(null);
 
   const icons = [
@@ -73,7 +73,7 @@ export const Aside = () => {
   };
 
   return (
-    <aside className='frame-aside'>
+    <aside className={'frame-aside' + (fold ? ' frame-aside-fold' : '')}>
       <h1 className={!!name ? 'name-show' : ''}>
         <Link to='/'>
           <i className='fas fa-cubes' />
