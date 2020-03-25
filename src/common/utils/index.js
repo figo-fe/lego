@@ -249,4 +249,5 @@ window._LEGO_UTILS_ = {
   copy,
   md5,
   dateFormat,
+  kv,
 };

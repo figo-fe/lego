@@ -205,6 +205,7 @@ window.fileUploader = function (file, path, cbs) {
   copy(text),
   md5(text),
   dateFormat(ms, [fmt]), // fmt 默认 yyyy-MM-dd hh:mm:ss
+  kv(key), // 取url对应参数值
 }`}
           </pre>
         </div>

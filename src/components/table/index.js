@@ -167,6 +167,7 @@ const _Table = props => {
                     style={{ width: tool.width ? parseInt(tool.width) : undefined }}
                     className='form-control'
                     placeholder={`请输入${tool.name}`}
+                    id={`toolbar_input_${tool.key}`}
                   />
                 );
 
@@ -251,6 +252,7 @@ const _Table = props => {
                 return (
                   <button
                     key={`${tool.key}-${idx}`}
+                    id={`toolbar_button_${tool.key}`}
                     style={{ width: tool.width ? parseInt(tool.width) : undefined, marginRight: 10 }}
                     onClick={() => {
                       const query = {};
@@ -282,6 +284,7 @@ const _Table = props => {
                   <div
                     className='toolbar-custom'
                     key={`${tool.key}-${idx}`}
+                    id={`toolbar_custom_${tool.key}`}
                     style={{ width: tool.width ? parseInt(tool.width) : undefined }}
                     dangerouslySetInnerHTML={{ __html: tool.custom_opts.html }}
                   />
