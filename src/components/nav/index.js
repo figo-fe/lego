@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
 
-export const Nav = ({ onSwitchAside }) => {
+export const Nav = ({ fold, onSwitchAside }) => {
   const { _admin, _user } = useContext(SettingContext);
 
   return (
     <nav className='frame-nav'>
       <div className='nav-switch-aside' onClick={onSwitchAside}>
-        <i className='fas fa-bars' />
+        <i className={'fas fa-' + (fold ? 'indent' : 'outdent')} />
       </div>
       <div style={{ flex: 1 }}></div>
       {_user && (

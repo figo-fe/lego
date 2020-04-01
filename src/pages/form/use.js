@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Wrap, Button, SchemaForm } from '../../components';
-import { axios, toast, parseUrl, execJs, buildUrl, isInFrame } from '../../common/utils';
+import { axios, toast, parseUrl, execJs, buildUrl, isInFrame, kv, buildApi } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { FORM } from '../../config/apis';
 
 export const FormUse = props => {
+  const debug = kv('debug');
   const context = useContext(SettingContext);
   const [state, setState] = useState({
     api: '',
@@ -50,7 +51,7 @@ export const FormUse = props => {
     const params = parseUrl();
     // do = edit且配置数据源时进入编辑模式
     if (params && params.do === 'edit' && state.origin && context.baseUrl !== void 0) {
-      const origin = (/^(http|\/\/)/.test(state.origin) ? '' : context.baseUrl) + state.origin;
+      const origin = buildApi(context.baseUrl, state.origin);
       const originUrl = buildUrl(origin, params);
 
       axios('GET', originUrl)
@@ -94,7 +95,7 @@ export const FormUse = props => {
     if (validates.length > 0) {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
-      const api = (/^(http|\/\/)/.test(state.api) ? '' : context.baseUrl) + state.api;
+      const api = buildApi(context.baseUrl, state.api);
 
       // 消除干扰参数
       delete params.do;
@@ -154,8 +155,8 @@ export const FormUse = props => {
         />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />
-          {!isInFrame && (
+          {debug && <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />}
+          {!isInFrame && props.history.length > 1 && (
             <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
           )}
         </div>

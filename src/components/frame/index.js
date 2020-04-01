@@ -9,7 +9,7 @@ export const Frame = ({ children }) => {
     <>
       {!isInFrame && <Aside fold={foldAside} />}
       <div className={'frame-body' + (isInFrame ? ' frame-hide-nav' : '')}>
-        {!isInFrame && <Nav onSwitchAside={() => setFoldAside(!foldAside)} />}
+        {!isInFrame && <Nav fold={foldAside} onSwitchAside={() => setFoldAside(!foldAside)} />}
         {children}
       </div>
     </>

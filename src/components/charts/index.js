@@ -7,10 +7,9 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
 import 'echarts/lib/component/legend';
-
-import './index.scss';
-import { axios, buildUrl, findByPath } from '../../common/utils';
+import { axios, buildUrl, findByPath, buildApi } from '../../common/utils';
 import { SettingContext } from '../../config/context';
+import './index.scss';
 
 export const Charts = ({ config }) => {
   const chartElementRefs = useRef([]);
@@ -67,7 +66,7 @@ export const Charts = ({ config }) => {
       config.list.forEach((data, idx) => {
         const el = chartElementRefs.current[idx];
         const instance = (chartInstanceRefs.current[idx] = echarts.init(el, config.theme));
-        const api = (/^(http|\/\/)/.test(data.api) ? '' : baseUrl) + data.api;
+        const api = buildApi(baseUrl, data.api);
 
         // 依次加载各表数据
         timer[`start_${idx}`] = setTimeout(() => {
