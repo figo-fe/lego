@@ -98,7 +98,7 @@ export const FormHelp = () => (
                   ，此方法在获取到回填数据后执行，接受两个参数：editor实例和回填数据。
                   <br />
                   2.3 声明<code>window._submitFix_</code>
-                  自定义提交数据，此方法参数为表单数据，可自行实现对数据的改造和校验，如：
+                  自定义提交数据，参数为表单数据，可自行实现对数据的改造和校验，如：
                   <pre>{`window._submitFix_ = function(data){
   if (condiction1) {
     // 自行对表单数据改造，获得想要的格式和内容
