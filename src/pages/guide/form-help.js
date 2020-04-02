@@ -97,7 +97,30 @@ export const FormHelp = () => (
                   2.2 声明<code>window._onDataReady_</code>自定义数据回填
                   ，此方法在获取到回填数据后执行，接受两个参数：editor实例和回填数据。
                   <br />
-                  2.3 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
+                  2.3 声明<code>window._submitFix_</code>
+                  自定义提交数据，此方法参数为表单数据，可自行实现对数据的改造和校验，如：
+                  <pre>{`window._submitFix_ = function(data){
+  if (condiction1) {
+    // 自行对表单数据改造，获得想要的格式和内容
+    return {
+      k1: data.k1 * 100,
+      k2: format(data.k2)
+    }
+  } else {
+    // 返回false表明数据非法
+    _LEGO_UTILS_.toast('xxx填写有误')
+    return false
+  }
+}`}</pre>
+                  Content-Type默认为<code>application/x-www-form-urlencoded</code>，可按需修改：
+                  <pre>{`window._submitFix_ = function(data){
+  return {
+    _contentType: 'json', // 指定content-type为application/json
+    data: data
+  }
+}`}</pre>
+                  <br />
+                  2.4 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
                   （见<Link to='/help/general#file-upload'>文件上传</Link>）
                 </li>
               </ul>

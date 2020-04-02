@@ -80,7 +80,7 @@ export const TableHelp = () => (
             <li>类型：选择工具类型</li>
             <li>名称：填写工具名称</li>
             <li>
-              Key：此工具唯一键，当工具为查询字段时，Key必须以<code>search_</code>开头
+              Key：此工具唯一键，当工具为查询字段时，Key必须以<code>search_</code>开头（URL变量中无需search_）
             </li>
             <li>宽度：工具占位宽度</li>
             <li>

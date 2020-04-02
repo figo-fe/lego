@@ -65,10 +65,10 @@ export const BoardEdit = props => {
         tmpList.current.chart = fixList('chart', resp[1].data.list);
       });
 
-      window.JSONEditor.defaults.callbacks.getModules = (_, vars, cb) => {
+      window.getBoardModules = (editor, vars) => {
         const { type } = vars;
         if (type !== 'none' && tmpList.current[type]) {
-          cb(tmpList.current[type]);
+          editor.updateChoices(tmpList.current[type]);
         }
       };
     }
@@ -84,7 +84,7 @@ export const BoardEdit = props => {
     }
 
     return () => {
-      delete window.JSONEditor.defaults.callbacks.updateModules;
+      delete window.getBoardModules;
     };
   }, [isEdit, props.match.params.id]);
 

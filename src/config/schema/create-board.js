@@ -85,7 +85,7 @@ export const createBoard = {
                   },
                   enumSource: [
                     {
-                      setter: 'getModules',
+                      setter: 'getBoardModules',
                     },
                   ],
                 },

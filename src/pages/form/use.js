@@ -143,15 +143,16 @@ export const FormUse = props => {
     const editor = formRef.current;
     let params = parseUrl();
 
-    // 消除干扰参数
-    delete params.do;
-
     // 自定义提交数据
     if (typeof window._submitFix_ === 'function') {
-      params = window._submitFix_(Object.assign(params, editor.getValue())) || {};
+      params = window._submitFix_(Object.assign(params, editor.getValue()));
     } else {
       params.data = JSON.stringify(editor.getValue());
     }
+
+    // 消除干扰参数
+    delete params.do;
+    delete params._contentType;
 
     console.log(params);
   }
