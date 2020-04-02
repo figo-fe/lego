@@ -32,6 +32,24 @@ export const GeneralDesc = () => (
           </p>
         </div>
       </div>
+      <div className='guide-node' id='response-data'>
+        <h2 className='help-title help-title-sub'>
+          <a className='hash' href='#response-data'>
+            <i className='fas fa-link'></i>
+          </a>
+          <span>约定接口格式</span>
+        </h2>
+        <div className='help-content'>
+          <p>LEGO接入的接口请按以下结构返回：</p>
+          <pre>
+            {`{
+  code: 0, // 返回状态码，0代表成功
+  data: {}, // 数据主体
+  msg: '' // 或 desc
+}`}
+          </pre>
+        </div>
+      </div>
       <div className='guide-node' id='url-variable'>
         <h2 className='help-title help-title-sub'>
           <a className='hash' href='#url-variable'>

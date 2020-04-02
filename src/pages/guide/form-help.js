@@ -100,7 +100,7 @@ export const FormHelp = () => (
                   2.3 声明<code>window._submitFix_</code>
                   自定义提交数据，参数为表单数据，可自行实现对数据的改造和校验，如：
                   <pre>{`window._submitFix_ = function(data){
-  if (condiction1) {
+  if (someCondiction) {
     // 自行对表单数据改造，获得想要的格式和内容
     return {
       k1: data.k1 * 100,
