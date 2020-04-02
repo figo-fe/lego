@@ -96,18 +96,28 @@ export const FormUse = props => {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
       const api = buildApi(context.baseUrl, state.api);
-
-      // 消除干扰参数
-      delete params.do;
+      const opts = {};
 
       // 自定义提交数据
       if (typeof window._submitFix_ === 'function') {
-        params = window._submitFix_(Object.assign(params, editor.getValue())) || {};
+        params = window._submitFix_(Object.assign(params, editor.getValue()));
+        if (!params) {
+          console.warn(`Form: Function window._submitFix_ return invalid value`);
+          return;
+        }
+        // 自定义提交类型(Content-Type)
+        if (/json$/.test(params._contentType)) {
+          opts.type = 'json';
+        }
       } else {
         params.data = JSON.stringify(editor.getValue());
       }
 
-      axios('POST', buildUrl(api), params)
+      // 消除干扰参数
+      delete params.do;
+      delete params._contentType;
+
+      axios('POST', buildUrl(api), params, opts)
         .then(res => {
           if (res.code === 0) {
             toast('提交成功');
@@ -149,10 +159,7 @@ export const FormUse = props => {
   return (
     <Wrap loading={state.loading}>
       <div className='lego-card'>
-        <SchemaForm
-          schema={JSON.parse(state.schema)}
-          onReady={editor => (formRef.current = window._editor_ = editor)}
-        />
+        <SchemaForm schema={JSON.parse(state.schema)} onReady={editor => (formRef.current = editor)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
           {debug && <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />}

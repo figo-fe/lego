@@ -58,7 +58,6 @@ export const BoardEdit = props => {
 
   useEffect(() => {
     const editor = boardEditor.current;
-    window._editor_ = editor;
 
     async function fetchList() {
       await Promise.all([axios('GET', `${BASEURL}/table/list`), axios('GET', `${BASEURL}/chart/list`)]).then(resp => {

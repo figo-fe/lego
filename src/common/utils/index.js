@@ -53,17 +53,24 @@ export const parseUrl = url => {
   return map;
 };
 
-export const axios = (method = 'GET', api, params = {}) => {
-  method = method.toUpperCase() === 'GET' ? 'get' : 'post';
-  if (method === 'post') {
-    params = qs.stringify(params);
+export const axios = (method = 'GET', api, params = {}, opts = {}) => {
+  /**
+   * opts 自定义配置项，主要用户表单模块用户自定义提交格式
+   * opts.type 仅限post，值为json时以application/json提交，否则为application/x-www-form-urlencoded
+   */
+
+  const options = {};
+  options.method = method.toUpperCase() === 'GET' ? 'GET' : 'POST';
+  options.url = api;
+
+  if (options.method === 'GET') {
+    options.params = params;
   } else {
-    params = {
-      params: params,
-    };
+    options.data = opts.type === 'json' ? params : qs.stringify(params);
   }
+
   return new Promise((resolve, reject) => {
-    _axios[method](api, params)
+    _axios(options)
       .then(res => {
         const data = res.data;
         if (data.code === 0) {

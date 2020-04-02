@@ -93,7 +93,7 @@ JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
     if (this.value !== val) {
       this.value = val;
       this.input.value = this.value;
-      this.onChange();
+      this.onChange(true);
     }
   },
   refreshValue: function() {
@@ -160,11 +160,11 @@ export default (el, schema = {}, opts = {}) => {
       },
     };
 
-    return (window._JsonEditor_ = new JSONEditor(el, {
+    return (window._editor_ = new JSONEditor(el, {
       disable_edit_json: true,
       disable_properties: true,
-      ...opts,
       schema,
+      ...opts,
     }));
   } else {
     return null;
