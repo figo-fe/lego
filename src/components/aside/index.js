@@ -24,7 +24,7 @@ export const Aside = ({ fold }) => {
   ];
 
   const renderSub = (list, index) => (
-    <ul className='sub-list' style={{ height: (openIdx === index ? list.length * 40 : 0) + 'px' }}>
+    <ul className='sub-list' style={{ height: (openIdx === index ? list.length * 40 + 10 : 0) + 'px' }}>
       {list.map((item, idx) => (
         <li className='item-v2' key={idx}>
           <NavLink
