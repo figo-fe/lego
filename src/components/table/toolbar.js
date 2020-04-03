@@ -105,7 +105,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
               const $ = window.$;
 
               document.querySelectorAll('.toolbar-row .form-control').forEach(input => {
-                query[input.name] = input.value;
+                query[input.name.replace(/^search_/, '')] = input.value;
               });
 
               if (multiReg) {
@@ -187,7 +187,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
           placeholder={`输入${item.name}`}
         />
       ))}
-      {search.length > 0 && (
+      {search.length + toolbar.filter(({ key }) => /^search_/.test(key)).length > 0 && (
         <button
           onClick={() => {
             const query = {};

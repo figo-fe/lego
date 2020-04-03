@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SettingContext } from '../../config/context';
+import { fixJumpUrl } from '../../common/utils';
 
 export const Aside = ({ fold }) => {
   const { name, _menu = [] } = useContext(SettingContext);
@@ -28,7 +29,7 @@ export const Aside = ({ fold }) => {
         <li className='item-v2' key={idx}>
           <NavLink
             activeClassName='active'
-            to={item.url || ''}
+            to={fixJumpUrl(item.url || '')}
             isActive={(match, location) => {
               let isMatch = !!match;
               if (!isMatch) {
@@ -56,7 +57,7 @@ export const Aside = ({ fold }) => {
         <NavLink
           className='link'
           activeClassName='active'
-          to={props.to}
+          to={fixJumpUrl(props.to)}
           onClick={() => setOpenIdx(openIdx === idx ? null : idx)}>
           {props.children}
         </NavLink>

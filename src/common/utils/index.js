@@ -172,6 +172,9 @@ export const findByPath = (object, path) => {
   return obj;
 };
 
+// 使用Router跳转需去掉basename
+export const fixJumpUrl = url => url.replace(new RegExp(`^${process.env.REACT_APP_PRE}/`), '/');
+
 // 根据path查找schema对应节点
 export const findSchemaByPath = (schema, path) => {
   if (path === 'root') return schema;
