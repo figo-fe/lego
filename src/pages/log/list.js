@@ -97,7 +97,7 @@ export const LogList = () => {
           const style = [
             'outline:none;display:block;width:800px;height:500px;font-size:14px',
             'resize:none;border:none;border-radius:5px;background:#111;color:#ddd',
-          ].join('');
+          ].join(';');
           const html = [
             '<div style="padding:15px;width:830px;height:530px">',
             `<textarea readonly="true" style="${style}">${JSON.stringify(code, null, 4)}</textarea>`,
