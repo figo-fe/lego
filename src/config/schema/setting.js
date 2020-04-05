@@ -1,4 +1,4 @@
-// 全局配置
+// 系统设置
 const uploadFnDemo = `/**
  * 实现 window.fileUploader
  * 
@@ -36,7 +36,7 @@ const sideMenu = `[
   }
 ]`;
 export const setting = {
-  title: '全局配置',
+  title: '系统设置',
   type: 'object',
   format: 'grid',
   properties: {
