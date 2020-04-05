@@ -79,11 +79,28 @@ const createBoard = () => {
   return db.prepare(sql).run();
 };
 
-// 创建表单
+const createLog = () => {
+  const sql = `CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    mod_type TEXT,
+    data_id INTEGER,
+    action TEXT,
+    operator TEXT DEFAULT '',
+    config TEXT,
+    ext TEXT DEFAULT '',
+    time TIMESTAMP DEFAULT (datetime('now', 'localtime')),
+    state INTEGER DEFAULT 1
+  )`;
+
+  return db.prepare(sql).run();
+};
+
+// 创建表
 createSetting();
 createForm();
 createTable();
 createChart();
 createBoard();
+createLog();
 
 module.exports = db;

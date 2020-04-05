@@ -3,7 +3,7 @@ import { Wrap, Table } from '../../components';
 
 export const TableList = props => {
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
-  const apiPrefix = `//${host}/_lego_api_/`;
+  const apiPrefix = `//${host}/lego-api/`;
   const config = {
     base: { name: '列表管理', api: apiPrefix + 'table/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [

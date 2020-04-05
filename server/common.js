@@ -1,30 +1,5 @@
 const fs = require('fs');
 
-exports.API = {
-  // 全局设置
-  SETTING: '/_lego_api_/setting',
-
-  // 表单
-  FORM: '/_lego_api_/form',
-  FORM_DELETE: '/_lego_api_/form/delete',
-  FORM_LIST: '/_lego_api_/form/list',
-
-  // 列表
-  TABLE: '/_lego_api_/table',
-  TABLE_DELETE: '/_lego_api_/table/delete',
-  TABLE_LIST: '/_lego_api_/table/list',
-
-  // 图表
-  CHART: '/_lego_api_/chart',
-  CHART_DELETE: '/_lego_api_/chart/delete',
-  CHART_LIST: '/_lego_api_/chart/list',
-
-  // 面板
-  BOARD: '/_lego_api_/board',
-  BOARD_DELETE: '/_lego_api_/board/delete',
-  BOARD_LIST: '/_lego_api_/board/list',
-};
-
 exports.resEnd = (ctx, ret = {}) => {
   ctx.set('Content-Type', 'application/json');
   ctx.body = JSON.stringify({

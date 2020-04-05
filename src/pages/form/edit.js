@@ -29,11 +29,13 @@ export const FormEdit = props => {
   }
 
   function doSave() {
-    axios('POST', FORM, {
+    const postData = Object.assign({}, formData, {
       id: props.match.params.id,
-      ...formData,
       ext: extRef.current.getValue(),
-    })
+      loading: undefined,
+    });
+
+    axios('POST', FORM, postData)
       .then(() => {
         toast('保存成功');
         props.history.push('/form/list');

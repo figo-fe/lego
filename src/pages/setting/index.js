@@ -58,6 +58,12 @@ export const Setting = props => {
             value='帮助'
             extClass='btn-outline-primary'
           />
+          <Button
+            key='log'
+            onClick={() => window.open(`${PREPATH}/log/list`)}
+            value='系统操作日志'
+            extClass='btn-outline-info'
+          />
         </div>
       </div>
     </Wrap>

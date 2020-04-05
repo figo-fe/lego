@@ -5,7 +5,7 @@ const staticServ = require('koa-static');
 const compress = require('koa-compress');
 const rewrite = require('koa-rewrite');
 const bodyParser = require('koa-bodyparser');
-const { API } = require('./common');
+const { resEnd } = require('./common');
 
 const ENV = fs.readFileSync(`${process.cwd()}/.env`).toString();
 const PREPATH = (ENV.match(/REACT_APP_PRE=([^\n]+)/) || []).pop();
@@ -15,81 +15,26 @@ if (!PREPATH) {
   return console.log('Must config .env REACT_APP_PRE!');
 }
 
-const {
-  setting,
-  form,
-  formDelete,
-  formList,
-  table,
-  tableDelete,
-  tableList,
-  chart,
-  chartDelete,
-  chartList,
-  board,
-  boardDelete,
-  boardList,
-} = require('./controller');
+const controllers = require('./controller');
 
 const app = new Koa();
 
+const getControllerName = pathname => {
+  const [m, c] = pathname.replace('/lego-api/', '').split('/');
+  return m + (c ? c.slice(0, 1).toUpperCase() + c.slice(1) : '');
+};
+
 const handleApi = ctx => {
   const pathname = url.parse(ctx.url).pathname;
-  switch (pathname) {
-    case API.SETTING:
-      setting(ctx);
-      break;
+  const controllerName = getControllerName(pathname);
 
-    case API.FORM:
-      form(ctx);
-      break;
-
-    case API.FORM_DELETE:
-      formDelete(ctx);
-      break;
-
-    case API.FORM_LIST:
-      formList(ctx);
-      break;
-
-    case API.TABLE:
-      table(ctx);
-      break;
-
-    case API.TABLE_DELETE:
-      tableDelete(ctx);
-      break;
-
-    case API.TABLE_LIST:
-      tableList(ctx);
-      break;
-
-    case API.CHART:
-      chart(ctx);
-      break;
-
-    case API.CHART_DELETE:
-      chartDelete(ctx);
-      break;
-
-    case API.CHART_LIST:
-      chartList(ctx);
-      break;
-
-    case API.BOARD:
-      board(ctx);
-      break;
-
-    case API.BOARD_DELETE:
-      boardDelete(ctx);
-      break;
-
-    case API.BOARD_LIST:
-      boardList(ctx);
-      break;
-
-    default:
-      console.log(ctx);
+  if (controllers[controllerName]) {
+    controllers[controllerName](ctx);
+  } else {
+    resEnd(ctx, {
+      code: 404,
+      msg: 'No controller',
+    });
   }
 };
 
@@ -107,7 +52,7 @@ app.use(async (ctx, next) => {
   }
 
   // controllers
-  if (ctx.url.indexOf('/_lego_api_/') === 0) {
+  if (ctx.url.indexOf('/lego-api/') === 0) {
     handleApi(ctx);
   }
 });

@@ -23,6 +23,7 @@ import { BoardList } from './pages/board/list';
 import { BoardUse } from './pages/board/use';
 
 import { Login } from './pages/ext';
+import { LogList } from './pages/log/list';
 
 import { SettingContext } from './config/context';
 import { axios, execJs, buildApi, toast } from './common/utils';
@@ -142,6 +143,8 @@ const App = () => {
               <Route path='/help/table' component={TableHelp} />
               <Route path='/help/chart' component={ChartHelp} />
               <Route path='/help/general' component={GeneralDesc} />
+
+              <Route path='/log/list' component={LogList} />
             </Frame>
           </Switch>
         </BrowserRouter>

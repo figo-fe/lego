@@ -3,7 +3,7 @@ import { Wrap, Table } from '../../components';
 
 export const ChartList = props => {
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
-  const apiPrefix = `//${host}/_lego_api_/`;
+  const apiPrefix = `//${host}/lego-api/`;
   const config = {
     base: { name: '图表管理', api: apiPrefix + 'chart/list?name={{name}}&pn={{pageNo}}', path: 'data.list' },
     cols: [
