@@ -84,7 +84,7 @@ const _Table = props => {
         break;
 
       case 'link':
-        if (/^\/table|chart|board|form\//.test(url)) {
+        if (/^\/(form|table|chart|board)\//.test(url)) {
           props.history.push(url);
         } else {
           window.location.assign(url);
