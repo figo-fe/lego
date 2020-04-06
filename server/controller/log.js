@@ -64,8 +64,11 @@ const getList = (mod_type, data_id, pn) => {
   return list;
 };
 
-const getTotal = () => {
-  return db.prepare('SELECT count(id) as total FROM logs WHERE state = 1').get();
+const getTotal = (mod_type, data_id) => {
+  let find = 'state = 1';
+  find += mod_type ? ` AND mod_type = "${mod_type}"` : '';
+  find += data_id ? ` AND data_id = "${data_id}"` : '';
+  return db.prepare(`SELECT count(id) as total FROM logs WHERE ${find}`).get();
 };
 
 exports.logList = ctx => {
@@ -76,7 +79,7 @@ exports.logList = ctx => {
       page: {
         pageSize: ps,
         pageNo: pn,
-        ...getTotal(),
+        ...getTotal(mod_type, data_id),
       },
     },
   });
