@@ -60,7 +60,7 @@ export const LogList = () => {
         key: 'search_mod_type',
         choices_opts: {
           source_type: 'list',
-          source_data: ':全部;form:表单;table:列表;chart:图表;board:面板;setting:系统设置',
+          source_data: ':全部模块;form:表单;table:列表;chart:图表;board:面板;setting:系统设置',
         },
       },
     ],
