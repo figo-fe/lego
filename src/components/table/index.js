@@ -36,14 +36,14 @@ const _Table = props => {
           setTableList(findByPath(res, config.base.path) || []);
 
           // 分页数据
-          const pageFix = window._pageFix_ || function() {};
+          const pageFix = window._pageFix_ || function () {};
           setPage(pageFix(res.data) || res.data.page);
 
           // 滚动置顶
           document.querySelector('.main-content').scrollTop = 0;
 
           // 绑定多选事件
-          $('.multi-box').on('click', function() {
+          $('.multi-box').on('click', function () {
             if (this.className.indexOf('check') > 0) {
               this.classList.remove('fa-check-square');
               this.classList.add('fa-square');
@@ -69,9 +69,7 @@ const _Table = props => {
 
       // 清除多选框状态
       setMultiNum(0);
-      $('.table-list .fa-check-square')
-        .removeClass('fa-check-square')
-        .addClass('fa-square');
+      $('.table-list .fa-check-square').removeClass('fa-check-square').addClass('fa-square');
     };
   }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
@@ -141,10 +139,10 @@ const _Table = props => {
         return (value / 100).toFixed(2);
 
       case 'audio':
-        return `<audio src="${value}">浏览器不支持</audio>`;
+        return `<div style="height:35px"><audio style="height:35px;outline:none" controls="controls" src="${value}">浏览器不支持</audio></div>`;
 
       case 'video':
-        return `<video src="${value}" >浏览器不支持</video>`;
+        return `<div style="height:150px;margin:10px 0"><video style="width:200px;height:150px;outline:none" controls="controls" src="${value}" >浏览器不支持</video></div>`;
 
       default:
         return value;
@@ -208,16 +206,12 @@ const _Table = props => {
                         const $ = window.$;
                         if (el.className.indexOf('check') > 0) {
                           el.className = 'far fa-square';
-                          $(`.multi-${key}-col`)
-                            .removeClass('fa-check-square')
-                            .addClass('fa-square');
+                          $(`.multi-${key}-col`).removeClass('fa-check-square').addClass('fa-square');
 
                           setMultiNum(0);
                         } else {
                           el.className = 'far fa-check-square';
-                          $(`.multi-${key}-col`)
-                            .removeClass('fa-square')
-                            .addClass('fa-check-square');
+                          $(`.multi-${key}-col`).removeClass('fa-square').addClass('fa-check-square');
 
                           setMultiNum(page.pageSize);
                         }

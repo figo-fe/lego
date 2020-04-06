@@ -1,0 +1,33 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "list": [
+      {
+        "name": "媒体资源1",
+        "audio": "https://news-bos.cdn.bcebos.com/mvideo/%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%9C.aac",
+        "video": "https://www.w3school.com.cn/i/movie.ogg"
+      },
+      {
+        "name": "媒体资源2",
+        "audio": "https://news-bos.cdn.bcebos.com/mvideo/%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%9C.aac",
+        "video": "https://www.w3school.com.cn/i/movie.ogg"
+      },
+      {
+        "name": "媒体资源3",
+        "audio": "https://news-bos.cdn.bcebos.com/mvideo/%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%9C.aac",
+        "video": "https://www.w3school.com.cn/i/movie.ogg"
+      },
+      {
+        "name": "媒体资源4",
+        "audio": "https://news-bos.cdn.bcebos.com/mvideo/%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%9C.aac",
+        "video": "https://www.w3school.com.cn/i/movie.ogg"
+      },
+      {
+        "name": "媒体资源5",
+        "audio": "https://news-bos.cdn.bcebos.com/mvideo/%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%9C.aac",
+        "video": "https://www.w3school.com.cn/i/movie.ogg"
+      }
+    ]
+  }
+}
