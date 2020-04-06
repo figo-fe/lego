@@ -1,12 +1,4 @@
 import React, { useRef, useContext, useEffect, useCallback } from 'react';
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
-import 'echarts/lib/component/toolbox';
-import 'echarts/lib/component/legend';
 import { axios, buildUrl, findByPath, buildApi } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import './index.scss';
@@ -63,20 +55,37 @@ export const Charts = ({ config }) => {
     const baseUrl = context.baseUrl;
     if (config && baseUrl !== void 0) {
       const timer = {};
-      config.list.forEach((data, idx) => {
-        const el = chartElementRefs.current[idx];
-        const instance = (chartInstanceRefs.current[idx] = echarts.init(el, config.theme));
-        const api = buildApi(baseUrl, data.api);
+      const instanceList = [];
 
-        // 依次加载各表数据
-        timer[`start_${idx}`] = setTimeout(() => {
-          updateChart(instance, api, data);
-          if (data.refresh > 0) {
-            timer[`refresh_${idx}`] = setInterval(() => {
-              updateChart(instance, api, data);
-            }, data.refresh * 1000);
-          }
-        }, 200 * idx);
+      // 异步加载echarts
+      Promise.all([
+        import('echarts/lib/echarts'),
+        import('echarts/lib/chart/bar'),
+        import('echarts/lib/chart/line'),
+        import('echarts/lib/chart/pie'),
+        import('echarts/lib/component/tooltip'),
+        import('echarts/lib/component/title'),
+        import('echarts/lib/component/toolbox'),
+        import('echarts/lib/component/legend'),
+      ]).then(([echarts]) => {
+        config.list.forEach((data, idx) => {
+          const el = chartElementRefs.current[idx];
+          const instance = (chartInstanceRefs.current[idx] = echarts.init(el, config.theme));
+          const api = buildApi(baseUrl, data.api);
+
+          // 将实例放入集合
+          instanceList.push(instance);
+
+          // 依次加载各表数据
+          timer[`start_${idx}`] = setTimeout(() => {
+            updateChart(instance, api, data);
+            if (data.refresh > 0) {
+              timer[`refresh_${idx}`] = setInterval(() => {
+                updateChart(instance, api, data);
+              }, data.refresh * 1000);
+            }
+          }, 200 * idx);
+        });
       });
 
       return () => {
@@ -84,6 +93,11 @@ export const Charts = ({ config }) => {
         Object.keys(timer).forEach(key => {
           const cleanup = /^start/.test(key) ? clearTimeout : clearInterval;
           cleanup(timer[key]);
+        });
+
+        // 销毁实例
+        instanceList.forEach(_instance => {
+          _instance.dispose();
         });
       };
     }
