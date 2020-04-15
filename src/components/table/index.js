@@ -8,7 +8,18 @@ import { TableToolBar } from './toolbar';
 import 'rc-pagination/assets/index.css';
 import './index.scss';
 
-const icons = ['file-alt', 'podcast', 'paper-plane', 'database', 'columns', 'cube'];
+const icons = [
+  'file-alt',
+  'podcast',
+  'paper-plane',
+  'bookmark',
+  'database',
+  'columns',
+  'cube',
+  'buffer',
+  'bullseye',
+  'calendar',
+];
 
 const _Table = props => {
   const { config } = props;
@@ -102,13 +113,13 @@ const _Table = props => {
         if (isComfirm) {
           axios('POST', url.replace(/[?&]handle_confirm=0$/, ''))
             .then(res => {
-              toast(`${handle.name}成功`);
+              toast(`操作成功`);
               // 刷新当前数据
               setHack(!hack);
               console.log(res);
             })
             .catch(err => {
-              toast(`${handle.name}失败\n${String(err)}`);
+              toast(`操作失败\n${String(err)}`);
               console.warn(err);
             });
         }
