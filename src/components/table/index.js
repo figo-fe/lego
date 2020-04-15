@@ -93,8 +93,14 @@ const _Table = props => {
 
       case 'api':
         url = buildApi(context.baseUrl, url);
-        if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
-          axios('POST', url)
+        let isComfirm = false;
+        if (/[?&]handle_confirm=0$/.test(url)) {
+          isComfirm = true;
+        } else if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
+          isComfirm = true;
+        }
+        if (isComfirm) {
+          axios('POST', url.replace(/[?&]handle_confirm=0$/, ''))
             .then(res => {
               toast(`${handle.name}成功`);
               // 刷新当前数据
@@ -255,7 +261,7 @@ const _Table = props => {
                   <td>
                     {handles.map((handle, i) => (
                       <span onClick={() => onClickHandle(row, handle)} key={i} className='handle'>
-                        <i className={'fas fa-' + (handle.icon || icons[i])} />
+                        {handle.icon !== 'none' && <i className={'fas fa-' + (handle.icon || icons[i])} />}
                         <em>{handle.name}</em>
                       </span>
                     ))}

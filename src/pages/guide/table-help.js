@@ -59,12 +59,20 @@ export const TableHelp = () => (
           <span>数据操作</span>
         </h2>
         <div className='help-content'>
-          添加数据操作如编辑、删除等，支持内页打开、新窗打开、弹窗浮层、接口请求和
-          <Link to='/help/general#exec-script'>执行脚本</Link>，可配置
-          <Link to='/help/general#icon-font'>IconFont</Link>
-          ，支持
-          <Link to='/help/general#url-variable'>URL变量</Link>
-          ，变量数据从行数据和页面URL参数中读取，行数据优先级更高。
+          <p>
+            添加数据操作如编辑、删除等，支持内页打开、新窗打开、弹窗浮层、接口请求和
+            <Link to='/help/general#exec-script'>执行脚本</Link>，可配置
+            <Link to='/help/general#icon-font'>IconFont</Link>
+            ，支持
+            <Link to='/help/general#url-variable'>URL变量</Link>
+            ，变量数据从行数据和页面URL参数中读取，行数据优先级更高。
+          </p>
+          <p>
+            接口请求类型默认增加二次确认弹窗，取消二次确认需在url结尾增加参数<code>handle_confirm=0</code>
+          </p>
+          <p>
+            数据操作图标留空时会自动添加图标，取消图标请填<code>none</code>
+          </p>
         </div>
       </div>
       <div className='guide-node' id='handle'>
