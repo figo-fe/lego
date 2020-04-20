@@ -407,6 +407,10 @@ li {
   border-color: #80bdff;
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 }
+.btn-primary.focus,
+.btn-primary:focus {
+  box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.8);
+}
 .btn-outline-secondary:focus,
 .btn-outline-secondary.focus {
   box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.5);
@@ -415,6 +419,12 @@ li {
 /* Plugins */
 .choices__list--dropdown {
   z-index: 99;
+}
+.choices__list--multiple .choices__item {
+  margin-bottom: 0.375rem;
+  border-radius: 4px;
+  padding: 0.2em 10px;
+  vertical-align: top;
 }
 .choices__inner {
   height: calc(1.5em + 0.75rem + 2px);
