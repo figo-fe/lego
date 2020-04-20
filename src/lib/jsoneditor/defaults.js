@@ -376,7 +376,7 @@ export function getDefaults() {
       if (schema.format === 'choices') {
         return 'choices';
       }
-      return 'select';
+      return 'choices';
     }
   });
   // Use the `enum` or `select` editors for schemas with enumerated properties
@@ -397,10 +397,10 @@ export function getDefaults() {
           return 'selectize';
         }
 
-        if (schema.format === 'choices' || schema.format === 'select') {
+        if (schema.format === 'choices') {
           return 'choices';
         }
-        return 'select';
+        return 'choices';
       }
     }
   });
@@ -478,7 +478,7 @@ export function getDefaults() {
   });
 
   JSONEditor.defaults.resolvers.unshift(function (schema) {
-    if (schema.type === 'string' && ['xhtml', 'html', 'bbcode'].indexOf(schema.format) !== -1) return 'sceditor';
+    if (schema.type === 'string' && ['xhtml', 'bbcode'].indexOf(schema.format) !== -1) return 'sceditor';
   });
 
   JSONEditor.defaults.resolvers.unshift(function (schema) {

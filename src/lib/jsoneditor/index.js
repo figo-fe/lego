@@ -1,5 +1,11 @@
+import Choices from 'choices.js';
+import 'choices.js/public/assets/styles/choices.css';
+
 import { JSONEditor } from './core';
 import uploadFileEditor from './custom-editors/uploadfile';
+
+// Add global
+window.Choices = Choices;
 
 // theme
 JSONEditor.defaults.theme = 'bootstrap4';

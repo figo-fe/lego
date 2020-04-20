@@ -77,9 +77,8 @@ export default ({ schema, onUpdate }) => {
         ];
         break;
 
-      case 'html':
+      case 'xhtml':
         tmp.type = 'string';
-        tmp.options.wysiwyg = true;
         break;
 
       default:
@@ -108,7 +107,7 @@ export default ({ schema, onUpdate }) => {
             <option value='url'>网址</option>
             <option value='select'>下拉框</option>
             <option value='range'>滑动条</option>
-            <option value='html'>富文本编辑器</option>
+            <option value='xhtml'>富文本编辑器</option>
           </select>
         </div>
       </div>

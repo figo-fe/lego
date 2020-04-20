@@ -401,3 +401,27 @@ li {
     border-radius: 4px;
   }
 }
+
+/* bootstrap */
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+.btn-outline-secondary:focus,
+.btn-outline-secondary.focus {
+  box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.5);
+}
+
+/* Plugins */
+.choices__list--dropdown {
+  z-index: 99;
+}
+.choices__inner {
+  height: calc(1.5em + 0.75rem + 2px);
+  min-height: auto;
+  padding: 0.375em 0.75rem;
+  border-radius: 0.25rem;
+  .choices__list--single {
+    padding: 0;
+  }
+}

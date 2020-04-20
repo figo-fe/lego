@@ -9,6 +9,7 @@
     "@koa/router": "^8.0.0",
     "axios": "^0.19.0",
     "better-sqlite3": "^5.4.1",
+    "choices.js": "^9.0.1",
     "echarts": "^4.5.0",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
