@@ -2,9 +2,10 @@ import _axios from 'axios';
 import qs from 'qs';
 import MD5 from 'md5.js';
 import popup from './popup';
-export { default as json2schema } from './json2schema';
-export { default as initEditor } from './initeditor';
 export { popup };
+
+export { default as initEditor } from '@jsoneditor';
+export { default as json2schema } from './json2schema';
 
 export const loadJs = url => {
   return new Promise(resolve => {
