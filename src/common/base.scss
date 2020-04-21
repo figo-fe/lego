@@ -402,20 +402,6 @@ li {
   }
 }
 
-/* bootstrap */
-.form-control:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-}
-.btn-primary.focus,
-.btn-primary:focus {
-  box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.8);
-}
-.btn-outline-secondary:focus,
-.btn-outline-secondary.focus {
-  box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.5);
-}
-
 /* Plugins */
 .choices__list--dropdown {
   z-index: 99;
@@ -434,4 +420,7 @@ li {
   .choices__list--single {
     padding: 0;
   }
+}
+.choices__list--dropdown .choices__item--selectable {
+  padding-right: 10px;
 }

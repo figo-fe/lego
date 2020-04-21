@@ -359,7 +359,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
   getButton: function (text, icon, title) {
     var el = this._super(text, icon, title);
-    el.classList.add('btn', 'btn-secondary', 'btn-sm');
+    el.classList.add('btn', 'btn-light', 'btn-sm');
     return el;
   },
 
