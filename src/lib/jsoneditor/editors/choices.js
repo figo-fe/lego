@@ -83,10 +83,12 @@ export var ChoicesEditor = SelectEditor.extend({
       this.onChange(true);
     }
 
-    if (this.choices_instance) {
-      this.choices_instance.setChoices(list, 'value', 'label', true);
-      this.choices_instance.setChoiceByValue(this.value + '');
-    }
+    setTimeout(() => {
+      if (this.choices_instance) {
+        this.choices_instance.setChoices(list, 'value', 'label', true);
+        this.choices_instance.setChoiceByValue(this.value + '');
+      }
+    });
   },
   enable: function () {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();

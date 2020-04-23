@@ -66,8 +66,6 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
     var option_titles = [];
     var select_values = {};
 
-    if (!this.choices_instance) return;
-
     list.forEach(function (data) {
       option_keys.push(String(data.value));
       option_titles.push(data.label);
@@ -79,7 +77,11 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
     this.select_values = select_values;
     this.schema.items.enum = Object.values(select_values);
 
-    this.choices_instance.setChoices(list, 'value', 'label', true);
+    setTimeout(() => {
+      if (this.choices_instance) {
+        this.choices_instance.setChoices(list, 'value', 'label', true);
+      }
+    });
   },
   updateValue: function (value) {
     value = [].concat(value);

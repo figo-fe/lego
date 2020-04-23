@@ -97,6 +97,7 @@ export const createChart = {
           toolbox: {
             title: '工具栏',
             type: 'array',
+            format: 'select',
             uniqueItems: true,
             items: {
               type: 'string',

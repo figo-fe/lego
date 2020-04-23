@@ -330,6 +330,9 @@ li {
 .form-control[type='file'] {
   height: auto;
 }
+h3.card-title label {
+  margin-right: 10px;
+}
 .card-body .btn-group {
   display: inline-block;
 }
@@ -407,16 +410,18 @@ li {
   z-index: 99;
 }
 .choices__list--multiple .choices__item {
-  margin-bottom: 0.375rem;
+  margin-bottom: 3px;
   border-radius: 4px;
-  padding: 0.2em 10px;
+  padding: 2px 10px;
   vertical-align: top;
 }
 .choices__inner {
-  height: calc(1.5em + 0.75rem + 2px);
-  min-height: auto;
-  padding: 0.375em 0.75rem;
+  min-height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.25rem 0.75rem 0 !important;
   border-radius: 0.25rem;
+  .choices__input {
+    padding: 0;
+  }
   .choices__list--single {
     padding: 0;
   }

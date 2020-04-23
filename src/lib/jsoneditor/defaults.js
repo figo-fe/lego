@@ -412,7 +412,7 @@ export function getDefaults() {
       !Array.isArray(schema.items) &&
       ['string', 'number', 'integer'].indexOf(schema.items.type) >= 0
     ) {
-      if (schema.format === 'choices') {
+      if (schema.format === 'choices' || schema.format === 'select') {
         return 'arrayChoices';
       }
       if (schema.uniqueItems) {
