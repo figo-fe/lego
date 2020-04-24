@@ -77,7 +77,7 @@ export var ChoicesEditor = SelectEditor.extend({
     this.enum_display = select_display;
 
     // 选项中无已选值，默认选择第一个
-    if (select_options.indexOf(this.value) === -1) {
+    if (select_options.indexOf(String(this.value)) === -1) {
       this.input.value = select_options[0];
       this.value = this.typecast(select_options[0]);
       this.onChange(true);
@@ -85,7 +85,12 @@ export var ChoicesEditor = SelectEditor.extend({
 
     setTimeout(() => {
       if (this.choices_instance) {
-        this.choices_instance.setChoices(list, 'value', 'label', true);
+        this.choices_instance.setChoices(
+          list.map(({ label, value }) => ({ label: String(label), value: String(value) })),
+          'value',
+          'label',
+          true,
+        );
         this.choices_instance.setChoiceByValue(this.value + '');
       }
     });

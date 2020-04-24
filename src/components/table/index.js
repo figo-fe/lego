@@ -245,7 +245,7 @@ const _Table = props => {
               );
             })}
             {hasHandle && (
-              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>${langs[lang]['operation']}</th>
+              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>{langs[lang]['operation']}</th>
             )}
           </tr>
         </thead>
