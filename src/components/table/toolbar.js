@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { langs, lang } from '@lang';
 
 export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHandle, onSearch, onFilter }) => {
   const [init, setInit] = useState(false);
@@ -33,7 +34,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
             name={tool.key}
             style={{ width: tool.width ? parseInt(tool.width) : undefined }}
             className='form-control'
-            placeholder={`请输入${tool.name}`}
+            placeholder={`${langs[lang]['please_enter']}${tool.name}`}
             id={`toolbar_input_${tool.key}`}
           />
         );
@@ -184,7 +185,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
           name={`search_${item.key}`}
           className='form-control'
           id={`toolbar_search_${item.key}`}
-          placeholder={`输入${item.name}`}
+          placeholder={`${langs[lang]['please_enter']}${item.name}`}
         />
       ))}
       {search.length + toolbar.filter(({ key }) => /^search_/.test(key)).length > 0 && (
@@ -199,7 +200,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
             onSearch(query);
           }}
           className='btn btn-sm btn-success'>
-          查询
+          {langs[lang]['search']}
         </button>
       )}
     </div>

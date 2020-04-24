@@ -4,6 +4,7 @@ import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
 import { axios, toast, buildUrl, findByPath, popup, dateFormat, buildApi, kv } from '../../common/utils';
 import { TableToolBar } from './toolbar';
+import { langs, lang } from '@lang';
 
 import 'rc-pagination/assets/index.css';
 import './index.scss';
@@ -68,7 +69,7 @@ const _Table = props => {
           });
         })
         .catch(err => {
-          toast('加载失败');
+          toast(langs[lang]['load_fail']);
           setLoading(false);
           console.log(err);
         });
@@ -107,19 +108,21 @@ const _Table = props => {
         let isComfirm = false;
         if (/[?&]handle_confirm=0$/.test(url)) {
           isComfirm = true;
-        } else if (window.confirm(`是否${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)) {
+        } else if (
+          window.confirm(`${langs[lang]['confirm']}${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)
+        ) {
           isComfirm = true;
         }
         if (isComfirm) {
           axios('POST', url.replace(/[?&]handle_confirm=0$/, ''))
             .then(res => {
-              toast(`操作成功`);
+              toast(langs[lang]['handle_success']);
               // 刷新当前数据
               setHack(!hack);
               console.log(res);
             })
             .catch(err => {
-              toast(`操作失败\n${String(err)}`);
+              toast(`${langs[lang]['handle_fail']}\n${String(err)}`);
               console.warn(err);
             });
         }
@@ -237,19 +240,21 @@ const _Table = props => {
                     />
                   )}
                   <span>{col.name || key}</span>
-                  {showSort && <em title='排序' className={'fas fa-' + sortIcon} />}
+                  {showSort && <em title={langs[lang]['order']} className={'fas fa-' + sortIcon} />}
                 </th>
               );
             })}
             {hasHandle && (
-              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>操作</th>
+              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>${langs[lang]['operation']}</th>
             )}
           </tr>
         </thead>
         <tbody className='table-tbody'>
           {tableList.length === 0 ? (
             <tr>
-              <td colSpan={cols.length + (hasHandle ? 1 : 0)}>{loading ? '加载中...' : '暂无数据'}</td>
+              <td colSpan={cols.length + (hasHandle ? 1 : 0)}>
+                {loading ? langs[lang]['loading'] : langs[lang]['no_data']}
+              </td>
             </tr>
           ) : (
             tableList.map((row, idx) => (
@@ -288,7 +293,9 @@ const _Table = props => {
           <Pagination
             onChange={pn => setPageNo(pn)}
             total={page.total || 0}
-            showTotal={all => `${multiNum > 0 ? '已选' + multiNum + '，' : ''}共${all}条数据`}
+            showTotal={all =>
+              `${langs[lang]['table_selected_number'](multiNum)}${langs[lang]['table_list_total'](all)}`
+            }
             pageSize={page.pageSize || 20}
             current={+pageNo}
             prevIcon={<i className='fas fa-chevron-left' />}

@@ -3,6 +3,7 @@ import { Wrap, Button, SchemaForm } from '../../components';
 import { axios, toast, parseUrl, execJs, buildUrl, isInFrame, kv, buildApi } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { FORM } from '../../config/apis';
+import { langs, lang } from '@lang';
 
 export const FormUse = props => {
   const debug = kv('debug');
@@ -22,9 +23,9 @@ export const FormUse = props => {
     axios('GET', FORM, { id }).then(res => {
       let { api, origin, schema, ext, state = 0 } = res.data;
       if (state === 0) {
-        toast('表单已失效');
+        toast(langs[lang]['form_invalid']);
         setState({
-          schema: '{"title":"无效表单","properties":{},"options":{"disable_collapse":true}}',
+          schema: `{"title":"${langs[lang]['form_invalid']}","properties":{},"options":{"disable_collapse":true}}`,
           loading: false,
         });
       } else {
@@ -93,7 +94,12 @@ export const FormUse = props => {
     const validates = editor.validate();
     let params = parseUrl();
     if (validates.length > 0) {
-      toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
+      toast(
+        [
+          `${langs[lang]['form_validate_fail']}<br />`,
+          `${validates.map(err => err.path + ': ' + err.message).join('<br />')}`,
+        ].join(''),
+      );
     } else {
       const api = buildApi(context.baseUrl, state.api);
       const opts = {};
@@ -120,7 +126,7 @@ export const FormUse = props => {
       axios('POST', buildUrl(api), params, opts)
         .then(res => {
           if (res.code === 0) {
-            toast('提交成功');
+            toast(langs[lang]['submit_success']);
             if (isInFrame) {
               // 关闭弹窗
               setTimeout(() => {
@@ -162,10 +168,14 @@ export const FormUse = props => {
       <div className='lego-card'>
         <SchemaForm schema={JSON.parse(state.schema)} onReady={editor => (formRef.current = editor)} />
         <div className='btns-row'>
-          <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
+          <Button onClick={doSubmit} value={langs[lang]['submit']} extClass='btn-primary' />
           {debug && <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />}
           {!isInFrame && props.history.length > 1 && (
-            <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
+            <Button
+              onClick={() => props.history.goBack()}
+              value={langs[lang]['back']}
+              extClass='btn-outline-secondary'
+            />
           )}
         </div>
       </div>
