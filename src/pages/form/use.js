@@ -40,6 +40,8 @@ export const FormUse = props => {
         console.log(`unmount ${fn}`);
         delete window._onDataReady_;
         delete window._editor_;
+        delete window._submitFix_;
+        delete window._afterSubmit_;
         delete window[fn];
         script.remove();
       } catch (e) {
@@ -137,6 +139,11 @@ export const FormUse = props => {
                 }
               }, 2e3);
             }
+          }
+
+          // 提交后执行方法
+          if (typeof window._afterSubmit_ === 'function') {
+            window._afterSubmit_(params, res);
           }
         })
         .catch(err => {

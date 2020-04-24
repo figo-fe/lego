@@ -120,7 +120,10 @@ export const FormHelp = () => (
   }
 }`}</pre>
                   <br />
-                  2.4 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
+                  2.4 声明<code>window._afterSubmit_</code>
+                  定制提交表单后的动作，接收两个参数<code>submit_params</code>和<code>response_data</code>
+                  <br />
+                  2.5 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
                   （见<Link to='/help/general#file-upload'>文件上传</Link>）
                 </li>
               </ul>
