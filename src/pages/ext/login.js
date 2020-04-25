@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
 import { axios, md5, toast } from '../../common/utils';
+import { langs, lang } from '@lang';
+
 import './login.scss';
 
 export const Login = props => {
@@ -17,25 +19,25 @@ export const Login = props => {
         window.location.replace(`${process.env.REACT_APP_PRE}/`);
       });
     } else {
-      toast('用户名和密码不得为空');
+      toast(langs[lang]['usr_pwd_empty']);
     }
   }
   return (
     <div className='lego-login'>
       <div className='login-main'>
         <div className='login-box'>
-          <div className='login-title'>后台管理系统</div>
+          <div className='login-title'>{langs[lang]['admin_name']}</div>
           <div className='login-form'>
             <div className='login-input'>
               <i className='fas fa-user'></i>
-              <input type='text' placeholder='请输入用户名' ref={usr} />
+              <input type='text' placeholder={`${langs[lang]['please_enter']}${langs[lang]['usr']}`} ref={usr} />
             </div>
             <div className='login-input'>
               <i className='fas fa-unlock'></i>
-              <input type='password' placeholder='请输入密码' ref={pwd} />
+              <input type='password' placeholder={`${langs[lang]['please_enter']}${langs[lang]['pwd']}`} ref={pwd} />
             </div>
             <div className='login-btn' onClick={doLogin}>
-              登 录
+              {langs[lang]['login']}
             </div>
           </div>
         </div>

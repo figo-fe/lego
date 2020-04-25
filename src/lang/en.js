@@ -1,5 +1,6 @@
 export const en = {
   // common
+  admin_name: 'Admin',
   submit_success: 'Success',
   handle_success: 'Success',
   handle_fail: 'Fail',
@@ -11,9 +12,15 @@ export const en = {
   load_success: 'Load Success',
   load_fail: 'Load Fail',
   no_data: 'No Data',
-  please_enter: 'Please Enter',
+  please_enter: 'Please Enter ',
   search: 'Search',
   confirm: 'Confirm',
+
+  // login
+  usr: 'Username',
+  pwd: 'Password',
+  usr_pwd_empty: "Username and password can't be empty",
+  login: 'LOGIN',
 
   // form
   form_invalid: 'Invalid',

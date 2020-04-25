@@ -1,5 +1,6 @@
 export const zh = {
   // common
+  admin_name: '后台管理系统',
   submit_success: '提交成功',
   handle_success: '操作成功',
   handle_fail: '操作失败',
@@ -14,6 +15,12 @@ export const zh = {
   please_enter: '请输入',
   search: '查询',
   confirm: '确认',
+
+  // login
+  usr: '用户名',
+  pwd: '密码',
+  usr_pwd_empty: '用户名和密码不得为空',
+  login: '登 录',
 
   // form
   form_invalid: '无效表单',
