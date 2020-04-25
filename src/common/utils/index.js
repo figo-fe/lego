@@ -79,9 +79,9 @@ export const axios = (method = 'GET', api, params = {}, opts = {}) => {
         } else {
           if (String(data.code) === process.env.REACT_APP_LOGIN_CODE) {
             if (process.env.REACT_APP_LOGIN_URL) {
-              window.location.assign(process.env.REACT_APP_LOGIN_URL);
+              window.location.replace(process.env.REACT_APP_LOGIN_URL);
             } else {
-              window.location.assign(process.env.REACT_APP_PRE + '/login');
+              window.location.replace(process.env.REACT_APP_PRE + '/login');
             }
           }
           reject(data);

@@ -37,13 +37,16 @@ const App = () => {
 
   // 获取系统配置和权限
   useEffect(() => {
+    // 登录页不加载配置
+    if (window.location.pathname.indexOf('/login') > 0) return;
+
     axios('GET', SETTING)
       .then(async res => {
         let { name = '后台管理系统', baseUrl = '', permissionApi = '', sideMenu = '', uploadFn = '' } = res.data;
 
-        let _menu = [];
-        let _admin = false;
-        let _user = '';
+        let _menu = []; // 边栏菜单
+        let _admin = false; // 是否有管理权限
+        let _user = ''; // 登录用户名
 
         // 设置页面title
         document.title = name;

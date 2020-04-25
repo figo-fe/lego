@@ -14,7 +14,7 @@ export const Login = props => {
 
       axios('POST', process.env.REACT_APP_LOGIN_API, params).then(data => {
         console.log('login', data);
-        window.location.assign(`${process.env.REACT_APP_PRE}/`);
+        window.location.replace(`${process.env.REACT_APP_PRE}/`);
       });
     } else {
       toast('用户名和密码不得为空');
