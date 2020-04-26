@@ -123,6 +123,7 @@ export const FormUse = props => {
 
       // 消除干扰参数
       delete params.do;
+      delete params.debug;
       delete params._contentType;
 
       axios('POST', buildUrl(api), params, opts)
@@ -165,6 +166,7 @@ export const FormUse = props => {
 
     // 消除干扰参数
     delete params.do;
+    delete params.debug;
     delete params._contentType;
 
     console.log(params);

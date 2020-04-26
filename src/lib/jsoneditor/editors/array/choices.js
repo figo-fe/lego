@@ -44,7 +44,7 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
       // this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string';
 
       // Choices doesn't support adding new items to select type input
-      this.newEnumAllowed = false;
+      this.newEnumAllowed = this.schema && this.schema.items.type === 'string';
 
       this.choices_instance = new window.Choices(this.input, options);
 
@@ -60,28 +60,6 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
       this.control.addEventListener('change', this.multiselectChangeHandler, false);
     }
     this._super();
-  },
-  updateChoices: function (list) {
-    var option_keys = [];
-    var option_titles = [];
-    var select_values = {};
-
-    list.forEach(function (data) {
-      option_keys.push(String(data.value));
-      option_titles.push(data.label);
-      select_values[String(data.value)] = data.value;
-    });
-
-    this.option_keys = option_keys;
-    this.option_titles = option_titles;
-    this.select_values = select_values;
-    this.schema.items.enum = Object.values(select_values);
-
-    setTimeout(() => {
-      if (this.choices_instance) {
-        this.choices_instance.setChoices(list, 'value', 'label', true);
-      }
-    });
   },
   updateValue: function (value) {
     value = [].concat(value);
@@ -113,6 +91,35 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
     this.choices_instance.setChoices([{ value: value + '', label: value + '' }], 'value', 'label', false);
 
     return true;
+  },
+  updateChoices: function (list) {
+    var option_keys = [];
+    var option_titles = [];
+    var select_values = {};
+
+    list = list.map(({ value, label, selected }) => ({
+      value,
+      label,
+      selected: this.value.indexOf(String(value)) >= 0 || !!selected,
+    }));
+
+    list.forEach(function (data) {
+      option_keys.push(String(data.value));
+      option_titles.push(data.label);
+      select_values[String(data.value)] = data.value;
+    });
+
+    this.option_keys = option_keys;
+    this.option_titles = option_titles;
+    this.select_values = select_values;
+    this.schema.items.enum = Object.values(select_values);
+
+    setTimeout(() => {
+      if (this.choices_instance) {
+        this.choices_instance.removeActiveItems();
+        this.choices_instance.setChoices(list, 'value', 'label', true);
+      }
+    });
   },
   enable: function () {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();

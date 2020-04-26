@@ -6,7 +6,11 @@ export var ChoicesEditor = SelectEditor.extend({
       // Sanitize value before setting it
       var sanitized = this.typecast(value || '');
 
-      if (this.enum_values[0] === undefined) return;
+      // 异步载入enum时默认为空，兼容表单设值
+      if (this.enum_values[0] === undefined) {
+        this.enum_values = [sanitized];
+        this.enum_options = ['' + sanitized];
+      }
 
       if (this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0];
 
@@ -15,9 +19,9 @@ export var ChoicesEditor = SelectEditor.extend({
       if (initial) this.is_dirty = false;
       else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true;
 
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+      var choicesValue = (this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]);
 
-      this.choices_instance.setChoiceByValue(sanitized);
+      this.choices_instance.setChoiceByValue(choicesValue);
 
       this.value = sanitized;
       this.onChange();
@@ -65,23 +69,34 @@ export var ChoicesEditor = SelectEditor.extend({
     var select_values = [];
     var select_options = [];
     var select_display = [];
+    var selected_idx;
 
-    list.forEach(function (data) {
+    list.forEach(function (data, idx) {
       select_values.push(data.value);
       select_options.push(String(data.value));
       select_display.push(String(data.label));
+
+      if (data.selected === true) {
+        selected_idx = idx;
+      }
     });
 
     this.enum_values = select_values;
     this.enum_options = select_options;
     this.enum_display = select_display;
 
-    // 选项中无已选值，默认选择第一个
-    if (select_options.indexOf(String(this.value)) === -1) {
-      this.input.value = select_options[0];
-      this.value = this.typecast(select_options[0]);
-      this.onChange(true);
+    if (selected_idx === void 0) {
+      selected_idx = select_options.indexOf(String(this.value));
+
+      if (selected_idx === -1) {
+        selected_idx = 0;
+      }
     }
+
+    // 选项中无已选值，默认选择第一个
+    this.input.value = select_options[selected_idx];
+    this.value = this.typecast(select_options[selected_idx]);
+    this.onChange(true);
 
     setTimeout(() => {
       if (this.choices_instance) {

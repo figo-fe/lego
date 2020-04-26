@@ -1188,7 +1188,8 @@ export var ObjectEditor = AbstractEditor.extend({
     })
 
     this.refreshValue()
-    this.layoutEditors()
+    // 重排会导致sceditor失效，不清楚为什么要重排，先注释
+    // this.layoutEditors()
     this.onChange()
   },
   showValidationErrors: function (errors) {
