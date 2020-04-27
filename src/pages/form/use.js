@@ -134,7 +134,7 @@ export const FormUse = props => {
               // 关闭弹窗
               setTimeout(() => {
                 try {
-                  window.parent._LEGO_UTILS_.popup.hide();
+                  window.parent._LEGO_UTILS_.popup.hide(true);
                 } catch (err) {
                   console.warn(err);
                 }

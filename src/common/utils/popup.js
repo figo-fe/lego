@@ -38,10 +38,11 @@ const show = (src, width = 800, height = 500) => {
   };
 };
 
-const hide = () => {
+const hide = execOnHide => {
+  // execOnHide 是否执行关闭回调，点x不执行
   document.body.removeChild(container);
   window.removeEventListener('message', updateHeight);
-  if (typeof cbs.onHide === 'function') {
+  if (execOnHide && typeof cbs.onHide === 'function') {
     cbs.onHide();
     delete cbs.onHide;
   }
