@@ -2,7 +2,7 @@ import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.css';
 
 import { JSONEditor } from './core';
-import uploadFileEditor from './custom-editors/uploadfile';
+import { UploadFile } from './custom-editors/uploadfile';
 
 // Add global
 window.Choices = Choices;
@@ -66,7 +66,8 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
     return 'uploadFile';
   }
 });
-uploadFileEditor(JSONEditor);
+
+JSONEditor.defaults.editors.uploadFile = UploadFile;
 
 export default (element, schema = {}, opts = {}) => {
   if (element) {

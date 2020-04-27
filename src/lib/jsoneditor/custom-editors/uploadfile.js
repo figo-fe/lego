@@ -1,3 +1,5 @@
+import { StringEditor } from '../editors/string';
+
 const getUploadBtn = () => {
   const btn = document.createElement('button');
   btn.type = 'button';
@@ -9,93 +11,77 @@ const getUploadBtn = () => {
 
   return btn;
 };
+
 const getProgress = () => {
   const progress = document.createElement('div');
   progress.style = [
     'transition: all .5s;position:absolute;left:0;bottom:0px;z-index:9;',
     'height:2px;background:#007bff;border-radius:1px;width:0',
   ].join('');
+
   return progress;
 };
 
-export default JSONEditor => {
-  JSONEditor.defaults.editors.uploadFile = JSONEditor.AbstractEditor.extend({
-    build: function () {
+export const UploadFile = StringEditor.extend({
+  build: function () {
+    this._super();
+    if (!this.input) return;
+
+    const self = this;
+    const parentNode = this.input.parentNode;
+    const nextSibling = this.input.nextSibling;
+
+    // 上传按钮
+    const uploadButton = getUploadBtn();
+    const button = this.theme.getInputGroup(this.input, [uploadButton]);
+
+    // 进度条
+    this.progress = getProgress();
+
+    // 插入元素
+    parentNode.insertBefore(button, nextSibling);
+    button.insertBefore(this.progress, uploadButton.parentNode);
+
+    // 监听选择文件
+    uploadButton.firstChild.addEventListener('change', function (e) {
+      console.log(e);
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.files && this.files.length) {
+        self.uploadFile(this.files[0]);
+      }
+    });
+  },
+  uploadFile: function (file) {
+    const uploader = window.formUploader || window.fileUploader;
+    if (uploader) {
       const self = this;
-      const btn = getUploadBtn();
-      this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
+      const { path } = self;
+      uploader(file, path, {
+        progress: function (percent) {
+          self.progress.style.opacity = '1';
+          self.progress.style.width = `${percent}%`;
+        },
+        success: function (url) {
+          self.progress.style.width = '100%';
+          self.progress.style.opacity = '0';
+          self.setValue(url);
 
-      this.input = this.theme.getFormInputField('text');
-      this.inputGroup = this.theme.getInputGroup(this.input, [btn]);
-
-      // 进度条
-      this.progress = getProgress();
-      this.inputGroup.insertBefore(this.progress, btn.parentNode);
-
-      this.control = this.theme.getFormControl(this.label, this.inputGroup, this.description, this.infoButton);
-      this.container.appendChild(this.control);
-      this.input.value = this.value;
-
-      this.input.addEventListener('change', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        self.is_dirty = true;
-        self.refreshValue();
-        self.onChange(true);
-      });
-
-      btn.firstChild.addEventListener('change', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.files && this.files.length) {
-          self.uploadFile(this.files[0]);
-        }
-      });
-
-      // style fix
-      btn.parentNode.className = 'input-group-append';
-      this.input.parentNode.style.marginBottom = '10px';
-    },
-    uploadFile: function (file) {
-      const uploader = window.formUploader || window.fileUploader;
-      if (uploader) {
-        const self = this;
-        const { path } = self;
-        uploader(file, path, {
-          progress: function (percent) {
-            self.progress.style.opacity = '1';
-            self.progress.style.width = `${percent}%`;
-          },
-          success: function (url) {
-            self.progress.style.width = '100%';
-            self.progress.style.opacity = '0';
-            setTimeout(() => {
-              self.progress.style.width = '0';
-            }, 600);
-            self.setValue(url);
-          },
-          fail: function (msg) {
+          setTimeout(() => {
             self.progress.style.width = '0';
+          }, 600);
+        },
+        fail: function (msg) {
+          self.progress.style.width = '0';
+
+          if (window._LEGO_UTILS_) {
+            window._LEGO_UTILS_.toast(msg);
+          } else {
             alert(msg);
-          },
-        });
-      }
-    },
-    setValue: function (val) {
-      if (this.value !== val) {
-        this.value = val;
-        this.input.value = this.value;
-        this.onChange(true);
-      }
-    },
-    refreshValue: function () {
-      this.value = this.input.value;
-      if (typeof this.value !== 'string') this.value = '';
-      this.serialized = this.value;
-    },
-    sanitize: function (value) {
-      return value;
-    },
-  });
-};
+          }
+        },
+      });
+    }
+  },
+  afterInputReady: function () {},
+});
