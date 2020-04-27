@@ -149,9 +149,9 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getInfoButton: function (text) {
     var button = document.createElement('button'); // shoud be a <button> but no fitting tbws style...
     button.type = 'button';
-    button.classList.add('ml-3', 'jsoneditor-twbs4-text-button');
+    button.classList.add('ml-2', 'jsoneditor-twbs4-text-button');
     button.setAttribute('data-toggle', 'tooltip');
-    button.setAttribute('data-placement', 'auto');
+    button.setAttribute('data-placement', 'right');
     button.title = text;
 
     var icon = document.createTextNode('ⓘ');
