@@ -3,6 +3,7 @@ import 'choices.js/public/assets/styles/choices.css';
 
 import { JSONEditor } from './core';
 import { UploadFile } from './custom-editors/uploadfile';
+import { SwitchBool } from './custom-editors/switchbool';
 
 // Add global
 window.Choices = Choices;
@@ -66,8 +67,14 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
     return 'uploadFile';
   }
 });
+JSONEditor.defaults.resolvers.unshift(function (schema) {
+  if (schema.type === 'boolean' && schema.format === 'switch') {
+    return 'switchBool';
+  }
+});
 
 JSONEditor.defaults.editors.uploadFile = UploadFile;
+JSONEditor.defaults.editors.switchBool = SwitchBool;
 
 export default (element, schema = {}, opts = {}) => {
   if (element) {

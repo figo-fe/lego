@@ -4107,23 +4107,25 @@ input[type='button'].btn-block {
 }
 
 .custom-switch {
-  padding-left: 2.25rem;
+  padding-left: 3rem;
 }
 
 .custom-switch .custom-control-label::before {
-  left: -2.25rem;
-  width: 1.75rem;
+  left: -3rem;
+  width: 2.5rem;
+  height: 1.4rem;
   pointer-events: all;
-  border-radius: 0.5rem;
+  border-radius: 0.7rem;
+  top: 0.1rem;
 }
 
 .custom-switch .custom-control-label::after {
-  top: calc(0.25rem + 2px);
-  left: calc(-2.25rem + 2px);
-  width: calc(1rem - 4px);
-  height: calc(1rem - 4px);
+  top: calc(0.1rem + 2px);
+  left: calc(-3rem + 2px);
+  width: calc(1.4rem - 4px);
+  height: calc(1.4rem - 4px);
   background-color: #adb5bd;
-  border-radius: 0.5rem;
+  border-radius: 0.7rem;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
     -webkit-transform 0.15s ease-in-out;
   transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
@@ -4140,8 +4142,8 @@ input[type='button'].btn-block {
 
 .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
   background-color: #fff;
-  -webkit-transform: translateX(0.75rem);
-  transform: translateX(0.75rem);
+  -webkit-transform: translateX(1.1rem);
+  transform: translateX(1.1rem);
 }
 
 .custom-switch .custom-control-input:disabled:checked ~ .custom-control-label::before {
