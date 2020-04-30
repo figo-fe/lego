@@ -101,9 +101,9 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
               data-input
             />
             <div className='input-group-append'>
-              <button type='button' title='Clear' className='btn input-group-text bg-white' data-clear>
+              <span type='button' title='Clear' className='input-group-text bg-white' data-clear>
                 <i className='fas fa-times-circle'></i>
-              </button>
+              </span>
             </div>
           </div>
         );
