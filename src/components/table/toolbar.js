@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { langs, lang } from '@lang';
+import { findByPath } from '../../common/utils';
 
 export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHandle, onSearch, onFilter }) => {
   const [init, setInit] = useState(false);
   const [filter, setFilter] = useState(cols.map(({ key }) => key));
   const [showFilter, setShowFilter] = useState(false);
+  const customRef = useRef(null);
 
   useEffect(() => {
     const $ = window.$;
@@ -33,7 +35,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
             key={`${tool.key}-${idx}`}
             name={tool.key}
             style={{ width: tool.width ? parseInt(tool.width) : undefined }}
-            className='form-control'
+            className='form-control mr-2'
             placeholder={`${langs[lang]['please_enter']}${tool.name}`}
             id={`toolbar_input_${tool.key}`}
           />
@@ -50,8 +52,8 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
               itemSelectText: '',
               searchEnabled: list.length > 10,
               choices: list.map(item => {
-                const [value, label] = item.split(':');
-                return { value, label };
+                const [value, label, selected] = item.split(':');
+                return { value, label, selected: selected === 'true' };
               }),
             });
 
@@ -78,18 +80,32 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
           window.flatpickr(`#toolbar_datepicker_${tool.key}`, {
             enableTime: showtime,
             dateFormat: format,
+            wrap: true,
             mode,
           });
         });
         return (
-          <input
-            key={`${tool.key}-${idx}`}
-            name={tool.key}
+          <div
             id={`toolbar_datepicker_${tool.key}`}
-            style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 120 }}
-            className='form-control'
-            autoComplete='off'
-          />
+            key={`${tool.key}-${idx}`}
+            className='input-group mr-2'
+            style={{ float: 'left', width: 'auto' }}>
+            <div className='input-group-prepend' style={{ cursor: 'pointer' }} data-toggle>
+              <div className='input-group-text bg-white'>{tool.name}</div>
+            </div>
+            <input
+              name={tool.key}
+              style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 120 }}
+              className='form-control'
+              autoComplete='off'
+              data-input
+            />
+            <div className='input-group-append'>
+              <button type='button' title='Clear' className='btn input-group-text bg-white' data-clear>
+                <i className='fas fa-times-circle'></i>
+              </button>
+            </div>
+          </div>
         );
 
       case 'button':
@@ -98,8 +114,8 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
           <button
             key={`${tool.key}-${idx}`}
             id={`toolbar_button_${tool.key}`}
-            className={`btn btn-sm btn-${style}`}
-            style={{ width: tool.width ? parseInt(tool.width) : undefined, marginRight: 10 }}
+            className={`btn btn-${style} mr-2`}
+            style={{ width: tool.width ? parseInt(tool.width) : undefined }}
             onClick={() => {
               const query = {};
               const multiReg = url.match(/{{multi-[^}]+}}/g);
@@ -125,13 +141,22 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
         );
 
       case 'custom':
+        let customContent = tool.custom_opts.html;
+        if (window._lego_table_data_) {
+          customContent = customContent.replace(/{{([^}]+)}}/gi, (match, find, index, origin) => {
+            return findByPath(window._lego_table_data_, find);
+          });
+
+          customRef.current = customContent;
+        }
+
         return (
           <div
-            className='toolbar-custom'
+            className='toolbar-custom mr-2'
             key={`${tool.key}-${idx}`}
             id={`toolbar_custom_${tool.key}`}
             style={{ width: tool.width ? parseInt(tool.width) : undefined }}
-            dangerouslySetInnerHTML={{ __html: tool.custom_opts.html }}
+            dangerouslySetInnerHTML={{ __html: customRef.current }}
           />
         );
 
@@ -146,9 +171,9 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
   return (
     <div className='toolbar-row clearfix'>
       <button
-        className='btn btn-sm btn-info'
+        className='btn btn-info mr-2'
         id='toolbar_filter_button'
-        style={{ marginRight: 10, position: 'relative' }}
+        style={{ position: 'relative' }}
         onClick={() => setShowFilter(!showFilter)}>
         <i style={{ marginRight: 8 }} className='fas fa-th' />
         <i className='fas fa-angle-down' />
@@ -183,7 +208,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
         <input
           key={item.key}
           name={`search_${item.key}`}
-          className='form-control'
+          className='form-control mr-2'
           id={`toolbar_search_${item.key}`}
           placeholder={`${langs[lang]['please_enter']}${item.name}`}
         />
@@ -199,7 +224,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
             });
             onSearch(query);
           }}
-          className='btn btn-sm btn-success'>
+          className='btn btn-success'>
           {langs[lang]['search']}
         </button>
       )}

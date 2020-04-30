@@ -77,6 +77,7 @@ export const createTable = {
           fn: {
             title: '功能',
             type: 'array',
+            format: 'choices',
             uniqueItems: true,
             items: {
               type: 'string',

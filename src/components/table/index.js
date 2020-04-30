@@ -44,7 +44,6 @@ const _Table = props => {
       const api = buildApi(context.baseUrl, config.base.api);
       axios('GET', buildUrl(api, { sort, ...search, pageNo }))
         .then(res => {
-          setLoading(false);
           setTableList(findByPath(res, config.base.path) || []);
 
           // 分页数据
@@ -67,6 +66,11 @@ const _Table = props => {
             // 更新已选个数
             setMultiNum($('.table-tbody .fa-check-square').length);
           });
+
+          // 数据设为全局，供组件使用
+          window._lego_table_data_ = res.data;
+
+          setLoading(false);
         })
         .catch(err => {
           toast(langs[lang]['load_fail']);
@@ -82,6 +86,9 @@ const _Table = props => {
       // 清除多选框状态
       setMultiNum(0);
       $('.table-list .fa-check-square').removeClass('fa-check-square').addClass('fa-square');
+
+      // 释放数据
+      delete window._lego_table_data_;
     };
   }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
@@ -175,17 +182,19 @@ const _Table = props => {
 
   return (
     <div>
-      <TableToolBar
-        cols={config.cols}
-        toolbar={config.toolbar}
-        search={searchFields}
-        onClickHandle={onClickHandle}
-        onSearch={query => {
-          setPageNo(1);
-          setSearch(query);
-        }}
-        onFilter={filter => setCols(config.cols.filter(({ key }) => filter.indexOf(key) >= 0))}
-      />
+      {!loading && (
+        <TableToolBar
+          cols={config.cols}
+          toolbar={config.toolbar}
+          search={searchFields}
+          onClickHandle={onClickHandle}
+          onSearch={query => {
+            setPageNo(1);
+            setSearch(query);
+          }}
+          onFilter={filter => setCols(config.cols.filter(({ key }) => filter.indexOf(key) >= 0))}
+        />
+      )}
       <table className='table-list'>
         <thead className='table-thead'>
           <tr>
@@ -245,7 +254,9 @@ const _Table = props => {
               );
             })}
             {hasHandle && (
-              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>{langs[lang]['operation']}</th>
+              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>
+                {langs[lang]['operation']}
+              </th>
             )}
           </tr>
         </thead>
