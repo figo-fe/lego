@@ -9,18 +9,7 @@ import { langs, lang } from '@lang';
 import 'rc-pagination/assets/index.css';
 import './index.scss';
 
-const icons = [
-  'file-alt',
-  'podcast',
-  'paper-plane',
-  'bookmark',
-  'database',
-  'columns',
-  'cube',
-  'buffer',
-  'bullseye',
-  'calendar',
-];
+const icons = ['file-alt', 'podcast', 'paper-plane', 'bookmark', 'database', 'columns', 'cube', 'bullseye', 'calendar'];
 
 const _Table = props => {
   const { config } = props;
@@ -176,6 +165,23 @@ const _Table = props => {
     }
   }
 
+  function getHandleWidth(handleList) {
+    let iconNum = 0; // 图标个数
+    let wordNum = 0; // 文字占位数，英文算半个
+    let itemNum = handleList.length; // 操作个数
+
+    handleList.forEach(({ icon, name }) => {
+      if (icon !== 'none') {
+        iconNum++;
+      }
+
+      wordNum += name.length - (name.match(/\w+/g) || []).join('').length * 0.55;
+    });
+
+    // 最大宽度300，超出换行
+    return Math.min(iconNum * 18 + wordNum * 14 + itemNum * 15 + 20, 300);
+  }
+
   const { handles = [] } = config;
   const hasHandle = handles.length > 0;
   const searchFields = config.cols.filter(col => col.fn.indexOf('search') !== -1);
@@ -253,11 +259,7 @@ const _Table = props => {
                 </th>
               );
             })}
-            {hasHandle && (
-              <th width={handles.map(word => word.name).join('').length * 14 + handles.length * 35 + 20}>
-                {langs[lang]['operation']}
-              </th>
-            )}
+            {hasHandle && <th width={getHandleWidth(handles)}>{langs[lang]['operation']}</th>}
           </tr>
         </thead>
         <tbody className='table-tbody'>

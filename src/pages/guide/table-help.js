@@ -96,7 +96,12 @@ export const TableHelp = () => (
               <ul>
                 <li>
                   <p>
-                    下拉框：「固定列表」以多组value:display分号隔开，「接口读取」填写函数名，并在扩展中实现此函数，如：
+                    下拉框：
+                    <br />
+                    「固定列表」以多组value:display[:true]分号隔开，<code>:true</code>（可选）表示默认选中，如
+                    <code>选项1:value1;选项2:value2:true;选项3:value3</code>默认选中选项2
+                    <br />
+                    「接口读取」填写函数名，并在扩展中实现，如：
                   </p>
                   <pre>{`window._updateChoices_ = function(choices_instance){
   // async_function 为异步获取数据伪函数
@@ -110,6 +115,7 @@ export const TableHelp = () => (
       {
         value: value2,
         label: name2
+        selected: true // 选中
       }
     ])
   })
@@ -121,7 +127,10 @@ export const TableHelp = () => (
                   按钮：支持8种风格，按钮功能和行为同「数据操作」，可配合列的多选功能实现多选操作，通过URL变量
                   <code>{'{{multi-key}}'}</code>获取以逗号分隔的多选数据。
                 </li>
-                <li>自定义：自定义HTML</li>
+                <li>
+                  自定义：自定义HTML，可通过<Link to='/help/general#path-map'>PathMap</Link>获取列表接口数据，如
+                  <code>{`{{table.type}}`}</code>，
+                </li>
               </ul>
             </li>
           </ul>
