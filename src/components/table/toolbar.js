@@ -59,14 +59,16 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
 
       case 'datepicker':
         const { mode, showtime, format } = tool.datepicker_opts;
-        setTimeout(() => {
-          window.flatpickr(`#toolbar_datepicker_${tool.key}`, {
-            enableTime: showtime,
-            dateFormat: format,
-            wrap: true,
-            mode,
+        if (!init) {
+          setTimeout(() => {
+            window.flatpickr(`#toolbar_datepicker_${tool.key}`, {
+              enableTime: showtime,
+              dateFormat: format,
+              wrap: true,
+              mode,
+            });
           });
-        });
+        }
         return (
           <div
             id={`toolbar_datepicker_${tool.key}`}
