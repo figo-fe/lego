@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { langs, lang } from '@lang';
 import { findByPath } from '../../common/utils';
 
-export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHandle, onSearch, onFilter }) => {
+export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearch }) => {
   const [init, setInit] = useState(false);
-  const [filter, setFilter] = useState(cols.map(({ key }) => key));
-  const [showFilter, setShowFilter] = useState(false);
   const customRef = useRef(null);
 
   useEffect(() => {
@@ -155,39 +153,6 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
 
   return (
     <div className='toolbar-row clearfix'>
-      <button
-        className='btn btn-info mr-2'
-        id='toolbar_filter_button'
-        style={{ position: 'relative' }}
-        onClick={() => setShowFilter(!showFilter)}>
-        <i style={{ marginRight: 8 }} className='fas fa-th' />
-        <i className='fas fa-angle-down' />
-        {showFilter && (
-          <div className='toolbar-filter-pop'>
-            {cols.map(({ key, name }) => (
-              <div
-                key={key}
-                className='filter-item'
-                onClick={evt => {
-                  let res = [];
-                  if (filter.indexOf(key) >= 0) {
-                    res = filter.filter(item => item !== key);
-                  } else {
-                    res = filter.concat(key);
-                  }
-                  setFilter(res);
-                  onFilter(res);
-                  evt.stopPropagation();
-                }}>
-                <i
-                  style={{ width: 14, marginRight: 5 }}
-                  className={'far fa-' + (filter.indexOf(key) >= 0 ? 'check-square' : 'square')}></i>
-                <span>{name || key}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </button>
       {toolbar.map((tool, idx) => renderTool(tool, idx))}
       {search.map(item => (
         <input

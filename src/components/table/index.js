@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import Pagination from 'rc-pagination';
 import { SettingContext } from '../../config/context';
@@ -23,8 +23,8 @@ const _Table = props => {
   const [page, setPage] = useState(null);
   const [pageNo, setPageNo] = useState(defaultPageNo);
   const [multiNum, setMultiNum] = useState(0);
-  const [cols, setCols] = useState(config.cols);
   const [hack, setHack] = useState(true);
+  const oldPageNo = useRef(pageNo);
 
   // 初始化数据
   useEffect(() => {
@@ -39,8 +39,11 @@ const _Table = props => {
           const pageFix = window._pageFix_ || function () {};
           setPage(pageFix(res.data) || res.data.page);
 
-          // 滚动置顶
-          document.querySelector('.main-content').scrollTop = 0;
+          // 切换分页时滚动到顶部
+          if (oldPageNo.current !== pageNo) {
+            oldPageNo.current = pageNo;
+            document.querySelector('.main-content').scrollTop = 0;
+          }
 
           // 绑定多选事件
           $('.multi-box').on('click', function () {
@@ -182,7 +185,7 @@ const _Table = props => {
     return Math.min(iconNum * 18 + wordNum * 14 + itemNum * 15 + 20, 300);
   }
 
-  const { handles = [] } = config;
+  const { cols = [], handles = [] } = config;
   const hasHandle = handles.length > 0;
   const searchFields = config.cols.filter(col => col.fn.indexOf('search') !== -1);
 
@@ -190,7 +193,6 @@ const _Table = props => {
     <div>
       {!loading && (
         <TableToolBar
-          cols={config.cols}
           toolbar={config.toolbar}
           search={searchFields}
           onClickHandle={onClickHandle}
@@ -198,7 +200,6 @@ const _Table = props => {
             setPageNo(1);
             setSearch(query);
           }}
-          onFilter={filter => setCols(config.cols.filter(({ key }) => filter.indexOf(key) >= 0))}
         />
       )}
       <table className='table-list'>
