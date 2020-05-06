@@ -248,7 +248,7 @@ const _Table = props => {
                           el.className = 'far fa-check-square';
                           $(`.multi-${key}-col`).removeClass('fa-square').addClass('fa-check-square');
 
-                          setMultiNum(page.pageSize);
+                          setMultiNum($('.table-tbody .fa-check-square').length);
                         }
                         evt.stopPropagation();
                       }}
@@ -288,12 +288,35 @@ const _Table = props => {
                 })}
                 {hasHandle && (
                   <td>
-                    {handles.map((handle, i) => (
-                      <span onClick={() => onClickHandle(row, handle)} key={i} className='handle'>
-                        {handle.icon !== 'none' && <i className={'fas fa-' + (handle.icon || icons[i])} />}
-                        <em>{handle.name}</em>
-                      </span>
-                    ))}
+                    {handles.map((handle, i) => {
+                      // 根据权限、用户、数据控制操作显示
+                      let showHandle = true;
+
+                      if (handle.show) {
+                        try {
+                          // eslint-disable-next-line no-new-func
+                          showHandle = new Function('data, account', `return ${handle.show}`)(row, {
+                            user: context._user,
+                            group: context._group,
+                            admin: context._admin,
+                          });
+                        } catch (err) {
+                          console.warn(String(err));
+                          showHandle = false;
+                        }
+                      }
+
+                      if (!(showHandle === false)) {
+                        return (
+                          <span onClick={() => onClickHandle(row, handle)} key={i} className='handle'>
+                            {handle.icon !== 'none' && <i className={'fas fa-' + (handle.icon || icons[i])} />}
+                            <em>{handle.name}</em>
+                          </span>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
                   </td>
                 )}
               </tr>

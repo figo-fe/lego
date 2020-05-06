@@ -61,9 +61,10 @@ export const Setting = props => {
           <Button
             key='log'
             onClick={() => window.open(`${PREPATH}/log/list`)}
-            value='系统操作日志'
+            value='操作日志'
             extClass='btn-outline-info'
           />
+          <span className='btn btn-sm text-muted float-right mr-0'>Version {process.env.REACT_APP_VERSION}</span>
         </div>
       </div>
     </Wrap>

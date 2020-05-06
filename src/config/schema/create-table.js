@@ -57,22 +57,32 @@ export const createTable = {
         properties: {
           key: {
             type: 'string',
+            options: {
+              input_width: '150px',
+            },
           },
           name: {
             title: '名称',
             type: 'string',
+            options: {
+              input_width: '150px',
+            },
           },
           fmt: {
             title: '格式化',
             type: 'string',
             enum: ['none', 'image', 'datetime', 'date', 'time', 'cny', 'audio', 'video'],
             options: {
+              enum_titles: ['无', '图片', '日期时间', '仅日期', '仅时间', '金额', '音频', '视频'],
               input_width: '120px',
             },
           },
           width: {
-            title: '列宽（为空时自适应）',
+            title: '列宽（选填）',
             type: 'string',
+            options: {
+              input_width: '120px',
+            },
           },
           fn: {
             title: '功能',
@@ -110,6 +120,10 @@ export const createTable = {
           },
           url: {
             title: 'URL',
+            type: 'string',
+          },
+          show: {
+            title: '显隐控制',
             type: 'string',
           },
           action: {
@@ -217,14 +231,15 @@ export const createTable = {
                 type: 'string',
                 enum: ['single', 'range'],
               },
-              showtime: {
-                title: '选择时间',
-                type: 'boolean',
-              },
               format: {
                 title: '格式化（Y-m-d H:i:S）',
                 type: 'string',
                 default: 'Y-m-d',
+              },
+              showtime: {
+                title: '选择时间',
+                type: 'boolean',
+                format: 'switch',
               },
             },
           },

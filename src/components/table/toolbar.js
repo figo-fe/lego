@@ -9,22 +9,7 @@ export const TableToolBar = ({ search = [], toolbar = [], cols = [], onClickHand
   const customRef = useRef(null);
 
   useEffect(() => {
-    const $ = window.$;
-
-    // 点击空白区域 收起筛选列
-    $('body').on('click.hideFilterPop', evt => {
-      const isOut = $(evt.target).parents('#toolbar_filter_button').length === 0;
-      const isSelf = evt.target.id === 'toolbar_filter_button';
-      if (isOut && !isSelf) {
-        setShowFilter(false);
-      }
-    });
-
     setInit(true);
-
-    return () => {
-      $('body').off('click.hideFilterPop');
-    };
   }, []);
 
   const renderTool = (tool, idx) => {

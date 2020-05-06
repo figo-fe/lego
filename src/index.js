@@ -46,7 +46,8 @@ const App = () => {
 
         let _menu = []; // 边栏菜单
         let _admin = false; // 是否有管理权限
-        let _user = ''; // 登录用户名
+        let _user = ''; // 用户名
+        let _group = ''; // 用户组
 
         // 设置页面title
         document.title = name;
@@ -62,6 +63,7 @@ const App = () => {
               _menu = data.menu || [];
               _admin = data.admin || false;
               _user = data.user || '';
+              _group = data.group || '';
             } else {
               toast('请在系统设置中定义权限/菜单配置函数！');
             }
@@ -86,6 +88,7 @@ const App = () => {
           _menu,
           _admin,
           _user,
+          _group,
         });
       })
       .catch(err => {
