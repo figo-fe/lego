@@ -18,11 +18,7 @@ const cbs = {};
 const updateHeight = evt => {
   const data = JSON.parse(evt.data);
   if (data.type === 'LEGO_POPUP_HEIGHT') {
-    if (data.height < 650) {
-      window.$('.popup-main').height(data.height);
-    } else {
-      window.$('.popup-main').height(650);
-    }
+    window.$('.popup-main').height(Math.min(650, data.height));
   }
 };
 

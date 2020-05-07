@@ -1,9 +1,9 @@
 export const en = {
   // common
   admin_name: 'Admin',
-  submit_success: 'Success',
-  handle_success: 'Success',
-  handle_fail: 'Fail',
+  submit_success: 'Submission successful',
+  handle_success: 'Operation successful ',
+  handle_fail: 'Operation failed',
   operation: 'Operation',
   submit: 'Submit',
   back: 'Back',

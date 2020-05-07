@@ -65,7 +65,7 @@ const _Table = props => {
           setLoading(false);
         })
         .catch(err => {
-          toast(langs[lang]['load_fail']);
+          toast(err.desc || err.msg || langs[lang]['load_fail']);
           setLoading(false);
           console.log(err);
         });
@@ -121,7 +121,7 @@ const _Table = props => {
               console.log(res);
             })
             .catch(err => {
-              toast(`${langs[lang]['handle_fail']}\n${String(err)}`);
+              toast(err.desc || err.msg || langs[lang]['handle_fail']);
               console.warn(err);
             });
         }
@@ -181,8 +181,8 @@ const _Table = props => {
       wordNum += name.length - (name.match(/\w+/g) || []).join('').length * 0.55;
     });
 
-    // 最大宽度300，超出换行
-    return Math.min(iconNum * 18 + wordNum * 14 + itemNum * 15 + 20, 300);
+    // 最大宽度350，超出换行
+    return Math.min(iconNum * 18 + wordNum * 14 + itemNum * 15 + 20, 350);
   }
 
   const { cols = [], handles = [] } = config;

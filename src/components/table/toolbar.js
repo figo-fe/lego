@@ -4,7 +4,7 @@ import { findByPath } from '../../common/utils';
 
 export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearch }) => {
   const [init, setInit] = useState(false);
-  const customRef = useRef(null);
+  const dataRef = useRef(null); // 列表接口数据
 
   useEffect(() => {
     setInit(true);
@@ -126,14 +126,13 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
         );
 
       case 'custom':
-        let customContent = tool.custom_opts.html;
         if (window._lego_table_data_) {
-          customContent = customContent.replace(/{{([^}]+)}}/gi, (match, find, index, origin) => {
-            return findByPath(window._lego_table_data_, find);
-          });
-
-          customRef.current = customContent;
+          dataRef.current = window._lego_table_data_;
         }
+
+        const customContent = tool.custom_opts.html.replace(/{{([^}]+)}}/gi, (match, find, index, origin) =>
+          findByPath(dataRef.current, find),
+        );
 
         return (
           <div
@@ -141,7 +140,7 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
             key={`${tool.key}-${idx}`}
             id={`toolbar_custom_${tool.key}`}
             style={{ width: tool.width ? parseInt(tool.width) : undefined }}
-            dangerouslySetInnerHTML={{ __html: customRef.current }}
+            dangerouslySetInnerHTML={{ __html: customContent }}
           />
         );
 

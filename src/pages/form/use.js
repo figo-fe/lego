@@ -79,12 +79,14 @@ export const FormUse = props => {
     if (isInFrame) {
       try {
         // 更新iframe高度
-        window.parent.postMessage(
-          JSON.stringify({
-            type: 'LEGO_POPUP_HEIGHT',
-            height: document.querySelector('.lego-card').offsetHeight,
-          }),
-        );
+        setTimeout(() => {
+          window.parent.postMessage(
+            JSON.stringify({
+              type: 'LEGO_POPUP_HEIGHT',
+              height: document.querySelector('.lego-card').offsetHeight,
+            }),
+          );
+        }, 100);
       } catch (e) {
         console.warn(e);
       }
