@@ -323,7 +323,7 @@ export function getDefaults() {
       if (schema.format === 'selectize') {
         return 'selectize';
       }
-      if (schema.format === 'choices' || schema.format === 'select') {
+      if (/^(choices|boolean|select)$/.test(schema.format)) {
         return 'choices';
       }
       return 'select';

@@ -40,24 +40,20 @@ export default ({ schema, onUpdate }) => {
         break;
 
       case 'boolean':
+      case 'switch':
         tmp.type = 'boolean';
         break;
 
-      case 'range':
-        tmp.type = 'number';
-        tmp.minimum = 1;
-        tmp.maximum = 100;
-        tmp.step = 2;
-        break;
-
-      case 'select':
+      case 'choices':
         tmp.type = 'string';
         tmp.enum = ['item1', 'item2', 'item3', 'item4'];
         tmp.options.enum_titles = ['选项1', '选项2', '选项3', '选项4'];
         break;
 
       case 'datetime-local':
-        tmp.type = 'string';
+      case 'date':
+      case 'time':
+        tmp.type = 'integer';
         tmp.options.flatpickr = {
           wrap: true,
           showClearButton: true,
@@ -77,8 +73,11 @@ export default ({ schema, onUpdate }) => {
         ];
         break;
 
-      case 'xhtml':
-        tmp.type = 'string';
+      case 'range':
+        tmp.type = 'number';
+        tmp.minimum = 1;
+        tmp.maximum = 100;
+        tmp.step = 2;
         break;
 
       default:
@@ -100,14 +99,21 @@ export default ({ schema, onUpdate }) => {
             <option value='text'>单行文本</option>
             <option value='textarea'>多行文本</option>
             <option value='number'>数值</option>
-            <option value='boolean'>布尔值</option>
+            <option value='boolean'>布尔值-下拉</option>
+            <option value='switch'>布尔值-开关</option>
+            <option value='choices'>下拉框</option>
+            <option value='datetime-local'>日期时间</option>
+            <option value='date'>仅日期</option>
+            <option value='time'>仅时间</option>
+            <option value='upload'>上传图片</option>
             <option value='password'>密码</option>
-            <option value='datetime-local'>时间</option>
-            <option value='upload'>图片</option>
             <option value='url'>网址</option>
-            <option value='select'>下拉框</option>
             <option value='range'>滑动条</option>
             <option value='xhtml'>富文本编辑器</option>
+            <option value='json'>代码编辑器-JSON</option>
+            <option value='html'>代码编辑器-HTML</option>
+            <option value='java'>代码编辑器-JAVA</option>
+            <option value='javascript'>代码编辑器-JS</option>
           </select>
         </div>
       </div>
