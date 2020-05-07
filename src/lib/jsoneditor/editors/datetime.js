@@ -90,7 +90,7 @@ export var DatetimeEditor = StringEditor.extend({
     }
 
     var value = this.schema.format === 'time' ? '1970-01-01 ' + this.value : this.value
-    return parseInt(new Date(value).getTime() / 1000)
+    return parseInt(new Date(value).getTime())
   },
   setValue: function (value, initial, fromTemplate) {
     if (this.schema.type === 'string') {
