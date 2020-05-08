@@ -16,8 +16,9 @@ const _Table = props => {
   const checked = config && config.base && config.cols;
   const context = useContext(SettingContext);
   const defaultPageNo = kv('pageNo') || 1;
+  const autoLoad = !!parseInt(kv('auto') || '1'); // 是否自动加载数据，默认为是
   const [tableList, setTableList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(autoLoad);
   const [sort, setSort] = useState(''); // key-ase, key-desc
   const [search, setSearch] = useState({});
   const [page, setPage] = useState(null);
@@ -29,7 +30,7 @@ const _Table = props => {
   // 初始化数据
   useEffect(() => {
     const $ = window.$;
-    if (checked && context.baseUrl !== void 0) {
+    if (checked && context.baseUrl !== void 0 && (autoLoad || Object.keys(search).length > 0)) {
       const api = buildApi(context.baseUrl, config.base.api);
       axios('GET', buildUrl(api, { sort, ...search, pageNo }))
         .then(res => {
@@ -82,7 +83,7 @@ const _Table = props => {
       // 释放数据
       delete window._lego_table_data_;
     };
-  }, [checked, context.baseUrl, config.base, sort, search, pageNo, hack]);
+  }, [checked, autoLoad, context.baseUrl, config.base, sort, search, pageNo, hack]);
 
   if (!checked) return <div>data or config error...</div>;
 
