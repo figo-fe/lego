@@ -14,10 +14,11 @@
 
 LEGO 默认以`/lego/`为页面前缀，`/lego-src/`为资源前缀，如有需要可自行修改：
 
-1. 安装依赖`yarn`
-2. 修改`.env`配置
-3. 执行`yarn release`构建
-4. 重启`pm2 restart server`
+1. 下载项目源码
+2. 执行`yarn`安装依赖
+3. 修改`.env`配置
+4. 执行`yarn release`构建
+5. 重启`pm2 restart server`
 
 - `REACT_APP_PRE` 页面前缀，必须以`/`开头，结尾没有，如`/lego`
 - `PUBLIC_URL` 静态资源前缀，**资源前缀不得与页面前缀一样**，如`/lego-src`

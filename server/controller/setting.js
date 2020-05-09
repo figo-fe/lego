@@ -14,8 +14,8 @@ const saveSetting = data => {
       .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, row.id);
   } else {
     return db
-      .prepare('INSERT INTO setting (name, baseUrl, permissionApi, sideMenu, uploadFn) VALUES (?, ?, ?, ?, ?, ?)')
-      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn);
+      .prepare('INSERT INTO setting (name, baseUrl, permissionApi, sideMenu, uploadFn, mode) VALUES (?, ?, ?, ?, ?, ?)')
+      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, '');
   }
 };
 

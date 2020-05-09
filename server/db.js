@@ -4,7 +4,7 @@ const fs = require('fs');
 // 检查并创建db目录
 if (!fs.existsSync('db')) fs.mkdirSync('db');
 
-const db = new Database('./db/lego.db', { verbose: console.log });
+const db = new Database('./db/lego.db', { verbose: console.log, readonly: false });
 
 const createSetting = () => {
   const sql = `CREATE TABLE IF NOT EXISTS setting (

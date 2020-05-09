@@ -41,6 +41,7 @@ export const Setting = props => {
           }, 2e3);
         })
         .catch(err => {
+          toast(err.msg);
           console.log(err);
         });
     }

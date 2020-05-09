@@ -74,7 +74,7 @@ const App = () => {
           try {
             _menu = JSON.parse(sideMenu);
           } catch (e) {
-            console.warn('Menu config error:', e);
+            console.warn('Menu config error:', String(e));
           }
           _admin = true;
         }
