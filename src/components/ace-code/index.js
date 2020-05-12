@@ -9,6 +9,7 @@ export const AceCode = ({ code = '', type = 'json', onReady }) => {
     if (!aceEditor.current) {
       aceEditor.current = ace.edit(codeRef.current, { mode: 'ace/mode/' + type });
       aceEditor.current.setTheme('ace/theme/monokai');
+      aceEditor.current.getSession().setUseWorker(false);
 
       if (typeof onReady === 'function') {
         onReady(aceEditor.current);

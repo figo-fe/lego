@@ -2,14 +2,14 @@ const dict = {
   '(name)': '名称',
   '(desc)': '描述',
   '(cate)': '分类',
-  '(shop)': '商家',
+  '(shop)': '商店',
   '(show)': '显示',
   '(price|sale)': '价格',
   '(url|link)': '链接',
   '(product)': '商品',
   '(hot)': '热度',
   '(order)': '排序',
-  '(image|img|pic)': '图片',
+  '(images?|imgs?|pic?|pictures?)': '图片',
   '(state|status)': '状态',
   '(start)': '开始时间',
   '(end)': '结束时间',
@@ -18,7 +18,7 @@ const dict = {
   '(range)': '范围',
   '(focus)': '焦点图',
   '(comment)': '评论',
-  '(num)': '数量',
+  '(num|number)': '数量',
   '(color)': '颜色',
   '(game)': '游戏',
   '(pay|buy)': '支付',
@@ -29,13 +29,13 @@ const dict = {
 };
 const getTitle = key => {
   for (var rule in dict) {
-    if (new RegExp(rule, 'i').test(key)) {
+    if (new RegExp(`^${rule}$`, 'i').test(key)) {
       return dict[rule];
     }
   }
   return key;
 };
-const getType = function(data) {
+const getType = function (data) {
   if (typeof data == 'object') {
     return toString.call(data) === '[object Array]' ? 'array' : 'object';
   } else {
@@ -59,7 +59,7 @@ const dataHandle = {
       grid_columns: 3,
     },
   }),
-  string: function(key, data) {
+  string: function (key, data) {
     const schema = {};
     schema.type = 'string';
     schema.title = getTitle(key);
@@ -112,7 +112,7 @@ const dataHandle = {
     }
     return schema;
   },
-  object: function(key, data, opts = {}) {
+  object: function (key, data, opts = {}) {
     const schema = {};
     schema.title = getTitle(key);
     schema.type = 'object';
@@ -124,7 +124,7 @@ const dataHandle = {
     }
     return schema;
   },
-  array: function(key, data, opts = {}) {
+  array: function (key, data, opts = {}) {
     const schema = {};
     schema.title = getTitle(key);
     schema.type = 'array';

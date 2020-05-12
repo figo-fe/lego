@@ -37,6 +37,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     }
   }
 
+  // 编辑单个表单
   function onFormEdit(evt) {
     const { target } = evt;
     const { schematype, schemapath } = target.dataset;
@@ -47,6 +48,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     }
   }
 
+  // 保存单个表单
   function onFormUpdate(formSchema) {
     onSchemaUpdate(updateSchemaByPath(schema, editPathRef.current, formSchema));
     setEditSchema(null);

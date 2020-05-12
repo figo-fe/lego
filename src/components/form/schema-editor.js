@@ -1,5 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { AceCode } from '..';
+import { toast } from '../../common/utils';
 
 export default ({ schema, onUpdate }) => {
   const [formSchema, setFormSchema] = useState(Object.assign({ title: '', type: '', format: '', options: {} }, schema));
@@ -144,7 +145,13 @@ export default ({ schema, onUpdate }) => {
         <button
           className='btn btn-sm btn-success'
           style={{ marginLeft: 10 }}
-          onClick={() => onUpdate(JSON.parse(aceRef.current.getValue()))}>
+          onClick={() => {
+            try {
+              onUpdate(JSON.parse(aceRef.current.getValue()));
+            } catch (err) {
+              toast(err.toString());
+            }
+          }}>
           保存
         </button>
       </div>
