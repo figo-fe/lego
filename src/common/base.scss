@@ -339,7 +339,8 @@ h3.card-title label {
 .card-body .btn {
   font-size: 12px;
 }
-.card-body .btn-light {
+.card-body .btn-light,
+.card-title .btn-light {
   background: #f8f8f8;
   border: 1px solid #d9d9d9;
 }
