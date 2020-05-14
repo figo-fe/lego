@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 
-export const AceCode = ({ code = '', type = 'json', onReady }) => {
+export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height = '100%' }) => {
   const codeRef = useRef(null);
   const aceEditor = useRef(null);
 
   useEffect(() => {
     const ace = window.ace;
     if (!aceEditor.current) {
-      aceEditor.current = ace.edit(codeRef.current, { mode: 'ace/mode/' + type });
+      aceEditor.current = ace.edit(codeRef.current, Object.assign({ mode: 'ace/mode/' + type, tabSize: 2 }, opts));
       aceEditor.current.setTheme('ace/theme/monokai');
       aceEditor.current.getSession().setUseWorker(false);
 
@@ -21,5 +21,5 @@ export const AceCode = ({ code = '', type = 'json', onReady }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, type]);
 
-  return <div style={{ height: '100%' }} ref={codeRef}></div>;
+  return <div style={{ height }} ref={codeRef}></div>;
 };
