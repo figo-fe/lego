@@ -26,7 +26,6 @@ export const _Aside = ({ location, fold }) => {
   useEffect(() => {
     // 展开父级菜单
     if (_menu.length > 0) {
-      console.log(111)
       let _openIdx = 0;
       _menu.forEach(({ sub = [] }, idx) => {
         sub.forEach(lnk => {

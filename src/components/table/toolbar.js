@@ -1,14 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { langs, lang } from '@lang';
-import { findByPath } from '../../common/utils';
+import { findByPath, parseUrl } from '../../common/utils';
 
 export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearch }) => {
   const [init, setInit] = useState(false);
   const dataRef = useRef(null); // 列表接口数据
+  const searchQuery = parseUrl(); // 获取页面URL参数
 
   useEffect(() => {
     setInit(true);
   }, []);
+
+  // 对查询框自动回填
+  const getFieldValue = key => {
+    if (key.indexOf('search_') === 0) {
+      return searchQuery[key.slice(7)] || '';
+    } else {
+      return '';
+    }
+  };
 
   const renderTool = (tool, idx) => {
     switch (tool.type) {
@@ -17,6 +27,7 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
           <input
             key={`${tool.key}-${idx}`}
             name={tool.key}
+            defaultValue={getFieldValue(tool.key)}
             style={{ width: tool.width ? parseInt(tool.width) : undefined }}
             className='form-control mr-2'
             placeholder={`${langs[lang]['please_enter']}${tool.name}`}
@@ -80,6 +91,7 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
             </div>
             <input
               name={tool.key}
+              defaultValue={getFieldValue(tool.key)}
               style={{ width: tool.width ? parseInt(tool.width) : (mode === 'range' ? 2 : 1) * 120 }}
               className='form-control'
               autoComplete='off'
@@ -159,6 +171,7 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
         <input
           key={item.key}
           name={`search_${item.key}`}
+          defaultValue={getFieldValue('search_' + item.key)}
           className='form-control mr-2'
           id={`toolbar_search_${item.key}`}
           placeholder={`${langs[lang]['please_enter']}${item.name}`}
