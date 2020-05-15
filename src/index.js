@@ -79,6 +79,12 @@ const App = () => {
           _admin = true;
         }
 
+        // _menu 必须为数组
+        if (!Array.isArray(_menu)) {
+          console.error('Menu must be an Array!');
+          _menu = [];
+        }
+
         setSetting({
           name,
           baseUrl,

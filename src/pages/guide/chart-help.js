@@ -51,8 +51,8 @@ export const ChartHelp = () => (
                 1. 如果横坐标为常量，可直接填写，并用逗号分隔，如：<code>周一,周二,周三,周四,周五,周六,周日</code>
                 <br />
                 2. 如果横坐标从数据源读取，有两种方式取值，请看以下数据示例：
-                <br />
-                <pre>{`{
+              </p>
+              <pre>{`{
   "code": 0,
   "data": {
     "dau": [
@@ -85,6 +85,7 @@ export const ChartHelp = () => (
     "xAxis": ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
   }
 }`}</pre>
+              <p>
                 2.1 如果接口直接返回横坐标数据，填写对应Path即可，如<code>data.xAxis</code>
                 <br />
                 2.2 如果横坐标是数据列表中的字段，可使用<Link to='/help/general#path-map'>PathMap</Link>取值，如

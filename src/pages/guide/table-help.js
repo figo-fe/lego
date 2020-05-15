@@ -180,7 +180,8 @@ export const TableHelp = () => (
             2. 修正分页数据：声明<code>window._pageFix_</code>对分页数据进行修正并返回<b>数据总数 total</b>和
             <b>分页大小 pageSize</b>。<br />
             例如接口分页数据为：
-            <pre>{`{
+          </p>
+          <pre>{`{
   "code": 0,
   "data": {
     "pageInfo": {
@@ -189,19 +190,16 @@ export const TableHelp = () => (
     }
   }
 }`}</pre>
-          </p>
-          <p>
-            则定义修正方法：
-            <pre>
-              {`window._pageFix_ = function (data) {
+          <p>则定义修正方法：</p>
+          <pre>
+            {`window._pageFix_ = function (data) {
   return {
     total: data.pageInfo.total,
     pageSize: data.pageInfo.size
   }
 }`}
-            </pre>
-          </p>
-          若接口分页数据为如下标准结构，则无需修正：
+          </pre>
+          <p>若接口分页数据为如下标准结构，则无需修正：</p>
           <pre>{`{
   "code": 0,
   "data": {
