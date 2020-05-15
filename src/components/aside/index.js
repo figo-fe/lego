@@ -26,16 +26,17 @@ export const _Aside = ({ location, fold }) => {
   useEffect(() => {
     // 展开父级菜单
     if (_menu.length > 0) {
-      let _openIdx = 0;
+      let newIdx = 0;
+      let pathname = location.pathname;
       _menu.forEach(({ sub = [] }, idx) => {
         sub.forEach(lnk => {
-          if (lnk.url.indexOf(location.pathname) >= 0) {
-            _openIdx = idx;
+          if (pathname !== '/' && lnk.url.indexOf(pathname) >= 0) {
+            newIdx = idx;
           }
         });
       });
 
-      setOpenIdx(_openIdx);
+      setOpenIdx(newIdx);
     }
   }, [location.pathname, _menu]);
 
