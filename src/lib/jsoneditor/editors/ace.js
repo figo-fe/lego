@@ -45,6 +45,7 @@ export var AceEditor = StringEditor.extend({
 
       this.ace_editor_instance.setValue(this.getValue())
       this.ace_editor_instance.session.getSelection().clearSelection()
+      this.ace_editor_instance.session.setUseWorker(false)
       this.ace_editor_instance.resize()
 
       if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
