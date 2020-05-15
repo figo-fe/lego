@@ -82,6 +82,8 @@ export default (element, schema = {}, opts = {}) => {
       {
         disable_edit_json: true,
         disable_properties: true,
+        enable_array_copy: true,
+        enable_array_sort: true,
         schema,
       },
       opts,

@@ -110,6 +110,10 @@ export var ArrayEditor = AbstractEditor.extend({
     this.hide_move_buttons = this.options.disable_array_reorder || this.jsoneditor.options.disable_array_reorder;
     this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add;
     this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy;
+
+    // 增加自定义排序 2020-05-14 17:37:54
+    this.show_sort_button = this.options.enable_array_sort || this.jsoneditor.options.enable_array_sort;
+
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top;
   },
   build: function () {
@@ -577,6 +581,63 @@ export var ArrayEditor = AbstractEditor.extend({
       });
 
       controlsHolder.appendChild(self.rows[i].copy_button);
+    }
+
+    // 自定义排序 2020-05-14 18:19:38
+    if (this.show_sort_button) {
+      const sortInput = this.theme.getFormInputField('number');
+      const sortButton = this.getButton('', 'sort', this.translate('button_sort_row_title_short'));
+      this.rows[i].sort_button = sortButton;
+
+      sortInput.classList.add('form-control-sm');
+      sortInput.value = i + 1;
+      sortInput.style.cssText = [
+        'border-radius:0;width:50px;font-size:12px;vertical-align:middle;',
+        'box-shadow:none;margin-left:-1px;display:none',
+      ].join(';');
+
+      sortButton.classList.add('sort', 'json-editor-btntype-sort');
+      sortButton.setAttribute('data-i', i);
+      sortButton.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (sortInput.style.display === 'none') {
+          sortInput.style.display = 'inline-block';
+          sortButton.firstChild.className = sortButton.firstChild.className.replace('sort', 'check');
+        } else {
+          const newIndex = sortInput.value - 1;
+
+          if (newIndex >= 0 && newIndex < self.rows.length) {
+            // 排序不变时跳过
+            if (newIndex !== i) {
+              const rows = self.getValue();
+
+              if (newIndex > i) {
+                rows.splice(newIndex + 1, 0, rows[i]);
+                rows.splice(i, 1);
+              } else {
+                rows.splice(newIndex, 0, rows[i]);
+                rows.splice(i + 1, 1);
+              }
+
+              self.setValue(rows);
+              self.onChange(true);
+              self.jsoneditor.trigger('moveRow', self.rows[newIndex]);
+
+              sortInput.value = i + 1;
+            }
+
+            sortInput.style.display = 'none';
+            sortButton.firstChild.className = sortButton.firstChild.className.replace('check', 'sort');
+          } else {
+            alert('Invalid Sort Number');
+          }
+        }
+      });
+
+      controlsHolder.appendChild(sortInput);
+      controlsHolder.appendChild(sortButton);
     }
 
     if (i && !self.hide_move_buttons) {

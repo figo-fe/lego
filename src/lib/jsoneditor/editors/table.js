@@ -200,8 +200,10 @@ export var TableEditor = ArrayEditor.extend({
   refreshRowButtons: function () {
     var self = this;
 
-    // If we currently have minItems items in the array
-    var minItems = this.schema.minItems && this.schema.minItems >= this.rows.length;
+    /* If we currently have minItems items in the array */
+    const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length;
+    /* If we currently have maxItems items in the array */
+    const maxItems = this.schema.maxItems && this.schema.maxItems <= this.rows.length;
 
     var needRowButtons = false;
     $each(this.rows, function (i, editor) {
@@ -222,6 +224,16 @@ export var TableEditor = ArrayEditor.extend({
         } else {
           needRowButtons = true;
           editor.delete_button.style.display = '';
+        }
+      }
+
+      if (editor.copy_button) {
+        /* Hide the copy button if we have maxItems items */
+        if (maxItems) {
+          editor.copy_button.style.display = 'none';
+        } else {
+          needRowButtons = true;
+          editor.copy_button.style.display = '';
         }
       }
 
@@ -311,6 +323,9 @@ export var TableEditor = ArrayEditor.extend({
 
     var controlsHolder = self.rows[i].table_controls;
 
+    // 操作垂直居中
+    controlsHolder.parentNode.style.verticalAlign = 'middle';
+
     // Buttons to delete row, move row up, and move row down
     if (!this.hide_delete_buttons) {
       self.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'));
@@ -338,6 +353,83 @@ export var TableEditor = ArrayEditor.extend({
         self.jsoneditor.trigger('deleteRow', self.rows[i]);
       });
       controlsHolder.appendChild(self.rows[i].delete_button);
+    }
+
+    if (this.show_copy_button) {
+      this.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'));
+      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
+      this.rows[i].copy_button.setAttribute('data-i', i);
+      this.rows[i].copy_button.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const j = e.currentTarget.getAttribute('data-i') * 1;
+        const value = this.getValue();
+
+        value.splice(j + 1, 0, value[j]);
+
+        this.setValue(value);
+        this.onChange(true);
+        this.jsoneditor.trigger('copyRow', this.rows[j + 1]);
+      });
+      controlsHolder.appendChild(this.rows[i].copy_button);
+    }
+
+    // 自定义排序 2020-05-14 18:19:38
+    if (this.show_sort_button) {
+      const sortInput = this.theme.getFormInputField('number');
+      const sortButton = this.getButton('', 'sort', this.translate('button_sort_row_title_short'));
+      this.rows[i].sort_button = sortButton;
+
+      sortInput.classList.add('form-control-sm');
+      sortInput.value = i + 1;
+      sortInput.style.cssText = [
+        'border-radius:0;width:50px;font-size:12px;vertical-align:middle;',
+        'box-shadow:none;margin-left:-1px;display:none',
+      ].join(';');
+
+      sortButton.classList.add('sort', 'json-editor-btntype-sort');
+      sortButton.setAttribute('data-i', i);
+      sortButton.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (sortInput.style.display === 'none') {
+          sortInput.style.display = 'inline-block';
+          sortButton.firstChild.className = sortButton.firstChild.className.replace('sort', 'check');
+        } else {
+          const newIndex = sortInput.value - 1;
+
+          if (newIndex >= 0 && newIndex < self.rows.length) {
+            // 排序不变时跳过
+            if (newIndex !== i) {
+              const rows = self.getValue();
+
+              if (newIndex > i) {
+                rows.splice(newIndex + 1, 0, rows[i]);
+                rows.splice(i, 1);
+              } else {
+                rows.splice(newIndex, 0, rows[i]);
+                rows.splice(i + 1, 1);
+              }
+
+              self.setValue(rows);
+              self.onChange(true);
+              self.jsoneditor.trigger('moveRow', self.rows[newIndex]);
+
+              sortInput.value = i + 1;
+            }
+
+            sortInput.style.display = 'none';
+            sortButton.firstChild.className = sortButton.firstChild.className.replace('check', 'sort');
+          } else {
+            alert('Invalid Sort Number');
+          }
+        }
+      });
+
+      controlsHolder.appendChild(sortInput);
+      controlsHolder.appendChild(sortButton);
     }
 
     if (i && !this.hide_move_buttons) {
