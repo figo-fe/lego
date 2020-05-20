@@ -1,16 +1,16 @@
 import React, { useLayoutEffect, useState, useRef } from 'react';
-import { Button, AceCode } from '..';
 import { initEditor, toast, findSchemaByPath, updateSchemaByPath } from '../../common/utils';
+import { CodePopup } from '../../components';
 import SchemaEditor from './schema-editor';
+
 import './index.scss';
 
 export const SchemaForm = ({ schema, startval, show = true, editable = false, onReady, onSchemaUpdate }) => {
   const formRef = useRef(null);
-  const aceEditor = useRef(null);
   const editPathRef = useRef(null);
   const onReadyRef = useRef(onReady);
-  const [schemaShow, setSchemaShow] = useState(false);
-  const [editSchema, setEditSchema] = useState(null);
+  const [schemaShow, setSchemaShow] = useState(false); // 显示编辑schema弹窗
+  const [editSchema, setEditSchema] = useState(null); // 单个表单schema
 
   useLayoutEffect(() => {
     if (schema) {
@@ -24,18 +24,6 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
       };
     }
   }, [schema, startval]);
-
-  function updateSchema() {
-    if (typeof onSchemaUpdate === 'function') {
-      let schema = null;
-      try {
-        schema = JSON.parse(aceEditor.current.getValue());
-      } catch (e) {
-        toast('Schema格式有误，请检查');
-      }
-      schema && onSchemaUpdate(schema);
-    }
-  }
 
   // 编辑单个表单
   function onFormEdit(evt) {
@@ -54,36 +42,43 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     setEditSchema(null);
   }
 
-  if (schema) {
-    return (
-      <div className={'form-view' + (editable ? ' form-edit' : '')}>
-        <div
-          style={{ display: show ? 'block' : 'none' }}
-          ref={formRef}
-          className='schema-form'
-          onClick={onFormEdit}></div>
-        {editable && (
-          <div className={'schema-box' + (schemaShow ? ' schema-show' : '')}>
-            <Button key='update' value='更新至表单' onClick={updateSchema} />
-            <div className='switch-btn' title='编辑schema' onClick={() => setSchemaShow(!schemaShow)}>
-              <i className={'fa fa-angle-' + (schemaShow ? 'right' : 'left')} />
+  if (!schema) return null;
+
+  return (
+    <div className={'form-view' + (editable ? ' form-edit' : '')}>
+      <div style={{ display: show ? 'block' : 'none' }} ref={formRef} className='schema-form' onClick={onFormEdit} />
+      {editable && (
+        <div className='btn btn-sm btn-outline-info switch-edit' title='编辑Schema' onClick={() => setSchemaShow(true)}>
+          <i className='fa fa-code' /> 编辑Schema
+        </div>
+      )}
+      {editable && editSchema && (
+        <div className='popup-mask'>
+          <div className='popup-main' style={{ width: 600, height: 350, padding: 15 }}>
+            <div className='popup-hide' title='关闭' onClick={() => setEditSchema(null)}>
+              <i className='fas fa-times'></i>
             </div>
-            <AceCode type='json' code={JSON.stringify(schema, null, 2)} onReady={ace => (aceEditor.current = ace)} />
+            <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
           </div>
-        )}
-        {editable && editSchema && (
-          <div className='popup-mask'>
-            <div className='popup-main' style={{ width: 600, height: 350, padding: 15 }}>
-              <div className='popup-hide' title='关闭' onClick={() => setEditSchema(null)}>
-                <i className='fas fa-times'></i>
-              </div>
-              <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  } else {
-    return null;
-  }
+        </div>
+      )}
+      {editable && schemaShow && (
+        <CodePopup
+          height={600}
+          initCode={JSON.stringify(schema, null, 2)}
+          onClose={() => setSchemaShow(false)}
+          onSubmit={code => {
+            try {
+              if (typeof onSchemaUpdate === 'function') {
+                onSchemaUpdate(JSON.parse(code));
+                setSchemaShow(false);
+              }
+            } catch (err) {
+              toast(String(err));
+            }
+          }}
+        />
+      )}
+    </div>
+  );
 };

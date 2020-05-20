@@ -1,35 +1,26 @@
-// create
-.form-ext {
-  height: 50px;
-  margin-top: 15px;
-  overflow: hidden;
-  padding: 10px 15px 15px !important;
-  background: #fafafa !important;
-  transition: 0.2s;
+.form-preview-box {
+  border: 2px dashed #ddd;
+  border-radius: 6px;
+  text-align: center;
+  height: 120px;
+  padding-top: 30px;
+  cursor: pointer;
   h3 {
+    color: #888;
     height: 30px;
-    line-height: 30px;
-    font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
-  .switch-ext {
-    display: inline-block;
-    height: 22px;
-    line-height: 22px;
-    text-align: center;
-    font-size: 18px;
-    width: 22px;
-    border-radius: 4px;
-    color: #007bff;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-left: 5px;
-    transform: rotate(90deg);
+  p {
+    color: #aaa;
+    margin: 0;
   }
-  &-show {
-    height: 455px;
-    .switch-ext {
-      transform: rotate(-90deg);
+  &:hover {
+    border-color: #aaa;
+    h3 {
+      color: #666;
+    }
+    p {
+      color: #888;
     }
   }
 }

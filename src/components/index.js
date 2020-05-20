@@ -7,3 +7,4 @@ export { Charts } from './charts';
 export { Button } from './button';
 export { SchemaForm } from './form';
 export { AceCode } from './ace-code';
+export { CodePopup } from './pop-code';

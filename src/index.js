@@ -5,9 +5,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Frame } from './components';
 import { Setting } from './pages/setting';
 import { GuideHome, SettingHelp, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
-import { FormCreate } from './pages/form/create';
+
+import { FormEdit } from './pages/form';
 import { FormList } from './pages/form/list';
-import { FormEdit } from './pages/form/edit';
 import { FormUse } from './pages/form/use';
 
 import { TableEdit } from './pages/table';
@@ -130,9 +130,9 @@ const App = () => {
               <Route exact path={['/index', '/']} render={GuideHome} />
               <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
 
-              <Route path='/form/create' component={FormCreate} />
-              <Route path='/form/list' component={FormList} />
+              <Route path='/form/create' component={FormEdit} />
               <Route path='/form/edit/:id' component={FormEdit} />
+              <Route path='/form/list' component={FormList} />
               <Route path='/form/use/:id' component={FormUse} />
 
               <Route path='/table/create' component={TableEdit} />

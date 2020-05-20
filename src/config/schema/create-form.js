@@ -1,5 +1,5 @@
 // 创建表单
-const jsonDemo = {
+export const formJsonDemo = {
   shop: '搜狗自营',
   name: '搜狗翻译笔',
   desc: '高清录音 语音转文字 同声传译 录音速记 微型便携',
@@ -18,7 +18,7 @@ const jsonDemo = {
   ],
 };
 export const createForm = {
-  title: '创建表单',
+  title: '表单配置',
   type: 'object',
   format: 'grid',
   options: {
@@ -55,12 +55,10 @@ export const createForm = {
         grid_columns: 3,
       },
     },
-    json: {
-      title: '数据示例',
-      description: '请填写数据示例，系统根据数据结构自动生成schema',
+    ext: {
+      title: '表单扩展',
       type: 'string',
-      format: 'json',
-      default: JSON.stringify(jsonDemo, null, 2),
+      format: 'javascript',
       options: {
         grid_columns: 12,
       },

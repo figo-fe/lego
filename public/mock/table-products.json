@@ -1,0 +1,192 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "totalPage": 3,
+    "pageNo": 1,
+    "pageSize": 20,
+    "pageList": [
+      {
+        "image": "//mall01.sogoucdn.com/image/2020/04/03/20200403184209_3460.png",
+        "productId": 31269,
+        "salePrice": 269800,
+        "name": "【罗永浩推荐】搜狗AI录音笔S1",
+        "linePrice": 269800,
+        "state": 3,
+        "desc": "罗永浩推荐爆款 超越专业翻译机 9种语言离线翻译 8麦克风超强拾音 录音实时转写文字准确率98%"
+      },
+      {
+        "image": "//mall02.sogoucdn.com/image/2020/02/10/20200210213306_2808.jpg",
+        "productId": 31372,
+        "salePrice": 129800,
+        "name": "搜狗AI录音笔E1",
+        "linePrice": 129800,
+        "state": 3,
+        "desc": "录音实时转文字准确率98%  录音1小时 出稿5分钟 深度降噪 同声传译"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2019/12/02/20191202171150_2496.jpg",
+        "productId": 29302,
+        "salePrice": 59800,
+        "name": "糖猫Y1 大嘴猴联名款视频电话手表",
+        "linePrice": 59800,
+        "state": 3,
+        "desc": "512MB系统内存 4G存储空间 高清视频通话 英语口语学习 大嘴猴联名款"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2020/02/10/20200210215438_2811.jpg",
+        "productId": 31408,
+        "salePrice": 64800,
+        "name": "搜狗AI录音笔C1 Pro故宫宫廷联名款",
+        "linePrice": 64800,
+        "state": 3,
+        "desc": "语音秒速转文字 WiFi快传 同声传译 32G存储 超强待机"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2020/03/09/20200309141412_3289.png",
+        "productId": 29153,
+        "salePrice": 59800,
+        "name": "搜狗AI录音笔C1 Pro",
+        "linePrice": 59800,
+        "state": 3,
+        "desc": "4月7日复工秒杀日领券立减30元 语音秒速转文字 WiFi快传 同声传译 32G存储 超强待机"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/06/26/20190626125928_6506.png",
+        "productId": 17658,
+        "salePrice": 39800,
+        "name": "搜狗AI录音笔C1",
+        "linePrice": 39800,
+        "state": 3,
+        "desc": "4月7日复工秒杀日立减20元 新老包装随机发货  高清录音 语音转文字 16G+云存储 免费转写 同声传译 录音速记"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/05/21/20190521160236_6102.jpg",
+        "productId": 17125,
+        "salePrice": 249900,
+        "name": "搜狗翻译宝Pro",
+        "linePrice": 259900,
+        "state": 3,
+        "desc": "同声翻译机 63种语言 中英日韩法俄德离线 拍照翻译 出国旅游同步语音翻译器"
+      },
+      {
+        "image": "http://mall03.sogoucdn.com/image/2019/04/28/20190428142912_4841.jpg",
+        "productId": 25885,
+        "salePrice": 59800,
+        "name": "糖猫Y1 能学口语的视频电话手表",
+        "linePrice": 59800,
+        "state": 3,
+        "desc": "512MB系统内存  4G存储空间  高清视频通话  英语口语学习"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/08/09/20190809183459_1772.jpg",
+        "productId": 26028,
+        "salePrice": 39800,
+        "name": "搜狗AI录音笔C1炫彩版",
+        "linePrice": 39800,
+        "state": 3,
+        "desc": "集赞即送充电宝 新老包装随机发货 高清录音 语音转文字 16G+云存储 免费转写 "
+      },
+      {
+        "image": "//mall02.sogoucdn.com/image/2019/12/18/20191218113050_2695.jpg",
+        "productId": 20122,
+        "salePrice": 37900,
+        "name": "糖猫JOY2 能学口语的儿童视频电话手表",
+        "linePrice": 37900,
+        "state": 3,
+        "desc": "4G高速网络，高清视频通话，AI多重定位，英语口语学习"
+      },
+      {
+        "image": "//mall02.sogoucdn.com/image/2019/07/25/20190725113113_1697.jpg",
+        "productId": 24823,
+        "salePrice": 37900,
+        "name": "糖猫JOY2 大嘴猴联名款视频电话手表",
+        "linePrice": 37900,
+        "state": 3,
+        "desc": "4G视频通话 AI智能问答 配音学口语"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/05/21/20190521114133_6062.jpg",
+        "productId": 21384,
+        "salePrice": 19900,
+        "name": "糖猫Plus2 能讲故事的电话手表",
+        "linePrice": 19900,
+        "state": 3,
+        "desc": "双向高清通话 7天超长待机 AI七重定位 魔法变声故事 AI智能问答"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2019/05/31/20190531114104_6301.jpg",
+        "productId": 23898,
+        "salePrice": 12900,
+        "name": "搜狗翻译宝Pro专用皮套",
+        "linePrice": 12900,
+        "state": 3,
+        "desc": "搜狗翻译宝Pro专用皮套"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/12/09/20191209141358_2522.jpg",
+        "productId": 29735,
+        "salePrice": 6500,
+        "name": "小米体重秤 单独购买不发货",
+        "linePrice": 6500,
+        "state": 3,
+        "desc": "赠品 小米体重秤 单独购买不发货"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2019/11/14/20191114155617_2204.jpg",
+        "productId": 21521,
+        "salePrice": 4900,
+        "name": "糖猫plus2专用表带（仅表带不含手表）",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "糖猫plus2专用表带"
+      },
+      {
+        "image": "//mall02.sogoucdn.com/image/2019/05/20/20190520161619_6047.png",
+        "productId": 21637,
+        "salePrice": 4900,
+        "name": "糖猫plus2专用吊坠",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "糖猫plus2专用吊坠"
+      },
+      {
+        "image": "//mall01.sogoucdn.com/image/2019/05/20/20190520162420_6048.png",
+        "productId": 21796,
+        "salePrice": 4900,
+        "name": "糖猫plus2专用贴膜",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "糖猫plus2专用贴膜"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2019/05/23/20190523103914_6162.jpg",
+        "productId": 21879,
+        "salePrice": 4900,
+        "name": "糖猫M2专用表带",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "完美适配糖猫M2手表"
+      },
+      {
+        "image": "//mall03.sogoucdn.com/image/2019/05/23/20190523170208_6182.png",
+        "productId": 22263,
+        "salePrice": 4900,
+        "name": "糖猫plus表带",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "适配糖猫plus手表"
+      },
+      {
+        "image": "//mall02.sogoucdn.com/image/2019/05/23/20190523171851_6189.png",
+        "productId": 22325,
+        "salePrice": 4900,
+        "name": "糖猫star专用表带",
+        "linePrice": 4900,
+        "state": 3,
+        "desc": "适配糖猫star手表"
+      }
+    ],
+    "totalCount": 48
+  }
+}

@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { langs, lang } from '@lang';
 import { findByPath, parseUrl } from '../../common/utils';
 
-export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearch }) => {
+export const TableToolBar = ({ loading = true, search = [], toolbar = [], onClickHandle, onSearch }) => {
   const [init, setInit] = useState(false);
   const dataRef = useRef(null); // 列表接口数据
   const searchQuery = parseUrl(); // 获取页面URL参数
+  const showToolBar = search.length + toolbar.length > 0;
 
   useEffect(() => {
-    setInit(true);
-  }, []);
+    if (!loading) {
+      setInit(true);
+    }
+  }, [loading]);
 
   // 对查询框自动回填
   const getFieldValue = key => {
@@ -164,6 +167,21 @@ export const TableToolBar = ({ search = [], toolbar = [], onClickHandle, onSearc
     }
   };
 
+  // 无工具栏
+  if (!showToolBar) return null;
+
+  // 载入中
+  if (loading) {
+    return (
+      <div className='toolbar-row clearfix'>
+        <div className='holder' style={{ width: 120 }}></div>
+        <div className='holder' style={{ width: 160 }}></div>
+        <div className='holder'></div>
+      </div>
+    );
+  }
+
+  // 渲染
   return (
     <div className='toolbar-row clearfix'>
       {toolbar.map((tool, idx) => renderTool(tool, idx))}

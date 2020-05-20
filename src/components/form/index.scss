@@ -1,52 +1,10 @@
 .form-view {
   position: relative;
-
-  .schema-box {
+  .switch-edit {
     position: absolute;
     right: 0;
     top: 0;
-    bottom: 0;
-    width: 800px;
-    background: #f8f9fa;
-    transition: all 0.2s;
-    transform: translateX(800px);
-    z-index: 10;
-
-    .btn {
-      position: absolute;
-      right: 30px;
-      top: 10px;
-      padding-top: 3px;
-      padding-bottom: 3px;
-      font-size: 13px;
-      z-index: 1;
-      background: #fff;
-    }
-    .btn:hover {
-      color: #0069d9;
-    }
-  }
-  .switch-btn {
-    position: absolute;
-    left: -30px;
-    top: 0;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    font-size: 20px;
-    width: 30px;
-    background: #efefef;
-    border-radius: 4px 0 0 4px;
-    color: #007bff;
-    cursor: pointer;
-    transition: all 0.2s;
-    &:hover {
-      color: #0069d9;
-      background: #e2e6ea;
-    }
-  }
-  .schema-show {
-    transform: translateX(0);
+    font-size: 12px;
   }
   .table-bordered {
     margin-bottom: 15px;

@@ -192,17 +192,16 @@ const _Table = props => {
 
   return (
     <div>
-      {!loading && (
-        <TableToolBar
-          toolbar={config.toolbar}
-          search={searchFields}
-          onClickHandle={onClickHandle}
-          onSearch={query => {
-            setPageNo(1);
-            setSearch(query);
-          }}
-        />
-      )}
+      <TableToolBar
+        loading={loading}
+        toolbar={config.toolbar}
+        search={searchFields}
+        onClickHandle={onClickHandle}
+        onSearch={query => {
+          setPageNo(1);
+          setSearch(query);
+        }}
+      />
       <table className='table-list'>
         <thead className='table-thead'>
           <tr>

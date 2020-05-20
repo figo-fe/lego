@@ -427,7 +427,7 @@ export function getDefaults() {
         // if 'selectize' enabled it is expected to be selectized control
         if (schema.format === 'selectize') return 'arraySelectize';
         else if (schema.format === 'select2') return 'arraySelect2';
-        else if (schema.format !== 'table') return 'multiselect'; // otherwise it is select
+        else if (schema.format !== 'table') return 'arrayChoices'; // otherwise it is arrayChoices
       }
     }
   });
