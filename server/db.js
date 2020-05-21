@@ -9,12 +9,12 @@ const db = new Database('./db/lego.db', { verbose: console.log, readonly: false 
 const createSetting = () => {
   const sql = `CREATE TABLE IF NOT EXISTS setting (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    baseUrl TEXT NOT NULL,
-    mode TEXT NOT NULL,
-    sideMenu TEXT NOT NULL,
-    uploadFn TEXT NOT NULL,
-    permissionApi VARCHAR(2000) NOT NULL
+    name TEXT NOT NULL DEFAULT "",
+    baseUrl TEXT NOT NULL DEFAULT "",
+    sideMenu TEXT NOT NULL DEFAULT "",
+    uploadFn TEXT NOT NULL DEFAULT "",
+    permissionApi VARCHAR(2000) NOT NULL DEFAULT "",
+    config TEXT NOT NULL DEFAULT ""
   )`;
 
   db.prepare(sql).run();
@@ -22,6 +22,11 @@ const createSetting = () => {
   // 数据库升级，增加permissionApi字段
   if (db.pragma('table_info(setting)').filter(({ name }) => name === 'permissionApi').length === 0) {
     db.prepare('ALTER TABLE setting ADD permissionApi VARCHAR(2000) NOT NULL DEFAULT ""').run();
+  }
+
+  // 数据库升级，增加config字段
+  if (db.pragma('table_info(setting)').filter(({ name }) => name === 'config').length === 0) {
+    db.prepare('ALTER TABLE setting ADD config TEXT NOT NULL DEFAULT ""').run();
   }
 };
 

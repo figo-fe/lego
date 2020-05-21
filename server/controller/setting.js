@@ -10,12 +10,16 @@ const saveSetting = data => {
 
   if (row) {
     return db
-      .prepare('UPDATE setting SET name = ?, baseUrl = ?, permissionApi = ?, sideMenu = ?, uploadFn = ? WHERE id = ?')
-      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, row.id);
+      .prepare(
+        'UPDATE setting SET name = ?, baseUrl = ?, permissionApi = ?, sideMenu = ?, uploadFn = ?, config = ? WHERE id = ?',
+      )
+      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, data.config, row.id);
   } else {
     return db
-      .prepare('INSERT INTO setting (name, baseUrl, permissionApi, sideMenu, uploadFn, mode) VALUES (?, ?, ?, ?, ?, ?)')
-      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, '');
+      .prepare(
+        'INSERT INTO setting (name, baseUrl, permissionApi, sideMenu, uploadFn, config) VALUES (?, ?, ?, ?, ?, ?)',
+      )
+      .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, data.config);
   }
 };
 

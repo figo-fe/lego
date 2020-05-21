@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import { Home } from './pages/home';
 import { Frame } from './components';
 import { Setting } from './pages/setting';
-import { GuideHome, SettingHelp, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
+import { SettingHelp, FormHelp, TableHelp, ChartHelp, GeneralDesc } from './pages/guide';
 
 import { FormEdit } from './pages/form';
 import { FormList } from './pages/form/list';
@@ -42,12 +43,21 @@ const App = () => {
 
     axios('GET', SETTING)
       .then(async res => {
-        let { name = '后台管理系统', baseUrl = '', permissionApi = '', sideMenu = '', uploadFn = '' } = res.data;
+        let {
+          name = '后台管理系统',
+          baseUrl = '',
+          permissionApi = '',
+          sideMenu = '',
+          uploadFn = '',
+          config = '',
+        } = res.data;
 
         let _menu = []; // 边栏菜单
         let _admin = false; // 是否有管理权限
         let _user = ''; // 用户名
         let _group = ''; // 用户组
+
+        let { homeUrl = '' } = JSON.parse(config || '{}'); // 扩展配置
 
         // 设置页面title
         document.title = name;
@@ -87,6 +97,7 @@ const App = () => {
 
         setSetting({
           name,
+          homeUrl,
           baseUrl,
           permissionApi,
           sideMenu,
@@ -127,9 +138,12 @@ const App = () => {
           <Switch>
             <Route path='/login' component={Login} />
             <Frame>
-              <Route exact path={['/index', '/']} render={GuideHome} />
-              <Route path='/setting' render={() => <Setting updateSetting={setSetting} />} />
-
+              <Route
+                exact
+                path={['/index', '/']}
+                render={({ history }) => <Home history={history} homeUrl={setting.homeUrl} />}
+              />
+              <Route path='/setting' component={Setting} />
               <Route path='/form/create' component={FormEdit} />
               <Route path='/form/edit/:id' component={FormEdit} />
               <Route path='/form/list' component={FormList} />

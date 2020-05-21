@@ -1,6 +1,6 @@
 export const en = {
   // common
-  admin_name: 'Admin',
+  admin_name: 'Admin Login',
   submit_success: 'Submission successful',
   handle_success: 'Operation successful ',
   handle_fail: 'Operation failed',

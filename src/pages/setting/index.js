@@ -5,21 +5,19 @@ import { SettingContext } from '../../config/context';
 import { setting } from '../../config/schema';
 import { SETTING, PREPATH } from '../../config/apis';
 
-export const Setting = props => {
-  const configRef = useCallback(node => {
-    configRef.current = initEditor(node, setting, {
-      disable_collapse: true,
-    });
-  }, []);
-
+export const Setting = () => {
   const context = useContext(SettingContext);
+
+  const configRef = useCallback(node => {
+    configRef.current = initEditor(node, setting, { disable_collapse: true });
+  }, []);
 
   useEffect(() => {
     if (context.name) {
-      const { name, baseUrl, permissionApi, sideMenu, uploadFn } = context;
+      const { name, baseUrl, permissionApi, homeUrl, sideMenu, uploadFn } = context;
 
       // 注意增加配置时，要兼容LEGO老版本
-      configRef.current.setValue({ name, baseUrl, permissionApi, sideMenu, uploadFn });
+      configRef.current.setValue({ name, baseUrl, permissionApi, homeUrl, sideMenu, uploadFn });
     }
   }, [context, configRef]);
 
@@ -30,11 +28,17 @@ export const Setting = props => {
     if (validates.length > 0) {
       toast(`表单填写有误：<br />${validates.map(err => err.path + ': ' + err.message).join('<br />')}`);
     } else {
-      const value = _editor.getValue();
-      axios('POST', SETTING, value)
+      const { name, baseUrl, permissionApi, homeUrl, sideMenu, uploadFn } = _editor.getValue();
+
+      axios('POST', SETTING, {
+        name,
+        baseUrl,
+        permissionApi,
+        sideMenu,
+        uploadFn,
+        config: JSON.stringify({ homeUrl }),
+      })
         .then(() => {
-          const { _menu, _admin } = context;
-          props.updateSetting({ _menu, _admin, ...value });
           toast('保存成功，即将刷新页面');
           setTimeout(() => {
             window.location.reload();
