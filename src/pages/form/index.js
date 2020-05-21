@@ -48,6 +48,7 @@ export const FormEdit = props => {
     axios('POST', FORM, postData)
       .then(() => {
         toast('保存成功');
+        props.history.goBack();
       })
       .catch(err => {
         toast(err.msg || err.desc);
