@@ -51,8 +51,8 @@ exports.logDelete = ctx => {
 const ps = 20; // pageSize
 const getList = (mod_type, data_id, pn) => {
   let find = 'state = 1';
-  find += mod_type ? ` AND mod_type = "${mod_type}"` : '';
-  find += data_id ? ` AND data_id = "${data_id}"` : '';
+  find += mod_type ? ` AND mod_type = '${mod_type}'` : '';
+  find += data_id ? ` AND data_id = '${data_id}'` : '';
 
   const list = db
     .prepare(
@@ -66,8 +66,8 @@ const getList = (mod_type, data_id, pn) => {
 
 const getTotal = (mod_type, data_id) => {
   let find = 'state = 1';
-  find += mod_type ? ` AND mod_type = "${mod_type}"` : '';
-  find += data_id ? ` AND data_id = "${data_id}"` : '';
+  find += mod_type ? ` AND mod_type = '${mod_type}'` : '';
+  find += data_id ? ` AND data_id = '${data_id}'` : '';
   return db.prepare(`SELECT count(id) as total FROM logs WHERE ${find}`).get();
 };
 
