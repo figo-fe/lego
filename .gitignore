@@ -18,5 +18,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# release
 /db/
 /build/
+/lego.zip

@@ -198,7 +198,15 @@ export const findSchemaByPath = (schema, path) => {
 export const updateSchemaByPath = (schema, path, data) => {
   const tmp = Object.assign({}, schema);
   const props = findSchemaByPath(tmp, path);
-  Object.assign(props, data);
+
+  // 更新节点数据
+  for (let k in Object.assign(props, data)) {
+    if (data[k]) {
+      props[k] = data[k];
+    } else {
+      delete props[k];
+    }
+  }
 
   return tmp;
 };

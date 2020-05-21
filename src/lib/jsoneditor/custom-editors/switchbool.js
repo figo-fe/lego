@@ -25,7 +25,6 @@ export const SwitchBool = StringEditor.extend({
     });
   },
   setValue: function (value) {
-    this.switchInput.nextSibling.innerHTML = value;
     this.switchInput.checked = value;
     this.value = value;
     this.input.value = value;
