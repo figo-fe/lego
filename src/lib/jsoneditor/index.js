@@ -44,7 +44,7 @@ JSONEditor.defaults.options.sceditor = {
       const uploader = window.formUploader || window.fileUploader;
       if (uploader) {
         const placeholder = createPlaceholder();
-        uploader(file, 'wysiwyg', {
+        uploader(file, 'RichTextEditor', {
           success: function (url) {
             placeholder.insert(`<img src="${url}" />`);
           },

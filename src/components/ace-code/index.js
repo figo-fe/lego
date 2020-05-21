@@ -12,6 +12,12 @@ export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height =
     editor.getSession().setUseWorker(false);
     editor.setValue(code, 1);
 
+    // 高度自适应
+    if (height === 'auto') {
+      editor.setOption('maxLines', opts.maxLines || 150);
+    }
+
+    // 回调ace实例
     if (typeof onReadyRef.current === 'function') {
       onReadyRef.current(editor);
     }
@@ -19,7 +25,7 @@ export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height =
     return () => {
       editor.destroy();
     };
-  }, [code, type, opts]);
+  }, [code, type, opts, height]);
 
   return <div style={{ height }} ref={container}></div>;
 };

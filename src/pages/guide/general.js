@@ -157,7 +157,7 @@ window.popupShow() // 关闭弹窗`}</pre>
  * 实现 window.fileUploader
  * 
  * file 文件对象
- * path 上传表单在schema中的路径，如 "root.info.image"，富文本编辑器的path为常量 "wysiwyg"
+ * path 上传表单在schema中的路径，如 "root.info.image"，富文本编辑器的path为常量 "RichTextEditor"
  * cbs 按需执行回调，将上传结果回传
  * 
  * cbs.progress: 更新进度, int, 值为0-100（success时自动设为100）

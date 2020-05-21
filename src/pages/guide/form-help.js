@@ -46,18 +46,17 @@ export const FormHelp = () => (
               </p>
             </li>
             <li>
-              <label>数据示例</label>
-              <p>
-                数据示例是生成表单的<b>核心</b>
-                ，请自行设计JSON数据结构和内容，尽量使用真实值，系统会根据类型生成相应的表单（如日期、文件上传等），亦可在后续步骤中完善。
-              </p>
-            </li>
-            <li>
               <label>表单备注</label>
               <p>表单备注信息，可记录表单用途、注意事项等，方便后期查阅</p>
             </li>
+            <li>
+              <label>导入数据模型</label>
+              <p>
+                填写基本信息后，点击页面顶部「表单预览区」，录入准备好的JSON数据模型，请尽量使用真实值，利于系统生成相对应的组件（如日期、文件上传等）。
+              </p>
+              <blockquote>可在弹出层右下方点击「插入示例」进行参考</blockquote>
+            </li>
           </ul>
-          <blockquote>填写以上内容后，点击页面底部「下一步」，预览生成的表单并进行完善。</blockquote>
         </div>
       </div>
       <div className='guide-node' id='step-2'>
@@ -71,34 +70,73 @@ export const FormHelp = () => (
           <ul>
             <li>
               <label>预览</label>
-              <p>系统根据用户提供的数据示例自动生成表单，如果此时表单符合你的需求，可跳过下面步骤，直接保存。</p>
+              <p>LEGO根据提供的数据模型自动生成表单，如果此时表单符合需求，可跳过下面步骤，直接保存。</p>
             </li>
             <li>
               <label>完善和扩展</label>
               <p>当表单不符合需求时，通过两方面进行完善：</p>
               <ul>
                 <li>
-                  1. 通过「<Link to='/help/general#json-schema'>JSON-Schema</Link>
-                  」，点击表单右上角蓝色箭头查看和编辑生成的JSON-Schema，参考
-                  <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
-                    JSON-Editor文档
-                  </a>
-                  进行编辑， 完成后点击「更新至表单」进行预览。
+                  <p>
+                    1. 完善「<Link to='/help/general#json-schema'>JSON-Schema</Link>
+                    」，点击表单右上角「编辑Schema」查看和编辑生成的JSON-Schema，参考
+                    <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
+                      JSON-Editor文档
+                    </a>
+                    进行编辑， 完成后点击「确定」进行预览。
+                  </p>
+                  <blockquote>点击单个表单可编辑相应节点，更改表单类型、设置Grid布局以及编辑表单的Schema</blockquote>
                 </li>
                 <li>
-                  2. 通过「表单扩展」，编写JavaScript进行扩展。
-                  <br />
-                  2.1 <code>window._editor_</code>可获取编辑器实例，参考
-                  <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
-                    JSON-Editor文档
-                  </a>
-                  对表单进行扩展。
-                  <br />
-                  2.2 声明<code>window._onDataReady_</code>自定义数据回填
-                  ，此方法在获取到回填数据后执行，接受两个参数：editor实例和回填数据。
-                  <br />
-                  2.3 声明<code>window._submitFix_</code>
-                  自定义提交数据，参数为表单数据，可自行实现对数据的改造和校验，如：
+                  <p>2. 通过「表单扩展」，编写JavaScript进行扩展。</p>
+                  <p>
+                    为更好的控制表单，扩展代码执行时机<b>早于</b>表单初始化，操作表单时请使用
+                    <code>setTimeout</code>
+                    适当延时
+                  </p>
+                  <p>
+                    2.1 <code>window._editor_</code>可获取编辑器实例，参考
+                    <a target='_blank' rel='noopener noreferrer' href='https://github.com/json-editor/json-editor'>
+                      JSON-Editor文档
+                    </a>
+                    对表单进行扩展。
+                  </p>
+                  <pre>{`// 常用方法
+window._editor_.getValue(); // 获取表单完整数据
+window._editor_.getEditor('root.path'); // 获取相应节点表单实例
+window._editor_.getEditor('root.path').getValue(); // 获取相应节点数据
+window._editor_.setValue(data); // 填入表单数据
+window._editor_.getEditor('root.path').setValue(); // 填入相应节点数据
+
+// 更新下拉框数据
+window._editor_.getEditor('root.dropdown').updateChoices([
+  {
+    label: '选项一',
+    value: 'value1'
+  },
+  {
+    label: '选项二',
+    value: 'value2',
+    selected: true // 默认选中
+  }
+]);`}</pre>
+                  <p>
+                    2.2 声明<code>window._onDataReady_</code>自定义数据回填
+                    ，此方法在获取到回填数据后执行，接受两个参数：editor实例和回填数据。
+                  </p>
+                  <pre>{`window._onDataReady_ = function (editor, data) {
+  // 对填入数据进行定制
+  if(someCondiction) {
+    editor.setValue({
+      name: data.name,
+      key: data.id + '_' + data.tag
+    });
+  }
+}`}</pre>
+                  <p>
+                    2.3 声明<code>window._submitFix_</code>
+                    自定义提交数据，参数为表单数据，可自行实现对数据的改造和校验，如：
+                  </p>
                   <pre>{`window._submitFix_ = function(data){
   if (someCondiction) {
     // 自行对表单数据改造，获得想要的格式和内容
@@ -112,19 +150,24 @@ export const FormHelp = () => (
     return false
   }
 }`}</pre>
-                  Content-Type默认为<code>application/x-www-form-urlencoded</code>，可按需修改：
+                  <p>
+                    Content-Type默认为<code>application/x-www-form-urlencoded</code>，可按需修改：
+                  </p>
                   <pre>{`window._submitFix_ = function(data){
   return {
     _contentType: 'json', // 指定content-type为application/json
     data: data
   }
 }`}</pre>
-                  <br />
-                  2.4 声明<code>window._afterSubmit_</code>
-                  定制提交表单后的动作，接收两个参数<code>submit_params</code>和<code>response_data</code>
-                  <br />
-                  2.5 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同<code>window.fileUploader</code>
-                  （见<Link to='/help/general#file-upload'>文件上传</Link>）
+                  <p>
+                    2.4 声明<code>window._afterSubmit_</code>定制提交表单后的动作，接收两个参数
+                    <code>submit_params</code>和<code>response_data</code>
+                  </p>
+                  <p>
+                    2.5 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同
+                    <code>window.fileUploader</code>
+                    （见<Link to='/help/general#file-upload'>文件上传</Link>）
+                  </p>
                 </li>
               </ul>
               <p></p>
@@ -150,10 +193,11 @@ export const FormHelp = () => (
         </h2>
         <div className='help-content'>
           <p>
-            <b>1. 如何进入表单编辑模式？</b>
+            <b>1. 使用时如何区分「新建页」和「编辑页」？</b>
             <br />
-            只要在表单URL上追加参数<code>do=edit</code>即可，例如 <code>http://lego.com/htm/form/use/1?do=edit</code>
-            ，编辑模式下系统会请求<b>数据API</b>进行数据回填。
+            只要在表单URL上追加参数<code>do=edit</code>即可使用编辑页，例如
+            <code>http://lego.com/htm/form/use/1?do=edit</code>
+            ，编辑模式下页面会请求<b>数据API</b>进行数据回填。
           </p>
         </div>
       </div>

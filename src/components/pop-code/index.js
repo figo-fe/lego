@@ -1,7 +1,15 @@
 import React, { useRef } from 'react';
 import { AceCode } from '../../components';
 
-export const CodePopup = ({ onSubmit, onClose, initCode = '', demo = '', width = 800, height = 500 }) => {
+export const CodePopup = ({
+  onSubmit,
+  onClose,
+  type = 'json',
+  initCode = '',
+  demo = '',
+  width = 800,
+  height = 500,
+}) => {
   const aceRef = useRef(null);
 
   return (
@@ -13,7 +21,7 @@ export const CodePopup = ({ onSubmit, onClose, initCode = '', demo = '', width =
         <div className='row'>
           <div className='col-md-12'>
             <div style={{ marginBottom: 15, height: height - 30 - 30 - 15 }}>
-              <AceCode code={initCode} type='json' onReady={ace => (aceRef.current = ace)} />
+              <AceCode code={initCode} type={type} onReady={ace => (aceRef.current = ace)} />
             </div>
           </div>
           <div className='col-md-12'>

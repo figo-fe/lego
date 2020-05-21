@@ -1,10 +1,12 @@
 .form-view {
   position: relative;
-  .switch-edit {
+  .edit-toolbar {
     position: absolute;
     right: 0;
     top: 0;
-    font-size: 12px;
+    .btn {
+      font-size: 12px;
+    }
   }
   .table-bordered {
     margin-bottom: 15px;
