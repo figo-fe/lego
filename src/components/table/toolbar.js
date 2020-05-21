@@ -145,9 +145,8 @@ export const TableToolBar = ({ loading = true, search = [], toolbar = [], onClic
           dataRef.current = window._lego_table_data_;
         }
 
-        const customContent = tool.custom_opts.html.replace(/{{([^}]+)}}/gi, (match, find, index, origin) =>
-          findByPath(dataRef.current, find),
-        );
+        const replacer = (match, find, index, origin) => findByPath(dataRef.current, find) || '';
+        const customContent = tool.custom_opts.html.replace(/{{([^}]+)}}/gi, replacer);
 
         return (
           <div

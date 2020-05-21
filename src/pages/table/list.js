@@ -13,9 +13,9 @@ export const TableList = props => {
     ],
     handles: [
       {
-        key: 'preview',
-        name: '预览',
-        icon: 'eye',
+        key: 'use',
+        name: '使用',
+        icon: 'paper-plane',
         url: '/table/use/{{id}}',
         action: 'link',
       },

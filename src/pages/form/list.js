@@ -13,9 +13,9 @@ export const FormList = props => {
     ],
     handles: [
       {
-        key: 'view',
-        name: '预览',
-        icon: 'eye',
+        key: 'use',
+        name: '使用',
+        icon: 'paper-plane',
         url: '/form/use/{{id}}',
         action: 'link',
       },
@@ -36,10 +36,7 @@ export const FormList = props => {
         <div id='tableTopHook' className='table-top clearfix'>
           <h2 className='title'>{config.base.name}</h2>
           <div className='btns'>
-            <button
-              type='button'
-              className='btn btn-primary btn-sm'
-              onClick={() => props.history.push('/form/create')}>
+            <button type='button' className='btn btn-primary btn-sm' onClick={() => props.history.push('/form/create')}>
               <i className='fas fa-plus' />
               <span>创建表单</span>
             </button>
