@@ -38,8 +38,9 @@ export const FormUse = props => {
       try {
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
-        delete window._onDataReady_;
         delete window._editor_;
+        delete window._onDataReady_;
+        delete window._onDataError_;
         delete window._submitFix_;
         delete window._afterSubmit_;
         delete window[fn];
@@ -73,7 +74,12 @@ export const FormUse = props => {
             }
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+          if (typeof window._onDataError_ === 'function') {
+            window._onDataError_(formRef.current, err);
+          }
+        });
     }
 
     if (isInFrame) {

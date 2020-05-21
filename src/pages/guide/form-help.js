@@ -134,7 +134,10 @@ window._editor_.getEditor('root.dropdown').updateChoices([
   }
 }`}</pre>
                   <p>
-                    2.3 声明<code>window._submitFix_</code>
+                    2.3 声明<code>window._onDataError_</code>处理表单回填时错误信息，参数同<code>_onDataReady_</code>。
+                  </p>
+                  <p>
+                    2.4 声明<code>window._submitFix_</code>
                     自定义提交数据，参数为表单数据，可自行实现对数据的改造和校验，如：
                   </p>
                   <pre>{`window._submitFix_ = function(data){
@@ -160,11 +163,11 @@ window._editor_.getEditor('root.dropdown').updateChoices([
   }
 }`}</pre>
                   <p>
-                    2.4 声明<code>window._afterSubmit_</code>定制提交表单后的动作，接收两个参数
+                    2.5 声明<code>window._afterSubmit_</code>定制提交表单后的动作，接收两个参数
                     <code>submit_params</code>和<code>response_data</code>
                   </p>
                   <p>
-                    2.5 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同
+                    2.6 声明<code>window.formUploader</code>可定制当前表单上传方法，参数同
                     <code>window.fileUploader</code>
                     （见<Link to='/help/general#file-upload'>文件上传</Link>）
                   </p>
