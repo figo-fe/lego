@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useRef } from 'react';
 import { initEditor, toast, findSchemaByPath, updateSchemaByPath } from '../../common/utils';
-import { CodePopup } from '../../components';
+import { CodePopup, Popup } from '../../components';
 import SchemaEditor from './schema-editor';
 
 import './index.scss';
@@ -46,12 +46,6 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     setEditSchema(null);
   }
 
-  // 打印数据
-  function doPrint() {
-    const dataCode = JSON.stringify(editorRef.current.getValue(), null, 4);
-    toast(`<pre style="text-align:left;color:#fff;padding-right:30px">${dataCode}</pre>`, 5e3);
-  }
-
   if (!schema) return null;
 
   return (
@@ -63,24 +57,14 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
         onClick={onFormEdit}
       />
       {editable && (
-        <div className='btn-group edit-toolbar'>
-          <div className='btn btn-sm btn-outline-info' onClick={() => setSchemaShow(true)}>
-            <i className='fa fa-code' /> 编辑Schema
-          </div>
-          <div className='btn btn-sm btn-outline-primary' onClick={doPrint}>
-            <i className='fa fa-terminal' /> 打印数据
-          </div>
+        <div className='btn btn-sm btn-outline-info edit-toolbar' onClick={() => setSchemaShow(true)}>
+          <i className='fa fa-code' /> 编辑Schema
         </div>
       )}
       {editable && editSchema && (
-        <div className='popup-mask'>
-          <div className='popup-main' style={{ width: 600, height: 350, padding: 15 }}>
-            <div className='popup-hide' title='关闭' onClick={() => setEditSchema(null)}>
-              <i className='fas fa-times'></i>
-            </div>
-            <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
-          </div>
-        </div>
+        <Popup width={600} height={350} onClose={() => setEditSchema(null)}>
+          <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
+        </Popup>
       )}
       {editable && schemaShow && (
         <CodePopup

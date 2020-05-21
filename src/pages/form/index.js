@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Wrap, Button, SchemaForm, CodePopup } from '../../components';
+import { Wrap, Button, SchemaForm, CodePopup, Popup } from '../../components';
 import { createForm, formJsonDemo } from '../../config/schema';
 import { json2schema, toast, axios } from '../../common/utils';
 import { FORM, PREPATH } from '../../config/apis';
-
+import { FormView } from './view';
 import './form.scss';
 
 export const FormEdit = props => {
@@ -11,6 +11,7 @@ export const FormEdit = props => {
   const configRef = useRef(null);
   const [loading, setLoading] = useState(isEdit); //页面加载状态
   const [jsonPopShow, setJsonPopShow] = useState(false); // 显示数据模型输入框
+  const [preview, setPreview] = useState(false); // 显示预览
 
   // 表单数据
   const [formData, setFormData] = useState({
@@ -36,6 +37,12 @@ export const FormEdit = props => {
       });
     }
   }, [isEdit, props.match.params.id]);
+
+  useEffect(() => {
+    if (preview) {
+      setFormData(data => Object.assign({}, data, configRef.current.getValue()));
+    }
+  }, [preview]);
 
   // 保存表单
   function doSave() {
@@ -77,7 +84,7 @@ export const FormEdit = props => {
               }
             }}>
             <h3>表单预览区</h3>
-            <p>点击此区域导入数据模型，自动生成表单</p>
+            <p>点此区域导入数据模型，自动生成表单</p>
           </div>
         )}
 
@@ -86,6 +93,7 @@ export const FormEdit = props => {
         </div>
         <div className='btns-row'>
           <Button value='保存' onClick={doSave} extClass='btn-success' />
+          <Button value='预览' onClick={() => setPreview(true)} extClass='btn-outline-info' />
           <Button
             key='help'
             onClick={() => window.open(`${PREPATH}/help/form`)}
@@ -95,6 +103,7 @@ export const FormEdit = props => {
           <Button value='返回' onClick={() => props.history.goBack()} extClass='btn-outline-secondary' />
         </div>
 
+        {/* 弹窗-编辑schema */}
         {jsonPopShow && (
           <CodePopup
             demo={JSON.stringify(formJsonDemo, null, 2)}
