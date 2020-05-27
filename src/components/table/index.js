@@ -87,9 +87,16 @@ const _Table = props => {
 
   if (!checked) return <div>data or config error...</div>;
 
+  // 将查询条件合并到数据中
+  function extendBySearch(data) {
+    const fixSearch = Object.keys(search).map(k => ({ [`search.${k}`]: search[k] }));
+    return Object.assign({}, data, fixSearch);
+  }
+
+  // 动作处理
   function onClickHandle(row, handle) {
-    let url = buildUrl(handle.url, row);
-    url = buildUrl(url, row);
+    const url = buildUrl(handle.url, extendBySearch(row));
+
     switch (handle.action) {
       case 'open':
         window.open(url);
@@ -104,9 +111,9 @@ const _Table = props => {
         break;
 
       case 'api':
-        url = buildApi(context.baseUrl, url);
+        const api = buildApi(context.baseUrl, url);
         let isComfirm = false;
-        if (/[?&]handle_confirm=0$/.test(url)) {
+        if (/[?&]handle_confirm=0$/.test(api)) {
           isComfirm = true;
         } else if (
           window.confirm(`${langs[lang]['confirm']}${handle.name}${row.name ? ' [' + row.name + '] ' : ''}？`)
@@ -114,7 +121,7 @@ const _Table = props => {
           isComfirm = true;
         }
         if (isComfirm) {
-          axios('POST', url.replace(/[?&]handle_confirm=0$/, ''))
+          axios('POST', api.replace(/[?&]handle_confirm=0$/, ''))
             .then(res => {
               toast(langs[lang]['handle_success']);
               // 刷新当前数据
@@ -276,7 +283,7 @@ const _Table = props => {
                 {cols.map(item => {
                   let content = fmt(item.fmt, row[item.key] === void 0 ? '--' : row[item.key]);
                   if (typeof window._colFix_ === 'function') {
-                    content = window._colFix_(item.key, content, row) || content;
+                    content = window._colFix_(item.key, content, extendBySearch(row)) || content;
                   }
 
                   if (item.fn.indexOf('multi') >= 0) {

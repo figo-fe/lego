@@ -3,10 +3,13 @@ import React, { useRef, useEffect } from 'react';
 export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height = '100%' }) => {
   const container = useRef(null);
   const onReadyRef = useRef(onReady);
+  const optsRef = useRef(opts);
 
+  // 初始化实例
   useEffect(() => {
     const ace = window.ace;
-    const editor = ace.edit(container.current, Object.assign({ mode: 'ace/mode/' + type, tabSize: 2 }, opts));
+    const options = optsRef.current;
+    const editor = ace.edit(container.current, Object.assign({ mode: 'ace/mode/' + type, tabSize: 2 }, options));
 
     editor.setTheme('ace/theme/monokai');
     editor.getSession().setUseWorker(false);
@@ -14,7 +17,7 @@ export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height =
 
     // 高度自适应
     if (height === 'auto') {
-      editor.setOption('maxLines', opts.maxLines || 150);
+      editor.setOption('maxLines', options.maxLines || 150);
     }
 
     // 回调ace实例
@@ -25,7 +28,7 @@ export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height =
     return () => {
       editor.destroy();
     };
-  }, [code, type, opts, height]);
+  }, [type, code, height]);
 
   return <div style={{ height }} ref={container}></div>;
 };

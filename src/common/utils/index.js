@@ -131,7 +131,11 @@ export const buildUrl = (url, params) => {
   }
   return url.replace(/\{\{[^}]+\}\}/g, find => {
     const key = find.slice(2, -2);
-    return `${data[key] || ''}`;
+    if (data[key]) {
+      return decodeURIComponent(data[key]);
+    } else {
+      return '';
+    }
   });
 };
 
