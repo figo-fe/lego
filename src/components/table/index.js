@@ -89,7 +89,12 @@ const _Table = props => {
 
   // 将查询条件合并到数据中
   function extendBySearch(data) {
-    const fixSearch = Object.keys(search).map(k => ({ [`search.${k}`]: search[k] }));
+    const fixSearch = {};
+
+    for (let k in search) {
+      fixSearch['search.' + k] = search[k];
+    }
+
     return Object.assign({}, data, fixSearch);
   }
 

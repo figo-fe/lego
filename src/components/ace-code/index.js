@@ -28,7 +28,7 @@ export const AceCode = ({ code = '', type = 'json', onReady, opts = {}, height =
     return () => {
       editor.destroy();
     };
-  }, [type, code, height]);
+  }, [code, type, height]);
 
   return <div style={{ height }} ref={container}></div>;
 };
