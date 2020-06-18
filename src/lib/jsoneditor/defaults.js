@@ -478,16 +478,16 @@ export function getDefaults() {
   });
 
   JSONEditor.defaults.resolvers.unshift(function (schema) {
-    if (schema.type === 'string' && schema.format === 'jodit') return 'jodit';
+    if (schema.type === 'string' && ['xhtml', 'jodit'].indexOf(schema.format) !== -1) return 'jodit';
   });
 
   JSONEditor.defaults.resolvers.unshift(function (schema) {
     if (schema.type === 'string' && schema.format === 'markdown') return 'simplemde';
   });
 
-  JSONEditor.defaults.resolvers.unshift(function (schema) {
-    if (schema.type === 'string' && ['xhtml', 'bbcode'].indexOf(schema.format) !== -1) return 'sceditor';
-  });
+  // JSONEditor.defaults.resolvers.unshift(function (schema) {
+  //   if (schema.type === 'string' && ['xhtml', 'bbcode'].indexOf(schema.format) !== -1) return 'sceditor';
+  // });
 
   JSONEditor.defaults.resolvers.unshift(function (schema) {
     if (

@@ -22,40 +22,78 @@ JSONEditor.defaults.options.choices = {
   itemSelectText: '',
 };
 
-// config sceditor
-JSONEditor.defaults.options.sceditor = {
-  style: process.env.PUBLIC_URL + '/lib/sceditor/content.min.css',
-  plugins: 'dragdrop',
-  emoticonsEnabled: false,
-  icons: 'monocons',
-  height: 400,
-  toolbar: [
-    'bold,italic,underline',
-    'font,size,color,removeformat',
-    'left,center,right,justify',
-    'bulletlist,orderedlist,table,code,quote',
-    'image,link,unlink',
-    'maximize,source',
-  ].join('|'),
-  dragdrop: {
-    allowedTypes: ['image/jpeg', 'image/png', 'image/gif'],
-    handleFile: (file, createPlaceholder) => {
-      // https://www.sceditor.com/documentation/plugins/dragdrop/
-      const uploader = window.formUploader || window.fileUploader;
-      if (uploader) {
-        const placeholder = createPlaceholder();
-        uploader(file, 'RichTextEditor', {
-          success: function (url) {
-            placeholder.insert(`<img src="${url}" />`);
-          },
-          progress: function (percent) {
-            console.log(percent);
-          },
-          fail: function (msg) {
-            placeholder.cancel();
-            alert(msg);
-          },
-        });
+// WYSIWYG Jodit Editor
+const Jodit = window.Jodit;
+
+Jodit.defaultOptions.controls.latex = {
+  name: 'Latex',
+  icon: 'latex',
+  tooltip: 'Insert Latex',
+  popup: editor => {
+    const form = editor.create.fromHTML(`<div class="jodit_form">
+      <div class="jodit_form_group">
+        <textarea ref="latex_code" style="width:300px;height:80px;display:block" class="jodit_input"></textarea>
+      </div>
+      <div class="jodit_buttons">
+        <button ref="insert_latex" class="jodit_button" type="button">Insert</button>
+      </div>
+    </div>`);
+
+    const snapshot = editor.observer.snapshot.make();
+
+    const { latex_code, insert_latex } = Jodit.modules.Helpers.refs(form);
+
+    insert_latex.addEventListener('click', () => {
+      editor.observer.snapshot.restore(snapshot);
+
+      const span = editor.create.inside.element('span');
+      span.className = 'math-tex';
+      span.innerText = latex_code.value;
+      editor.selection.insertNode(span);
+    });
+
+    return form;
+  },
+};
+
+JSONEditor.defaults.options.jodit = {
+  buttons: [
+    'bold',
+    'strikethrough',
+    'underline',
+    'italic',
+    'eraser',
+    '|',
+    'font',
+    'fontsize',
+    'brush',
+    'paragraph',
+    '|',
+    'superscript',
+    'subscript',
+    'ul',
+    'ol',
+    'outdent',
+    'indent',
+    '|',
+    'image',
+    'file',
+    'video',
+    'table',
+    'link',
+    '|',
+    'align',
+    'undo',
+    'redo',
+    'copyformat',
+    '|',
+    'fullsize',
+    'source',
+  ],
+  events: {
+    getIcon: name => {
+      if (name === 'latex') {
+        return '<i style="font-size:14px" class="fa fa-square-root-alt"></i>';
       }
     },
   },
