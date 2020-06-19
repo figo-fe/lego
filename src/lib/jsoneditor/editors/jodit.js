@@ -20,7 +20,13 @@ export var JoditEditor = StringEditor.extend({
       // single property options from schema "options.jodit"
       options = this.expandCallbacks(
         'jodit',
-        $extend({}, { height: 450 }, this.defaults.options.jodit || {}, this.options.jodit || {}),
+        $extend(
+          {},
+          { height: 450 },
+          this.defaults.options.jodit || {},
+          this.options.jodit || {},
+          window.joditConfig || {}, // 自定义配置
+        ),
       );
 
       this.jodit_instance = new window.Jodit(this.input, options);

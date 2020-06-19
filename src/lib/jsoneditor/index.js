@@ -57,6 +57,14 @@ Jodit.defaultOptions.controls.latex = {
 };
 
 JSONEditor.defaults.options.jodit = {
+  toolbarSticky: false,
+  spellcheck: false,
+  showCharsCounter: false,
+  showWordsCounter: false,
+  sourceEditorNativeOptions: {
+    theme: 'ace/theme/monokai',
+  },
+  sizeLG: 300,
   buttons: [
     'bold',
     'strikethrough',

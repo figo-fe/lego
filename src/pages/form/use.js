@@ -43,6 +43,8 @@ export const FormUse = props => {
         delete window._onDataError_;
         delete window._submitFix_;
         delete window._afterSubmit_;
+        delete window.formUploader; // Jodit当前表单上传配置
+        delete window.joditConfig; // Jodit当前表单配置
         delete window[fn];
         script.remove();
       } catch (e) {
