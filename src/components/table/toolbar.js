@@ -191,7 +191,7 @@ export const TableToolBar = ({ loading = true, search = [], toolbar = [], onClic
           defaultValue={getFieldValue('search_' + item.key)}
           className='form-control mr-2'
           id={`toolbar_search_${item.key}`}
-          placeholder={`${langs[lang]['please_enter']}${item.name}`}
+          placeholder={`${langs[lang]['please_enter']}${item.name || item.key}`}
         />
       ))}
       {search.length + toolbar.filter(({ key }) => /^search_/.test(key)).length > 0 && (
