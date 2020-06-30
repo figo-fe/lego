@@ -87,6 +87,11 @@ const _Table = props => {
 
   if (!checked) return <div>data or config error...</div>;
 
+  // 在自定义扩展中强制更新
+  window.forceUpdateTable = function () {
+    setHack(bool => !bool);
+  };
+
   // 将查询条件合并到数据中
   function extendBySearch(data) {
     const fixSearch = {};
