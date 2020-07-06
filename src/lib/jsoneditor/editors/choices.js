@@ -3,7 +3,7 @@ import { SelectEditor } from './select';
 import { $extend } from '../utilities';
 export var ChoicesEditor = SelectEditor.extend({
   setValue: function (value, initial) {
-    if (this.choices_instance) {
+    if (this.choices_instance && value !== undefined) {
       // Sanitize value before setting it
       var sanitized = this.typecast(value || '');
 
@@ -30,7 +30,7 @@ export var ChoicesEditor = SelectEditor.extend({
       // 轮询设值
       setTimeout(() => {
         this.setValue(value, initial);
-      }, 150);
+      }, 100);
     }
   },
   afterInputReady: function () {
@@ -50,13 +50,15 @@ export var ChoicesEditor = SelectEditor.extend({
 
       // 通过扩展异步设置choices
       if (this.setter && typeof window[this.setter] === 'function') {
-        try {
-          window[this.setter].call(this, {}, function (list) {
-            self.updateChoices(list);
-          });
-        } catch (e) {
-          console.warn(String(e));
-        }
+        setTimeout(function () {
+          try {
+            window[self.setter].call(self, {}, function (list) {
+              self.updateChoices(list);
+            });
+          } catch (e) {
+            console.warn(String(e));
+          }
+        }, 150);
       }
     }
     this._super();
