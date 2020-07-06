@@ -1,3 +1,4 @@
+// https://github.com/json-editor/json-editor/blob/0393146bc9947b7542a277c89940756e150f1997/src/editors/choices.js
 import { SelectEditor } from './select';
 import { $extend } from '../utilities';
 export var ChoicesEditor = SelectEditor.extend({
@@ -25,11 +26,19 @@ export var ChoicesEditor = SelectEditor.extend({
 
       this.value = sanitized;
       this.onChange();
-    } else this._super(value, initial);
+    } else {
+      // 轮询设值
+      setTimeout(() => {
+        this.setValue(value, initial);
+      }, 150);
+    }
   },
   afterInputReady: function () {
     if (window.Choices && !this.choices_instance) {
+      var self = this;
       var options;
+      this.setter = this.schema.setter;
+
       // Get options, either global options from "this.defaults.options.choices" or
       // single property options from schema "options.choices"
       options = this.expandCallbacks(
@@ -38,31 +47,39 @@ export var ChoicesEditor = SelectEditor.extend({
       );
 
       this.choices_instance = new window.Choices(this.input, options);
+
+      // 通过扩展异步设置choices
+      if (this.setter && typeof window[this.setter] === 'function') {
+        try {
+          window[this.setter].call(this, {}, function (list) {
+            self.updateChoices(list);
+          });
+        } catch (e) {
+          console.warn(String(e));
+        }
+      }
     }
     this._super();
   },
   onWatchedFieldChange: function () {
-    this._super();
-
-    var vars = this.getWatchedFieldValues();
-
-    // 自定义source，支持异步
-    if (this.enumSource && this.enumSource[0].setter) {
-      var enumSetter = this.enumSource[0].setter;
-      if (typeof window[enumSetter] === 'function') {
-        window[enumSetter](this, vars);
-      }
-      return;
-    }
-
-    // 被监听字段更新
-    if (this.choices_instance && vars.self === void 0) {
+    if (this.choices_instance) {
       var self = this;
-      var choicesList = this.enum_options.map(function (v, i) {
-        return { value: v, label: self.enum_display[i] };
-      });
-      this.choices_instance.setChoices(choicesList, 'value', 'label', true);
-      this.choices_instance.setChoiceByValue(this.value + ''); // Set new selection
+      if (this.setter && typeof window[this.setter] === 'function') {
+        try {
+          window[this.setter].call(this, this.getWatchedFieldValues(), function (list) {
+            self.updateChoices(list);
+          });
+        } catch (e) {
+          console.warn(String(e));
+        }
+      } else {
+        this._super();
+        var choicesList = this.enum_options.map(function (v, i) {
+          return { value: v, label: self.enum_display[i] };
+        });
+        this.choices_instance.setChoices(choicesList, 'value', 'label', true);
+        this.choices_instance.setChoiceByValue(this.value + ''); // Set new selection
+      }
     }
   },
   updateChoices: function (list) {
@@ -122,6 +139,7 @@ export var ChoicesEditor = SelectEditor.extend({
     if (this.choices_instance) {
       this.choices_instance.destroy();
       this.choices_instance = null;
+      delete window[this.setter];
     }
     this._super();
   },
