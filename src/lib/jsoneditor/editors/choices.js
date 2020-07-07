@@ -141,7 +141,6 @@ export var ChoicesEditor = SelectEditor.extend({
     if (this.choices_instance) {
       this.choices_instance.destroy();
       this.choices_instance = null;
-      delete window[this.setter];
     }
     this._super();
   },
