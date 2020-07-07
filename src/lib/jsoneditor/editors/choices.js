@@ -25,7 +25,7 @@ export var ChoicesEditor = SelectEditor.extend({
       this.choices_instance.setChoiceByValue(choicesValue);
 
       this.value = sanitized;
-      this.onChange();
+      this.onChange(true);
     } else {
       // 轮询设值
       setTimeout(() => {
