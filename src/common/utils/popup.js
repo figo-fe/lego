@@ -19,9 +19,11 @@ container.className = 'popup-mask';
 const cbs = {};
 
 const updateHeight = evt => {
-  const data = JSON.parse(evt.data);
-  if (data.type === 'LEGO_POPUP_HEIGHT') {
-    window.$('.popup-main').height(Math.min(650, data.height));
+  if (evt && evt.data) {
+    const data = JSON.parse(evt.data);
+    if (data.type === 'LEGO_POPUP_HEIGHT') {
+      window.$('.popup-main').height(Math.min(650, data.height));
+    }
   }
 };
 

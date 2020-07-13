@@ -222,7 +222,13 @@ export const dateFormat = (ms, fmt) => {
    * @param {string} [fmt] 输出格式，不传默认为 {yyyy-MM-dd hh:mm:ss}
    * @return {string} 返回转换后的时间字符串
    */
-  var date = new Date(parseInt(ms));
+
+  ms = parseInt(ms);
+
+  // 不合法返回空
+  if (!(ms > 0)) return '';
+
+  var date = new Date(ms);
   fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
 
   var o = {
