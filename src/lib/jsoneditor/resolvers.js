@@ -19,7 +19,7 @@ const boolean = schema => {
     if (schema.format === 'select2') return 'select2';
     if (schema.format === 'selectize') return 'selectize';
     if (schema.format === 'choices') return 'choices';
-    return 'select';
+    return 'choices';
   }
 };
 
@@ -49,7 +49,7 @@ const enumSource = schema => {
     if (schema.format === 'select2') return 'select2';
     if (schema.format === 'selectize') return 'selectize';
     if (schema.format === 'choices') return 'choices';
-    return 'select';
+    return 'choices';
   }
 };
 
@@ -62,7 +62,7 @@ const enumeratedProperties = schema => {
       if (schema.format === 'select2') return 'select2';
       if (schema.format === 'selectize') return 'selectize';
       if (schema.format === 'choices') return 'choices';
-      return 'select';
+      return 'choices';
     }
   }
 };
@@ -75,7 +75,7 @@ const arraysOfStrings = schema => {
     !Array.isArray(schema.items) &&
     ['string', 'number', 'integer'].includes(schema.items.type)
   ) {
-    if (schema.format === 'choices') return 'arrayChoices';
+    if (schema.format === 'choices' || schema.format === 'select') return 'arrayChoices';
     if (schema.uniqueItems) {
       /* if 'selectize' enabled it is expected to be selectized control */
       if (schema.format === 'selectize') return 'arraySelectize';
@@ -120,7 +120,7 @@ const jodit = schema => schema.type === 'string' && schema.format === 'jodit' &&
 
 const markdown = schema => schema.type === 'string' && schema.format === 'markdown' && 'simplemde';
 
-const xhtml = schema => schema.type === 'string' && ['xhtml', 'bbcode'].includes(schema.format) && 'sceditor';
+const xhtml = schema => schema.type === 'string' && ['xhtml', 'bbcode'].includes(schema.format) && 'jodit';
 
 /* Use the ace editor for schemas with format equals any of ace editor modes */
 const aceModes = [

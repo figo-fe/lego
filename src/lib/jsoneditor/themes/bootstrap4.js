@@ -8,7 +8,7 @@ const options = {
   custom_forms: false /* use twbs custom form stylings */,
   object_indent: true /* Indent nested object elements (use nested .card layout) */,
   object_background:
-    'bg-light' /* Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/) */,
+    '' /* Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/) */,
   object_text:
     '' /* Bootstrap 4 card tect color modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/) */,
   table_border: false /* Add border to array "table" row and cells */,
@@ -366,7 +366,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
   getButton(text, icon, title) {
     const el = super.getButton(text, icon, title);
-    el.classList.add('btn', 'btn-secondary', 'btn-sm');
+    el.classList.add('btn', 'btn-light', 'btn-sm');
     return el;
   }
 
