@@ -1,13 +1,15 @@
-import { NumberEditor } from './number'
+import { NumberEditor } from './number.js'
+import { isInteger } from '../utilities.js'
 
-export var IntegerEditor = NumberEditor.extend({
-
-  sanitize: function (value) {
-    value = value + ''
-    // eslint-disable-next-line no-useless-escape
-    return value.replace(/[^0-9\-]/g, '')
-  },
-  getNumColumns: function () {
+export class IntegerEditor extends NumberEditor {
+  getNumColumns () {
     return 2
   }
-})
+
+  getValue () {
+    if (!this.dependenciesFulfilled) {
+      return undefined
+    }
+    return isInteger(this.value) ? parseInt(this.value) : this.value
+  }
+}

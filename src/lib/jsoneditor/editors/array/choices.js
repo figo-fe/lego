@@ -1,139 +1,103 @@
-import { MultiSelectEditor } from '../multiselect';
-import { $extend } from '../../utilities';
-export var ArrayChoicesEditor = MultiSelectEditor.extend({
-  setValue: function (value, initial) {
+import { MultiSelectEditor } from '../multiselect.js'
+import { extend } from '../../utilities.js'
+
+export class ArrayChoicesEditor extends MultiSelectEditor {
+  setValue (value, initial) {
     if (this.choices_instance) {
-      // Make sure we are dealing with an array of strings so we can check for strict equality
-      value = [].concat(value).map(function (e) {
-        return e + '';
-      });
+      /* Make sure we are dealing with an array of strings so we can check for strict equality */
+      value = [].concat(value).map(e => `${e}`)
 
-      this.updateValue(value); // Sets this.value to sanitized value
+      this.updateValue(value) /* Sets this.value to sanitized value */
 
-      this.choices_instance.removeActiveItems(); // Remove existing selection
-      this.choices_instance.setChoiceByValue(this.value); // Set new selection
+      this.choices_instance.removeActiveItems() /* Remove existing selection */
+      this.choices_instance.setChoiceByValue(this.value) /* Set new selection */
 
-      this.onChange(true);
-    } else this._super(value, initial);
-  },
-  afterInputReady: function () {
+      this.onChange(true)
+    } else super.setValue(value, initial)
+  }
+
+  afterInputReady () {
     if (window.Choices && !this.choices_instance) {
-      var options;
-      var self = this;
-      // Get options, either global options from "this.defaults.options.choices" or
-      // single property options from schema "options.choices"
-      options = this.expandCallbacks(
-        'choices',
-        $extend(
-          {},
-          {
-            removeItems: true,
-            removeItemButton: true,
-          },
-          this.defaults.options.choices || {},
-          this.options.choices || {},
-          {
-            addItems: true,
-            editItems: false,
-            duplicateItemsAllowed: false,
-          },
-        ),
-      );
+      /* Get options, either global options from "this.defaults.options.choices" or */
+      /* single property options from schema "options.choices" */
+      const options = this.expandCallbacks('choices', extend({}, {
+        removeItems: true,
+        removeItemButton: true
+      }, this.defaults.options.choices || {}, this.options.choices || {}, {
+        addItems: true,
+        editItems: false,
+        duplicateItemsAllowed: false
+      }))
 
-      // New items are allowed if option "addItems" is true and items type is "string"
-      // this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string';
+      /* New items are allowed if option "addItems" is true and items type is "string" */
+      /* this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string'; */
 
-      // Choices doesn't support adding new items to select type input
-      this.newEnumAllowed = this.schema && this.schema.items.type === 'string';
+      /* Choices doesn't support adding new items to select type input */
+      this.newEnumAllowed = false
 
-      this.choices_instance = new window.Choices(this.input, options);
+      this.choices_instance = new window.Choices(this.input, options)
 
-      // Remove change handler set in parent class (src/multiselect.js)
-      this.control.removeEventListener('change', this.multiselectChangeHandler);
+      /* Remove change handler set in parent class (src/multiselect.js) */
+      this.control.removeEventListener('change', this.multiselectChangeHandler)
 
-      // Create a new change handler
-      this.multiselectChangeHandler = function (e) {
-        var value = self.choices_instance.getValue(true);
-        self.updateValue(value);
-        self.onChange(true);
-      };
-      this.control.addEventListener('change', this.multiselectChangeHandler, false);
+      /* Create a new change handler */
+      this.multiselectChangeHandler = e => {
+        const value = this.choices_instance.getValue(true)
+        this.updateValue(value)
+        this.onChange(true)
+      }
+      this.control.addEventListener('change', this.multiselectChangeHandler, false)
     }
-    this._super();
-  },
-  updateValue: function (value) {
-    value = [].concat(value);
-    var changed = false;
-    var newValue = [];
-    for (var i = 0; i < value.length; i++) {
-      if (!this.select_values[value[i] + '']) {
-        changed = true;
+    super.afterInputReady()
+  }
+
+  updateValue (value) {
+    value = [].concat(value)
+    let changed = false; const newValue = []
+    for (let i = 0; i < value.length; i++) {
+      if (!this.select_values[`${value[i]}`]) {
+        changed = true
         if (this.newEnumAllowed) {
-          if (!this.addNewOption(value[i])) continue;
-        } else continue;
+          if (!this.addNewOption(value[i])) continue
+        } else continue
       }
-      var sanitized = this.sanitize(this.select_values[value[i]]);
-      newValue.push(sanitized);
-      if (sanitized !== value[i]) changed = true;
+      const sanitized = this.sanitize(this.select_values[value[i]])
+      newValue.push(sanitized)
+      if (sanitized !== value[i]) changed = true
     }
-    this.value = newValue;
+    this.value = newValue
 
-    return changed;
-  },
-  addNewOption: function (value) {
-    // Add new value and label
-    this.option_keys.push(value + '');
-    this.option_titles.push(value + '');
-    this.select_values[value + ''] = value;
-    // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
-    this.schema.items.enum.push(value);
-    // Add new value and label to choices
-    this.choices_instance.setChoices([{ value: value + '', label: value + '' }], 'value', 'label', false);
+    return changed
+  }
 
-    return true;
-  },
-  updateChoices: function (list) {
-    var option_keys = [];
-    var option_titles = [];
-    var select_values = {};
+  addNewOption (value) {
+    /* Add new value and label */
+    this.option_keys.push(`${value}`)
+    this.option_titles.push(`${value}`)
+    this.select_values[`${value}`] = value
+    /* Update Schema enum to prevent triggering "Value must be one of the enumerated values" */
+    this.schema.items.enum.push(value)
+    /* Add new value and label to choices */
+    this.choices_instance.setChoices([{ value: `${value}`, label: `${value}` }], 'value', 'label', false)
 
-    list = list.map(({ value, label, selected }) => ({
-      value,
-      label,
-      selected: this.value.indexOf(String(value)) >= 0 || !!selected,
-    }));
+    return true
+  }
 
-    list.forEach(function (data) {
-      option_keys.push(String(data.value));
-      option_titles.push(data.label);
-      select_values[String(data.value)] = data.value;
-    });
+  enable () {
+    if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
+    super.enable()
+  }
 
-    this.option_keys = option_keys;
-    this.option_titles = option_titles;
-    this.select_values = select_values;
-    this.schema.items.enum = Object.values(select_values);
+  disable (alwaysDisabled) {
+    if (this.choices_instance) this.choices_instance.disable()
+    super.disable(alwaysDisabled)
+  }
 
-    setTimeout(() => {
-      if (this.choices_instance) {
-        this.choices_instance.removeActiveItems();
-        this.choices_instance.setChoices(list, 'value', 'label', true);
-      }
-    });
-  },
-  enable: function () {
-    if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();
-    this._super();
-  },
-  disable: function (alwaysDisabled) {
-    if (this.choices_instance) this.choices_instance.disable();
-    this._super(alwaysDisabled);
-  },
-  destroy: function () {
+  destroy () {
     if (this.choices_instance) {
-      this.choices_instance.destroy();
-      this.choices_instance = null;
+      this.choices_instance.destroy()
+      this.choices_instance = null
     }
-    this._super();
-  },
-});
+    super.destroy()
+  }
+}

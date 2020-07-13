@@ -1,888 +1,790 @@
-import { AbstractEditor } from '../editor';
-import { $extend, $each, $trigger } from '../utilities';
-export var ArrayEditor = AbstractEditor.extend({
-  askConfirmation: function () {
+import { AbstractEditor } from '../editor.js'
+import { extend, trigger } from '../utilities.js'
+
+export class ArrayEditor extends AbstractEditor {
+  askConfirmation () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
-      if (window.confirm('Are you sure you want to remove this node?') === false) {
-        return false;
+      if (window.confirm(this.translate('button_delete_node_warning')) === false) {
+        return false
       }
     }
-    return true;
-  },
-  getDefault: function () {
-    return this.schema['default'] || [];
-  },
-  register: function () {
-    this._super();
+    return true
+  }
+
+  getDefault () {
+    return this.schema.default || []
+  }
+
+  register () {
+    super.register()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].register();
+      for (let i = 0; i < this.rows.length; i++) {
+        this.rows[i].register()
       }
     }
-  },
-  unregister: function () {
-    this._super();
+  }
+
+  unregister () {
+    super.unregister()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].unregister();
+      for (let i = 0; i < this.rows.length; i++) {
+        this.rows[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
-    var info = this.getItemInfo(0);
-    // Tabs require extra horizontal space
+  }
+
+  getNumColumns () {
+    const info = this.getItemInfo(0)
+    /* Tabs require extra horizontal space */
     if (this.tabs_holder && this.schema.format !== 'tabs-top') {
-      return Math.max(Math.min(12, info.width + 2), 4);
-    } else {
-      return info.width;
+      return Math.max(Math.min(12, info.width + 2), 4)
     }
-  },
-  enable: function () {
+    return info.width
+  }
+
+  enable () {
     if (!this.always_disabled) {
-      if (this.add_row_button) this.add_row_button.disabled = false;
-      if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = false;
-      if (this.delete_last_row_button) this.delete_last_row_button.disabled = false;
-      if (this.copy_button) this.copy_button.disabled = false;
-      // if(this.toggle_button) this.toggle_button.disabled = false;
-      if (this.delete_button) this.delete_button.disabled = false;
-      if (this.moveup_button) this.moveup_button.disabled = false;
-      if (this.movedown_button) this.movedown_button.disabled = false;
+      if (this.add_row_button) this.add_row_button.disabled = false
+      if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = false
+      if (this.delete_last_row_button) this.delete_last_row_button.disabled = false
+      if (this.copy_button) this.copy_button.disabled = false
+      /* if(this.toggle_button) this.toggle_button.disabled = false; */
+      if (this.delete_button) this.delete_button.disabled = false
+      if (this.moveup_button) this.moveup_button.disabled = false
+      if (this.movedown_button) this.movedown_button.disabled = false
 
       if (this.rows) {
-        for (var i = 0; i < this.rows.length; i++) {
-          this.rows[i].enable();
+        for (let i = 0; i < this.rows.length; i++) {
+          this.rows[i].enable()
 
-          if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = false;
-          if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = false;
-          if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = false;
-          if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = false;
-          // if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false;
-          if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = false;
-          if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = false;
-          if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = false;
+          if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = false
+          if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = false
+          if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = false
+          if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = false
+          /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false; */
+          if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = false
+          if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = false
+          if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = false
         }
       }
-      this._super();
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
-    if (alwaysDisabled) this.always_disabled = true;
-    if (this.add_row_button) this.add_row_button.disabled = true;
-    if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true;
-    if (this.delete_last_row_button) this.delete_last_row_button.disabled = true;
-    if (this.copy_button) this.copy_button.disabled = true;
-    // if(this.toggle_button) this.toggle_button.disabled = true;
-    if (this.delete_button) this.delete_button.disabled = true;
-    if (this.moveup_button) this.moveup_button.disabled = true;
-    if (this.movedown_button) this.movedown_button.disabled = true;
+  }
+
+  disable (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
+    if (this.add_row_button) this.add_row_button.disabled = true
+    if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true
+    if (this.delete_last_row_button) this.delete_last_row_button.disabled = true
+    if (this.copy_button) this.copy_button.disabled = true
+    /* if(this.toggle_button) this.toggle_button.disabled = true; */
+    if (this.delete_button) this.delete_button.disabled = true
+    if (this.moveup_button) this.moveup_button.disabled = true
+    if (this.movedown_button) this.movedown_button.disabled = true
 
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].disable(alwaysDisabled);
+      for (let i = 0; i < this.rows.length; i++) {
+        this.rows[i].disable(alwaysDisabled)
 
-        if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true;
-        if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true;
-        if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = true;
-        if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = true;
-        // if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true;
-        if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = true;
-        if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true;
-        if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true;
+        if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true
+        if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true
+        if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = true
+        if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = true
+        /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true; */
+        if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = true
+        if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true
+        if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true
       }
     }
-    this._super();
-  },
-  preBuild: function () {
-    this._super();
+    super.disable()
+  }
 
-    this.rows = [];
-    this.row_cache = [];
+  preBuild () {
+    super.preBuild()
 
-    this.hide_delete_buttons = this.options.disable_array_delete || this.jsoneditor.options.disable_array_delete;
-    this.hide_delete_all_rows_buttons =
-      this.hide_delete_buttons ||
-      this.options.disable_array_delete_all_rows ||
-      this.jsoneditor.options.disable_array_delete_all_rows;
-    this.hide_delete_last_row_buttons =
-      this.hide_delete_buttons ||
-      this.options.disable_array_delete_last_row ||
-      this.jsoneditor.options.disable_array_delete_last_row;
-    this.hide_move_buttons = this.options.disable_array_reorder || this.jsoneditor.options.disable_array_reorder;
-    this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add;
-    this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy;
+    this.rows = []
+    this.row_cache = []
 
-    // 增加自定义排序 2020-05-14 17:37:54
-    this.show_sort_button = this.options.enable_array_sort || this.jsoneditor.options.enable_array_sort;
+    this.hide_delete_buttons = this.options.disable_array_delete || this.jsoneditor.options.disable_array_delete
+    this.hide_delete_all_rows_buttons = this.hide_delete_buttons || this.options.disable_array_delete_all_rows || this.jsoneditor.options.disable_array_delete_all_rows
+    this.hide_delete_last_row_buttons = this.hide_delete_buttons || this.options.disable_array_delete_last_row || this.jsoneditor.options.disable_array_delete_last_row
+    this.hide_move_buttons = this.options.disable_array_reorder || this.jsoneditor.options.disable_array_reorder
+    this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add
+    this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy
+    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
+  }
 
-    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top;
-  },
-  build: function () {
+  build () {
     if (!this.options.compact) {
-      this.header = document.createElement('label');
-      this.header.textContent = this.getTitle();
-      this.title = this.theme.getHeader(this.header);
-      this.container.appendChild(this.title);
-      this.title_controls = this.theme.getHeaderButtonHolder();
-      this.title.appendChild(this.title_controls);
+      this.header = document.createElement('label')
+      this.header.textContent = this.getTitle()
+      this.title = this.theme.getHeader(this.header)
+      this.container.appendChild(this.title)
+      this.title_controls = this.theme.getHeaderButtonHolder()
+      this.title.appendChild(this.title_controls)
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description);
-        this.container.appendChild(this.description);
+        this.description = this.theme.getDescription(this.schema.description)
+        this.container.appendChild(this.description)
       }
-      this.error_holder = document.createElement('div');
-      this.container.appendChild(this.error_holder);
+      this.error_holder = document.createElement('div')
+      this.container.appendChild(this.error_holder)
 
       if (this.schema.format === 'tabs-top') {
-        this.controls = this.theme.getHeaderButtonHolder();
-        this.title.appendChild(this.controls);
-        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.getItemTitle()));
-        this.container.appendChild(this.tabs_holder);
-        this.row_holder = this.theme.getTopTabContentHolder(this.tabs_holder);
+        this.controls = this.theme.getHeaderButtonHolder()
+        this.title.appendChild(this.controls)
+        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.getItemTitle()))
+        this.container.appendChild(this.tabs_holder)
+        this.row_holder = this.theme.getTopTabContentHolder(this.tabs_holder)
 
-        this.active_tab = null;
+        this.active_tab = null
       } else if (this.schema.format === 'tabs') {
-        this.controls = this.theme.getHeaderButtonHolder();
-        this.title.appendChild(this.controls);
-        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.getItemTitle()));
-        this.container.appendChild(this.tabs_holder);
-        this.row_holder = this.theme.getTabContentHolder(this.tabs_holder);
+        this.controls = this.theme.getHeaderButtonHolder()
+        this.title.appendChild(this.controls)
+        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.getItemTitle()))
+        this.container.appendChild(this.tabs_holder)
+        this.row_holder = this.theme.getTabContentHolder(this.tabs_holder)
 
-        this.active_tab = null;
+        this.active_tab = null
       } else {
-        this.panel = this.theme.getIndentedPanel();
-        this.container.appendChild(this.panel);
-        this.row_holder = document.createElement('div');
-        this.panel.appendChild(this.row_holder);
-        this.controls = this.theme.getButtonHolder();
+        this.panel = this.theme.getIndentedPanel()
+        this.container.appendChild(this.panel)
+        this.row_holder = document.createElement('div')
+        this.panel.appendChild(this.row_holder)
+        this.controls = this.theme.getButtonHolder()
         if (this.array_controls_top) {
-          this.title.appendChild(this.controls);
+          this.title.appendChild(this.controls)
         } else {
-          this.panel.appendChild(this.controls);
+          this.panel.appendChild(this.controls)
         }
       }
     } else {
-      // compact mode
-      this.title = this.theme.getHeader('');
-      this.container.appendChild(this.title);
-      this.panel = this.theme.getIndentedPanel();
-      this.container.appendChild(this.panel);
-      this.title_controls = this.theme.getHeaderButtonHolder();
-      this.title.appendChild(this.title_controls);
-      this.controls = this.theme.getHeaderButtonHolder();
-      this.title.appendChild(this.controls);
-      this.row_holder = document.createElement('div');
-      this.panel.appendChild(this.row_holder);
+      /* compact mode */
+      this.title = this.theme.getHeader('')
+      this.container.appendChild(this.title)
+      this.panel = this.theme.getIndentedPanel()
+      this.container.appendChild(this.panel)
+      this.title_controls = this.theme.getHeaderButtonHolder()
+      this.title.appendChild(this.title_controls)
+      this.controls = this.theme.getHeaderButtonHolder()
+      this.title.appendChild(this.controls)
+      this.row_holder = document.createElement('div')
+      this.panel.appendChild(this.row_holder)
     }
 
-    // Add controls
-    this.addControls();
-  },
-  onChildEditorChange: function (editor) {
-    this.refreshValue();
-    this.refreshTabs(true);
-    this._super(editor);
-  },
-  getItemTitle: function () {
+    /* Add controls */
+    this.addControls()
+  }
+
+  onChildEditorChange (editor) {
+    this.refreshValue()
+    this.refreshTabs(true)
+    super.onChildEditorChange(editor)
+  }
+
+  getItemTitle () {
     if (!this.item_title) {
       if (this.schema.items && !Array.isArray(this.schema.items)) {
-        var tmp = this.jsoneditor.expandRefs(this.schema.items);
-        this.item_title = tmp.title || this.translate('default_array_item_title');
+        const tmp = this.jsoneditor.expandRefs(this.schema.items)
+        this.item_title = tmp.title || this.translate('default_array_item_title')
       } else {
-        this.item_title = this.translate('default_array_item_title');
+        this.item_title = this.translate('default_array_item_title')
       }
     }
-    return this.cleanText(this.item_title);
-  },
-  getItemSchema: function (i) {
+    return this.cleanText(this.item_title)
+  }
+
+  getItemSchema (i) {
     if (Array.isArray(this.schema.items)) {
       if (i >= this.schema.items.length) {
         if (this.schema.additionalItems === true) {
-          return {};
+          return {}
         } else if (this.schema.additionalItems) {
-          return $extend({}, this.schema.additionalItems);
+          return extend({}, this.schema.additionalItems)
         }
       } else {
-        return $extend({}, this.schema.items[i]);
+        return extend({}, this.schema.items[i])
       }
     } else if (this.schema.items) {
-      return $extend({}, this.schema.items);
+      return extend({}, this.schema.items)
     } else {
-      return {};
+      return {}
     }
-  },
-  getItemInfo: function (i) {
-    var schema = this.getItemSchema(i);
+  }
 
-    // Check if it's cached
-    this.item_info = this.item_info || {};
-    var stringified = JSON.stringify(schema);
-    if (typeof this.item_info[stringified] !== 'undefined') return this.item_info[stringified];
+  getItemInfo (i) {
+    let schema = this.getItemSchema(i)
 
-    // Get the schema for this item
-    schema = this.jsoneditor.expandRefs(schema);
+    /* Check if it's cached */
+    this.item_info = this.item_info || {}
+    const stringified = JSON.stringify(schema)
+    if (typeof this.item_info[stringified] !== 'undefined') return this.item_info[stringified]
+
+    /* Get the schema for this item */
+    schema = this.jsoneditor.expandRefs(schema)
 
     this.item_info[stringified] = {
       title: schema.title || this.translate('default_array_item_title'),
-      default: schema['default'],
+      default: schema.default,
       width: 12,
-      child_editors: schema.properties || schema.items,
-    };
+      child_editors: schema.properties || schema.items
+    }
 
-    return this.item_info[stringified];
-  },
-  getElementEditor: function (i) {
-    var itemInfo = this.getItemInfo(i);
-    var schema = this.getItemSchema(i);
-    schema = this.jsoneditor.expandRefs(schema);
-    schema.title = itemInfo.title + ' ' + (i + 1);
+    return this.item_info[stringified]
+  }
 
-    var editor = this.jsoneditor.getEditorClass(schema);
+  getElementEditor (i) {
+    const itemInfo = this.getItemInfo(i)
+    let schema = this.getItemSchema(i)
+    schema = this.jsoneditor.expandRefs(schema)
+    schema.title = `${itemInfo.title} ${i + 1}`
 
-    var holder;
+    const editor = this.jsoneditor.getEditorClass(schema)
+
+    let holder
     if (this.tabs_holder) {
       if (this.schema.format === 'tabs-top') {
-        holder = this.theme.getTopTabContent();
+        holder = this.theme.getTopTabContent()
       } else {
-        holder = this.theme.getTabContent();
+        holder = this.theme.getTabContent()
       }
-      holder.id = this.path + '.' + i;
+      holder.id = `${this.path}.${i}`
     } else if (itemInfo.child_editors) {
-      holder = this.theme.getChildEditorHolder();
+      holder = this.theme.getChildEditorHolder()
     } else {
-      holder = this.theme.getIndentedPanel();
+      holder = this.theme.getIndentedPanel()
     }
 
-    this.row_holder.appendChild(holder);
+    this.row_holder.appendChild(holder)
 
-    var ret = this.jsoneditor.createEditor(editor, {
+    const ret = this.jsoneditor.createEditor(editor, {
       jsoneditor: this.jsoneditor,
-      schema: schema,
+      schema,
       container: holder,
-      path: this.path + '.' + i,
+      path: `${this.path}.${i}`,
       parent: this,
-      required: true,
-    });
-    ret.preBuild();
-    ret.build();
-    ret.postBuild();
+      required: true
+    })
+    ret.preBuild()
+    ret.build()
+    ret.postBuild()
 
     if (!ret.title_controls) {
-      ret.array_controls = this.theme.getButtonHolder();
-      holder.appendChild(ret.array_controls);
+      ret.array_controls = this.theme.getButtonHolder()
+      holder.appendChild(ret.array_controls)
     }
 
-    return ret;
-  },
-  destroy: function () {
-    this.empty(true);
-    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
-    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder);
-    if (this.controls && this.controls.parentNode) this.controls.parentNode.removeChild(this.controls);
-    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel);
+    return ret
+  }
 
-    this.rows = this.row_cache = this.title = this.description = this.row_holder = this.panel = this.controls = null;
+  destroy () {
+    this.empty(true)
+    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
+    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
+    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder)
+    if (this.controls && this.controls.parentNode) this.controls.parentNode.removeChild(this.controls)
+    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel)
 
-    this._super();
-  },
-  empty: function (hard) {
-    if (!this.rows) return;
-    var self = this;
-    $each(this.rows, function (i, row) {
+    this.rows = this.row_cache = this.title = this.description = this.row_holder = this.panel = this.controls = null
+
+    super.destroy()
+  }
+
+  empty (hard) {
+    if (!this.rows) return
+
+    this.rows.forEach((row, i) => {
       if (hard) {
-        if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab);
-        self.destroyRow(row, true);
-        self.row_cache[i] = null;
+        if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
+        this.destroyRow(row, true)
+        this.row_cache[i] = null
       }
-      self.rows[i] = null;
-    });
-    self.rows = [];
-    if (hard) self.row_cache = [];
-  },
-  destroyRow: function (row, hard) {
-    var holder = row.container;
+      this.rows[i] = null
+    })
+    this.rows = []
+    if (hard) this.row_cache = []
+  }
+
+  destroyRow (row, hard) {
+    const holder = row.container
     if (hard) {
-      row.destroy();
-      if (holder.parentNode) holder.parentNode.removeChild(holder);
-      if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab);
+      row.destroy()
+      if (holder.parentNode) holder.parentNode.removeChild(holder)
+      if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
     } else {
-      if (row.tab) row.tab.style.display = 'none';
-      holder.style.display = 'none';
-      row.unregister();
+      if (row.tab) row.tab.style.display = 'none'
+      holder.style.display = 'none'
+      row.unregister()
     }
-  },
-  getMax: function () {
-    if (Array.isArray(this.schema.items) && this.schema.additionalItems === false) {
-      return Math.min(this.schema.items.length, this.schema.maxItems || Infinity);
-    } else {
-      return this.schema.maxItems || Infinity;
+  }
+
+  getMax () {
+    if ((Array.isArray(this.schema.items)) && this.schema.additionalItems === false) {
+      return Math.min(this.schema.items.length, this.schema.maxItems || Infinity)
     }
-  },
-  refreshTabs: function (refreshHeaders) {
-    var self = this;
-    $each(this.rows, function (i, row) {
-      if (!row.tab) return;
+    return this.schema.maxItems || Infinity
+  }
+
+  refreshTabs (refreshHeaders) {
+    this.rows.forEach(row => {
+      if (!row.tab) return
 
       if (refreshHeaders) {
-        row.tab_text.textContent = row.getHeaderText();
+        row.tab_text.textContent = row.getHeaderText()
+      } else if (row.tab === this.active_tab) {
+        this.theme.markTabActive(row)
       } else {
-        if (row.tab === self.active_tab) {
-          self.theme.markTabActive(row);
-        } else {
-          self.theme.markTabInactive(row);
-        }
+        this.theme.markTabInactive(row)
       }
-    });
-  },
-  setValue: function (value, initial) {
-    // Update the array's value, adding/removing rows when necessary
-    value = value || [];
+    })
+  }
 
-    if (!Array.isArray(value)) value = [value];
+  setValue (value = [], initial) {
+    if (!(Array.isArray(value))) value = [value]
 
-    var serialized = JSON.stringify(value);
-    if (serialized === this.serialized) return;
+    const serialized = JSON.stringify(value)
+    if (serialized === this.serialized) return
 
-    // Make sure value has between minItems and maxItems items in it
+    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemInfo(value.length)['default']);
+        value.push(this.getItemInfo(value.length).default)
       }
     }
     if (this.getMax() && value.length > this.getMax()) {
-      value = value.slice(0, this.getMax());
+      value = value.slice(0, this.getMax())
     }
 
-    var self = this;
-    $each(value, function (i, val) {
-      if (self.rows[i]) {
-        // TODO: don't set the row's value if it hasn't changed
-        self.rows[i].setValue(val, initial);
-      } else if (self.row_cache[i]) {
-        self.rows[i] = self.row_cache[i];
-        self.rows[i].setValue(val, initial);
-        self.rows[i].container.style.display = '';
-        if (self.rows[i].tab) self.rows[i].tab.style.display = '';
-        self.rows[i].register();
-        self.jsoneditor.trigger('addRow', self.rows[i]);
+    value.forEach((val, i) => {
+      if (this.rows[i]) {
+        /* TODO: don't set the row's value if it hasn't changed */
+        this.rows[i].setValue(val, initial)
+      } else if (this.row_cache[i]) {
+        this.rows[i] = this.row_cache[i]
+        this.rows[i].setValue(val, initial)
+        this.rows[i].container.style.display = ''
+        if (this.rows[i].tab) this.rows[i].tab.style.display = ''
+        this.rows[i].register()
+        this.jsoneditor.trigger('addRow', this.rows[i])
       } else {
-        var editor = self.addRow(val, initial);
-        self.jsoneditor.trigger('addRow', editor);
+        const editor = this.addRow(val, initial)
+        this.jsoneditor.trigger('addRow', editor)
       }
-    });
+    })
 
-    for (var j = value.length; j < self.rows.length; j++) {
-      self.destroyRow(self.rows[j]);
-      self.rows[j] = null;
+    for (let j = value.length; j < this.rows.length; j++) {
+      this.destroyRow(this.rows[j])
+      this.rows[j] = null
     }
-    self.rows = self.rows.slice(0, value.length);
+    this.rows = this.rows.slice(0, value.length)
 
-    // Set the active tab
-    var newActiveTab = null;
-    $each(self.rows, function (i, row) {
-      if (row.tab === self.active_tab) {
-        newActiveTab = row.tab;
-        return false;
-      }
-    });
-    if (!newActiveTab && self.rows.length) newActiveTab = self.rows[0].tab;
+    /* Set the active tab */
+    const row = this.rows.find(row => row.tab === this.active_tab)
+    let newActiveTab = typeof row !== 'undefined' ? row.tab : null
+    if (!newActiveTab && this.rows.length) newActiveTab = this.rows[0].tab
 
-    self.active_tab = newActiveTab;
+    this.active_tab = newActiveTab
 
-    self.refreshValue(initial);
-    self.refreshTabs(true);
-    self.refreshTabs();
+    this.refreshValue(initial)
+    this.refreshTabs(true)
+    this.refreshTabs()
 
-    self.onChange();
+    this.onChange()
 
-    // TODO: sortable
-  },
-  refreshValue: function (force) {
-    var self = this;
-    var oldi = this.value ? this.value.length : 0;
-    this.value = [];
+    /* TODO: sortable */
+  }
 
-    $each(this.rows, function (i, editor) {
-      // Get the value for this editor
-      self.value[i] = editor.getValue();
-    });
+  refreshValue (force) {
+    const oldi = this.value ? this.value.length : 0
+    /* Get the value for this editor */
+    this.value = this.rows.map(editor => editor.getValue())
 
     if (oldi !== this.value.length || force) {
-      // If we currently have minItems items in the array
-      var minItems = this.schema.minItems && this.schema.minItems >= this.rows.length;
+      /* If we currently have minItems items in the array */
+      const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
 
-      $each(this.rows, function (i, editor) {
-        // Hide the move down button for the last row
+      this.rows.forEach((editor, i) => {
+        /* Hide the move down button for the last row */
         if (editor.movedown_button) {
-          if (i === self.rows.length - 1) {
-            editor.movedown_button.style.display = 'none';
+          if (i === this.rows.length - 1) {
+            editor.movedown_button.style.display = 'none'
           } else {
-            editor.movedown_button.style.display = '';
+            editor.movedown_button.style.display = ''
           }
         }
 
-        // Hide the delete button if we have minItems items
+        /* Hide the delete button if we have minItems items */
         if (editor.delete_button) {
           if (minItems) {
-            editor.delete_button.style.display = 'none';
+            editor.delete_button.style.display = 'none'
           } else {
-            editor.delete_button.style.display = '';
+            editor.delete_button.style.display = ''
           }
         }
 
-        // Get the value for this editor
-        self.value[i] = editor.getValue();
-      });
+        /* Get the value for this editor */
+        this.value[i] = editor.getValue()
+      })
 
-      var controlsNeeded = false;
+      let controlsNeeded = false
 
       if (!this.value.length) {
-        this.delete_last_row_button.style.display = 'none';
-        this.remove_all_rows_button.style.display = 'none';
+        this.delete_last_row_button.style.display = 'none'
+        this.remove_all_rows_button.style.display = 'none'
       } else if (this.value.length === 1) {
-        this.remove_all_rows_button.style.display = 'none';
+        this.remove_all_rows_button.style.display = 'none'
 
-        // If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows
+        /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
         if (minItems || this.hide_delete_last_row_buttons) {
-          this.delete_last_row_button.style.display = 'none';
+          this.delete_last_row_button.style.display = 'none'
         } else {
-          this.delete_last_row_button.style.display = '';
-          controlsNeeded = true;
+          this.delete_last_row_button.style.display = ''
+          controlsNeeded = true
         }
       } else {
         if (minItems || this.hide_delete_last_row_buttons) {
-          this.delete_last_row_button.style.display = 'none';
+          this.delete_last_row_button.style.display = 'none'
         } else {
-          this.delete_last_row_button.style.display = '';
-          controlsNeeded = true;
+          this.delete_last_row_button.style.display = ''
+          controlsNeeded = true
         }
 
         if (minItems || this.hide_delete_all_rows_buttons) {
-          this.remove_all_rows_button.style.display = 'none';
+          this.remove_all_rows_button.style.display = 'none'
         } else {
-          this.remove_all_rows_button.style.display = '';
-          controlsNeeded = true;
+          this.remove_all_rows_button.style.display = ''
+          controlsNeeded = true
         }
       }
 
-      // If there are maxItems in the array, hide the add button beneath the rows
+      /* If there are maxItems in the array, hide the add button beneath the rows */
       if ((this.getMax() && this.getMax() <= this.rows.length) || this.hide_add_button) {
-        this.add_row_button.style.display = 'none';
+        this.add_row_button.style.display = 'none'
       } else {
-        this.add_row_button.style.display = '';
-        controlsNeeded = true;
+        this.add_row_button.style.display = ''
+        controlsNeeded = true
       }
 
       if (!this.collapsed && controlsNeeded) {
-        this.controls.style.display = 'inline-block';
+        this.controls.style.display = 'inline-block'
       } else {
-        this.controls.style.display = 'none';
+        this.controls.style.display = 'none'
       }
     }
-  },
-  addRow: function (value, initial) {
-    var self = this;
-    var i = this.rows.length;
+  }
 
-    self.rows[i] = this.getElementEditor(i);
-    self.row_cache[i] = self.rows[i];
+  addRow (value, initial) {
+    const i = this.rows.length
 
-    if (self.tabs_holder) {
-      self.rows[i].tab_text = document.createElement('span');
-      self.rows[i].tab_text.textContent = self.rows[i].getHeaderText();
-      if (self.schema.format === 'tabs-top') {
-        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path));
-        self.theme.addTopTab(self.tabs_holder, self.rows[i].tab);
+    this.rows[i] = this.getElementEditor(i)
+    this.row_cache[i] = this.rows[i]
+
+    if (this.tabs_holder) {
+      this.rows[i].tab_text = document.createElement('span')
+      this.rows[i].tab_text.textContent = this.rows[i].getHeaderText()
+      if (this.schema.format === 'tabs-top') {
+        this.rows[i].tab = this.theme.getTopTab(this.rows[i].tab_text, this.getValidId(this.rows[i].path))
+        this.theme.addTopTab(this.tabs_holder, this.rows[i].tab)
       } else {
-        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path));
-        self.theme.addTab(self.tabs_holder, self.rows[i].tab);
+        this.rows[i].tab = this.theme.getTab(this.rows[i].tab_text, this.getValidId(this.rows[i].path))
+        this.theme.addTab(this.tabs_holder, this.rows[i].tab)
       }
-      self.rows[i].tab.addEventListener('click', function (e) {
-        self.active_tab = self.rows[i].tab;
-        self.refreshTabs();
-        e.preventDefault();
-        e.stopPropagation();
-      });
+      this.rows[i].tab.addEventListener('click', (e) => {
+        this.active_tab = this.rows[i].tab
+        this.refreshTabs()
+        e.preventDefault()
+        e.stopPropagation()
+      })
     }
 
-    var controlsHolder = self.rows[i].title_controls || self.rows[i].array_controls;
+    const controlsHolder = this.rows[i].title_controls || this.rows[i].array_controls
 
-    // Buttons to delete row, move row up, and move row down
-    if (!self.hide_delete_buttons) {
-      self.rows[i].delete_button = this.getButton(
-        self.getItemTitle(),
-        'delete',
-        this.translate('button_delete_row_title', [self.getItemTitle()]),
-      );
-      self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete');
-      self.rows[i].delete_button.setAttribute('data-i', i);
-      self.rows[i].delete_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    /* Buttons to delete row, move row up, and move row down */
+    if (!this.hide_delete_buttons) {
+      this.rows[i].delete_button = this.getButton(this.getItemTitle(), 'delete', this.translate('button_delete_row_title', [this.getItemTitle()]))
+      this.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
+      this.rows[i].delete_button.setAttribute('data-i', i)
+      this.rows[i].delete_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-        if (!self.askConfirmation()) {
-          return false;
+        if (!this.askConfirmation()) {
+          return false
         }
 
-        var i = this.getAttribute('data-i') * 1;
-        var value = self.getValue();
-        var newval = [];
-        var newActiveTab = null;
+        const i = e.currentTarget.getAttribute('data-i') * 1
+        const newval = this.getValue().filter((row, j) => j !== i)
+        let newActiveTab = null
 
-        $each(value, function (j, row) {
-          if (j !== i) {
-            newval.push(row);
-          }
-        });
+        const editor = this.rows[i]
 
-        var editor = self.rows[i];
+        this.setValue(newval)
 
-        self.setValue(newval);
-
-        if (self.rows[i]) {
-          newActiveTab = self.rows[i].tab;
-        } else if (self.rows[i - 1]) {
-          newActiveTab = self.rows[i - 1].tab;
+        if (this.rows[i]) {
+          newActiveTab = this.rows[i].tab
+        } else if (this.rows[i - 1]) {
+          newActiveTab = this.rows[i - 1].tab
         }
 
         if (newActiveTab) {
-          self.active_tab = newActiveTab;
-          self.refreshTabs();
+          this.active_tab = newActiveTab
+          this.refreshTabs()
         }
 
-        self.onChange(true);
-        self.jsoneditor.trigger('deleteRow', editor);
-      });
+        this.onChange(true)
+        this.jsoneditor.trigger('deleteRow', editor)
+      })
 
       if (controlsHolder) {
-        controlsHolder.appendChild(self.rows[i].delete_button);
+        controlsHolder.appendChild(this.rows[i].delete_button)
       }
     }
 
-    // Button to copy an array element and add it as last element
-    if (self.show_copy_button) {
-      self.rows[i].copy_button = this.getButton(self.getItemTitle(), 'copy', 'Copy ' + self.getItemTitle());
-      self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
-      self.rows[i].copy_button.setAttribute('data-i', i);
-      self.rows[i].copy_button.addEventListener('click', function (e) {
-        var value = self.getValue();
-        e.preventDefault();
-        e.stopPropagation();
-        var i = this.getAttribute('data-i') * 1;
+    /* Button to copy an array element and add it as last element */
+    if (this.show_copy_button) {
+      this.rows[i].copy_button = this.getButton(this.getItemTitle(), 'copy', `Copy ${this.getItemTitle()}`)
+      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
+      this.rows[i].copy_button.setAttribute('data-i', i)
+      this.rows[i].copy_button.addEventListener('click', e => {
+        const value = this.getValue()
+        e.preventDefault()
+        e.stopPropagation()
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
-        $each(value, function (j, row) {
+        value.forEach((row, j) => {
           if (j === i) {
-            value.push(row);
+            value.push(row)
           }
-        });
+        })
 
-        self.setValue(value);
-        self.refreshValue(true);
-        self.onChange(true);
-      });
+        this.setValue(value)
+        this.refreshValue(true)
+        this.onChange(true)
+      })
 
-      controlsHolder.appendChild(self.rows[i].copy_button);
+      controlsHolder.appendChild(this.rows[i].copy_button)
     }
 
-    // 自定义排序 2020-05-14 18:19:38
-    if (this.show_sort_button) {
-      const sortInput = this.theme.getFormInputField('number');
-      const sortButton = this.getButton('', 'sort', this.translate('button_sort_row_title_short'));
-      this.rows[i].sort_button = sortButton;
+    if (i && !this.hide_move_buttons) {
+      this.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
+      this.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
+      this.rows[i].moveup_button.setAttribute('data-i', i)
+      this.rows[i].moveup_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
-      sortInput.classList.add('form-control-sm');
-      sortInput.value = i + 1;
-      sortInput.style.cssText = [
-        'border-radius:0;width:50px;font-size:12px;vertical-align:middle;',
-        'box-shadow:none;margin-left:-1px;display:none',
-      ].join(';');
+        if (i <= 0) return
+        const rows = this.getValue()
+        const tmp = rows[i - 1]
+        rows[i - 1] = rows[i]
+        rows[i] = tmp
 
-      sortButton.classList.add('sort', 'json-editor-btntype-sort');
-      sortButton.setAttribute('data-i', i);
-      sortButton.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
+        this.setValue(rows)
+        this.active_tab = this.rows[i - 1].tab
+        this.refreshTabs()
 
-        if (sortInput.style.display === 'none') {
-          sortInput.style.display = 'inline-block';
-          sortButton.firstChild.className = sortButton.firstChild.className.replace('sort', 'check');
-        } else {
-          const newIndex = sortInput.value - 1;
+        this.onChange(true)
 
-          if (newIndex >= 0 && newIndex < self.rows.length) {
-            // 排序不变时跳过
-            if (newIndex !== i) {
-              const rows = self.getValue();
-
-              if (newIndex > i) {
-                rows.splice(newIndex + 1, 0, rows[i]);
-                rows.splice(i, 1);
-              } else {
-                rows.splice(newIndex, 0, rows[i]);
-                rows.splice(i + 1, 1);
-              }
-
-              self.setValue(rows);
-              self.onChange(true);
-              self.jsoneditor.trigger('moveRow', self.rows[newIndex]);
-
-              sortInput.value = i + 1;
-            }
-
-            sortInput.style.display = 'none';
-            sortButton.firstChild.className = sortButton.firstChild.className.replace('check', 'sort');
-          } else {
-            alert('Invalid Sort Number');
-          }
-        }
-      });
-
-      controlsHolder.appendChild(sortInput);
-      controlsHolder.appendChild(sortButton);
-    }
-
-    if (i && !self.hide_move_buttons) {
-      self.rows[i].moveup_button = this.getButton(
-        '',
-        this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup',
-        this.translate('button_move_up_title'),
-      );
-      self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move');
-      self.rows[i].moveup_button.setAttribute('data-i', i);
-      self.rows[i].moveup_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var i = this.getAttribute('data-i') * 1;
-
-        if (i <= 0) return;
-        var rows = self.getValue();
-        var tmp = rows[i - 1];
-        rows[i - 1] = rows[i];
-        rows[i] = tmp;
-
-        self.setValue(rows);
-        self.active_tab = self.rows[i - 1].tab;
-        self.refreshTabs();
-
-        self.onChange(true);
-
-        self.jsoneditor.trigger('moveRow', self.rows[i - 1]);
-      });
+        this.jsoneditor.trigger('moveRow', this.rows[i - 1])
+      })
 
       if (controlsHolder) {
-        controlsHolder.appendChild(self.rows[i].moveup_button);
+        controlsHolder.appendChild(this.rows[i].moveup_button)
       }
     }
 
-    if (!self.hide_move_buttons) {
-      self.rows[i].movedown_button = this.getButton(
-        '',
-        this.schema.format === 'tabs-top' ? 'moveright' : 'movedown',
-        this.translate('button_move_down_title'),
-      );
-      self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move');
-      self.rows[i].movedown_button.setAttribute('data-i', i);
-      self.rows[i].movedown_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var i = this.getAttribute('data-i') * 1;
+    if (!this.hide_move_buttons) {
+      this.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
+      this.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
+      this.rows[i].movedown_button.setAttribute('data-i', i)
+      this.rows[i].movedown_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
-        var rows = self.getValue();
-        if (i >= rows.length - 1) return;
-        var tmp = rows[i + 1];
-        rows[i + 1] = rows[i];
-        rows[i] = tmp;
+        const rows = this.getValue()
+        if (i >= rows.length - 1) return
+        const tmp = rows[i + 1]
+        rows[i + 1] = rows[i]
+        rows[i] = tmp
 
-        self.setValue(rows);
-        self.active_tab = self.rows[i + 1].tab;
-        self.refreshTabs();
-        self.onChange(true);
+        this.setValue(rows)
+        this.active_tab = this.rows[i + 1].tab
+        this.refreshTabs()
+        this.onChange(true)
 
-        self.jsoneditor.trigger('moveRow', self.rows[i + 1]);
-      });
+        this.jsoneditor.trigger('moveRow', this.rows[i + 1])
+      })
 
       if (controlsHolder) {
-        controlsHolder.appendChild(self.rows[i].movedown_button);
+        controlsHolder.appendChild(this.rows[i].movedown_button)
       }
     }
 
-    if (value) self.rows[i].setValue(value, initial);
-    self.refreshTabs();
+    if (value) this.rows[i].setValue(value, initial)
+    this.refreshTabs()
 
-    return self.rows[i];
-  },
-  addControls: function () {
-    var self = this;
+    return this.rows[i]
+  }
 
-    this.collapsed = false;
-    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'));
-    this.toggle_button.classList.add('json-editor-btntype-toggle');
-    this.toggle_button.style.margin = '0 10px 0 0';
-    this.title.insertBefore(this.toggle_button, this.title.childNodes[0]);
+  addControls () {
+    this.collapsed = false
+    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
+    this.toggle_button.classList.add('json-editor-btntype-toggle')
+    this.toggle_button.style.margin = '0 10px 0 0'
+    this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
 
-    var rowHolderDisplay = self.row_holder.style.display;
-    var controlsDisplay = self.controls.style.display;
-    this.toggle_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (self.collapsed) {
-        self.collapsed = false;
-        if (self.panel) self.panel.style.display = '';
-        self.row_holder.style.display = rowHolderDisplay;
-        if (self.tabs_holder) self.tabs_holder.style.display = '';
-        self.controls.style.display = controlsDisplay;
-        self.setButtonText(this, '', 'collapse', self.translate('button_collapse'));
+    const rowHolderDisplay = this.row_holder.style.display
+    const controlsDisplay = this.controls.style.display
+    this.toggle_button.addEventListener('click', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (this.collapsed) {
+        this.collapsed = false
+        if (this.panel) this.panel.style.display = ''
+        this.row_holder.style.display = rowHolderDisplay
+        if (this.tabs_holder) this.tabs_holder.style.display = ''
+        this.controls.style.display = controlsDisplay
+        this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
       } else {
-        self.collapsed = true;
-        self.row_holder.style.display = 'none';
-        if (self.tabs_holder) self.tabs_holder.style.display = 'none';
-        self.controls.style.display = 'none';
-        if (self.panel) self.panel.style.display = 'none';
-        self.setButtonText(this, '', 'expand', self.translate('button_expand'));
+        this.collapsed = true
+        this.row_holder.style.display = 'none'
+        if (this.tabs_holder) this.tabs_holder.style.display = 'none'
+        this.controls.style.display = 'none'
+        if (this.panel) this.panel.style.display = 'none'
+        this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
       }
-    });
+    })
 
-    // If it should start collapsed
+    /* If it should start collapsed */
     if (this.options.collapsed) {
-      $trigger(this.toggle_button, 'click');
+      trigger(this.toggle_button, 'click')
     }
 
-    // Collapse button disabled
+    /* Collapse button disabled */
     if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
-      if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none';
+      if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none'
     } else if (this.jsoneditor.options.disable_collapse) {
-      this.toggle_button.style.display = 'none';
+      this.toggle_button.style.display = 'none'
     }
 
-    // Add "new row" and "delete last" buttons below editor
-    this.add_row_button = this.getButton(
-      this.getItemTitle(),
-      'add',
-      this.translate('button_add_row_title', [this.getItemTitle()]),
-    );
-    this.add_row_button.classList.add('json-editor-btntype-add');
-    this.add_row_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var i = self.rows.length;
-      var editor;
-      if (self.row_cache[i]) {
-        editor = self.rows[i] = self.row_cache[i];
-        self.rows[i].setValue(self.rows[i].getDefault(), true);
-        self.rows[i].container.style.display = '';
-        if (self.rows[i].tab) self.rows[i].tab.style.display = '';
-        self.rows[i].register();
+    /* Add "new row" and "delete last" buttons below editor */
+    this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
+    this.add_row_button.classList.add('json-editor-btntype-add')
+    this.add_row_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      const i = this.rows.length
+      let editor
+      if (this.row_cache[i]) {
+        editor = this.rows[i] = this.row_cache[i]
+        this.rows[i].setValue(this.rows[i].getDefault(), true)
+        this.rows[i].container.style.display = ''
+        if (this.rows[i].tab) this.rows[i].tab.style.display = ''
+        this.rows[i].register()
       } else {
-        editor = self.addRow();
+        editor = this.addRow()
       }
-      self.active_tab = self.rows[i].tab;
-      self.refreshTabs();
-      self.refreshValue();
-      self.onChange(true);
-      self.jsoneditor.trigger('addRow', editor);
-    });
-    self.controls.appendChild(this.add_row_button);
+      this.active_tab = this.rows[i].tab
+      this.refreshTabs()
+      this.refreshValue()
+      this.onChange(true)
+      this.jsoneditor.trigger('addRow', editor)
+    })
+    this.controls.appendChild(this.add_row_button)
 
-    this.delete_last_row_button = this.getButton(
-      this.translate('button_delete_last', [this.getItemTitle()]),
-      'subtract',
-      this.translate('button_delete_last_title', [this.getItemTitle()]),
-    );
-    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast');
-    this.delete_last_row_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
+    this.delete_last_row_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-      if (!self.askConfirmation()) {
-        return false;
+      if (!this.askConfirmation()) {
+        return false
       }
 
-      var rows = self.getValue();
-      var newActiveTab = null;
+      const rows = this.getValue()
+      let newActiveTab = null
 
-      var editor = rows.pop();
+      const editor = rows.pop()
 
-      self.setValue(rows);
+      this.setValue(rows)
 
-      if (self.rows[self.rows.length - 1]) {
-        newActiveTab = self.rows[self.rows.length - 1].tab;
+      if (this.rows[this.rows.length - 1]) {
+        newActiveTab = this.rows[this.rows.length - 1].tab
       }
 
       if (newActiveTab) {
-        self.active_tab = newActiveTab;
-        self.refreshTabs();
+        this.active_tab = newActiveTab
+        this.refreshTabs()
       }
 
-      self.onChange(true);
-      self.jsoneditor.trigger('deleteRow', editor);
-    });
-    self.controls.appendChild(this.delete_last_row_button);
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteRow', editor)
+    })
+    this.controls.appendChild(this.delete_last_row_button)
 
-    this.remove_all_rows_button = this.getButton(
-      this.translate('button_delete_all'),
-      'delete',
-      this.translate('button_delete_all_title'),
-    );
-    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall');
-    this.remove_all_rows_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+    this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
+    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
+    this.remove_all_rows_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-      if (!self.askConfirmation()) {
-        return false;
+      if (!this.askConfirmation()) {
+        return false
       }
 
-      self.empty(true);
-      self.setValue([]);
-      self.onChange(true);
-      self.jsoneditor.trigger('deleteAllRows');
-    });
-    self.controls.appendChild(this.remove_all_rows_button);
+      this.empty(true)
+      this.setValue([])
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteAllRows')
+    })
+    this.controls.appendChild(this.remove_all_rows_button)
 
-    if (self.tabs) {
-      this.add_row_button.style.width = '100%';
-      this.add_row_button.style.textAlign = 'left';
-      this.add_row_button.style.marginBottom = '3px';
+    if (this.tabs) {
+      this.add_row_button.style.width = '100%'
+      this.add_row_button.style.textAlign = 'left'
+      this.add_row_button.style.marginBottom = '3px'
 
-      this.delete_last_row_button.style.width = '100%';
-      this.delete_last_row_button.style.textAlign = 'left';
-      this.delete_last_row_button.style.marginBottom = '3px';
+      this.delete_last_row_button.style.width = '100%'
+      this.delete_last_row_button.style.textAlign = 'left'
+      this.delete_last_row_button.style.marginBottom = '3px'
 
-      this.remove_all_rows_button.style.width = '100%';
-      this.remove_all_rows_button.style.textAlign = 'left';
-      this.remove_all_rows_button.style.marginBottom = '3px';
+      this.remove_all_rows_button.style.width = '100%'
+      this.remove_all_rows_button.style.textAlign = 'left'
+      this.remove_all_rows_button.style.marginBottom = '3px'
     }
-  },
-  showValidationErrors: function (errors) {
-    var self = this;
+  }
 
-    // Get all the errors that pertain to this editor
-    var myErrors = [];
-    var otherErrors = [];
-    $each(errors, function (i, error) {
-      if (error.path === self.path) {
-        myErrors.push(error);
+  showValidationErrors (errors) {
+    /* Get all the errors that pertain to this editor */
+    const myErrors = []
+    const otherErrors = []
+    errors.forEach(error => {
+      if (error.path === this.path) {
+        myErrors.push(error)
       } else {
-        otherErrors.push(error);
+        otherErrors.push(error)
       }
-    });
+    })
 
-    // Show errors for this editor
+    /* Show errors for this editor */
     if (this.error_holder) {
       if (myErrors.length) {
-        this.error_holder.innerHTML = '';
-        this.error_holder.style.display = '';
-        $each(myErrors, function (i, error) {
-          self.error_holder.appendChild(self.theme.getErrorMessage(error.message));
-        });
-        // Hide error area
+        this.error_holder.innerHTML = ''
+        this.error_holder.style.display = ''
+        myErrors.forEach(error => {
+          this.error_holder.appendChild(this.theme.getErrorMessage(error.message))
+        })
+        /* Hide error area */
       } else {
-        this.error_holder.style.display = 'none';
+        this.error_holder.style.display = 'none'
       }
     }
 
-    // Show errors for child editors
-    $each(this.rows, function (i, row) {
-      row.showValidationErrors(otherErrors);
-    });
-  },
-});
+    /* Show errors for child editors */
+    this.rows.forEach(row =>
+      row.showValidationErrors(otherErrors)
+    )
+  }
+}

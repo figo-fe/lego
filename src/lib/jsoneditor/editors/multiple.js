@@ -1,124 +1,128 @@
-// Multiple Editor (for when `type` is an array, also when `oneOf` is present)
-import { AbstractEditor } from '../editor'
-import { Validator } from '../validator'
-import { $extend, $each } from '../utilities'
-export var MultipleEditor = AbstractEditor.extend({
+/* Multiple Editor (for when `type` is an array, also when `oneOf` is present) */
+import { AbstractEditor } from '../editor.js'
+import { Validator } from '../validator.js'
+import { extend } from '../utilities.js'
 
-  register: function () {
+export class MultipleEditor extends AbstractEditor {
+  register () {
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].unregister()
       }
       if (this.editors[this.type]) this.editors[this.type].register()
     }
-    this._super()
-  },
-  unregister: function () {
-    this._super()
+    super.register()
+  }
+
+  unregister () {
+    super.unregister()
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns () {
     if (!this.editors[this.type]) return 4
     return Math.max(this.editors[this.type].getNumColumns(), 4)
-  },
-  enable: function () {
+  }
+
+  enable () {
     if (!this.always_disabled) {
       if (this.editors) {
-        for (var i = 0; i < this.editors.length; i++) {
+        for (let i = 0; i < this.editors.length; i++) {
           if (!this.editors[i]) continue
           this.editors[i].enable()
         }
       }
       this.switcher.disabled = false
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].disable(alwaysDisabled)
       }
     }
     this.switcher.disabled = true
-    this._super()
-  },
-  switchEditor: function (i) {
-    var self = this
+    super.disable()
+  }
 
+  switchEditor (i) {
     if (!this.editors[i]) {
       this.buildChildEditor(i)
     }
 
-    var currentValue = self.getValue()
+    const currentValue = this.getValue()
 
-    self.type = i
+    this.type = i
 
-    self.register()
+    this.register()
 
-    $each(self.editors, function (type, editor) {
+    this.editors.forEach((editor, type) => {
       if (!editor) return
-      if (self.type === type) {
-        if (self.keep_values) editor.setValue(currentValue, true)
+      if (this.type === type) {
+        if (this.keep_values) editor.setValue(currentValue, true)
         editor.container.style.display = ''
       } else editor.container.style.display = 'none'
     })
-    self.refreshValue()
-    self.refreshHeaderText()
-  },
-  buildChildEditor: function (i) {
-    var self = this
-    var type = this.types[i]
-    var holder = self.theme.getChildEditorHolder()
-    self.editor_holder.appendChild(holder)
+    this.refreshValue()
+    this.refreshHeaderText()
+  }
 
-    var schema
+  buildChildEditor (i) {
+    const type = this.types[i]
+    const holder = this.theme.getChildEditorHolder()
+    this.editor_holder.appendChild(holder)
+
+    let schema
 
     if (typeof type === 'string') {
-      schema = $extend({}, self.schema)
+      schema = extend({}, this.schema)
       schema.type = type
     } else {
-      schema = $extend({}, self.schema, type)
-      schema = self.jsoneditor.expandRefs(schema)
+      schema = extend({}, this.schema, type)
+      schema = this.jsoneditor.expandRefs(schema)
 
-      // If we need to merge `required` arrays
-      if (type && type.required && Array.isArray(type.required) && self.schema.required && Array.isArray(self.schema.required)) {
-        schema.required = self.schema.required.concat(type.required)
+      /* If we need to merge `required` arrays */
+      if (type && type.required && Array.isArray(type.required) && this.schema.required && Array.isArray(this.schema.required)) {
+        schema.required = this.schema.required.concat(type.required)
       }
     }
 
-    var editor = self.jsoneditor.getEditorClass(schema)
+    const editor = this.jsoneditor.getEditorClass(schema)
 
-    self.editors[i] = self.jsoneditor.createEditor(editor, {
-      jsoneditor: self.jsoneditor,
-      schema: schema,
+    this.editors[i] = this.jsoneditor.createEditor(editor, {
+      jsoneditor: this.jsoneditor,
+      schema,
       container: holder,
-      path: self.path,
-      parent: self,
+      path: this.path,
+      parent: this,
       required: true
     })
-    self.editors[i].preBuild()
-    self.editors[i].build()
-    self.editors[i].postBuild()
+    this.editors[i].preBuild()
+    this.editors[i].build()
+    this.editors[i].postBuild()
 
-    if (self.editors[i].header) self.editors[i].header.style.display = 'none'
+    if (this.editors[i].header) this.editors[i].header.style.display = 'none'
 
-    self.editors[i].option = self.switcher_options[i]
+    this.editors[i].option = this.switcher_options[i]
 
-    holder.addEventListener('change_header_text', function () {
-      self.refreshHeaderText()
+    holder.addEventListener('change_header_text', () => {
+      this.refreshHeaderText()
     })
 
-    if (i !== self.type) holder.style.display = 'none'
-  },
-  preBuild: function () {
+    if (i !== this.type) holder.style.display = 'none'
+  }
+
+  preBuild () {
     this.types = []
     this.type = 0
     this.editors = []
@@ -140,15 +144,15 @@ export var MultipleEditor = AbstractEditor.extend({
       if (!this.schema.type || this.schema.type === 'any') {
         this.types = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null']
 
-        // If any of these primitive types are disallowed
+        /* If any of these primitive types are disallowed */
         if (this.schema.disallow) {
-          var disallow = this.schema.disallow
+          let { disallow } = this.schema
           if (typeof disallow !== 'object' || !(Array.isArray(disallow))) {
             disallow = [disallow]
           }
-          var allowedTypes = []
-          $each(this.types, function (i, type) {
-            if (disallow.indexOf(type) === -1) allowedTypes.push(type)
+          const allowedTypes = []
+          this.types.forEach(type => {
+            if (!disallow.includes(type)) allowedTypes.push(type)
           })
           this.types = allowedTypes
         }
@@ -161,89 +165,92 @@ export var MultipleEditor = AbstractEditor.extend({
     }
 
     this.display_text = this.getDisplayText(this.types)
-  },
-  build: function () {
-    var self = this
-    var container = this.container
+  }
+
+  build () {
+    const { container } = this
 
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.header)
 
     this.switcher = this.theme.getSwitcher(this.display_text)
     container.appendChild(this.switcher)
-    this.switcher.addEventListener('change', function (e) {
+    this.switcher.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
 
-      self.switchEditor(self.display_text.indexOf(this.value))
-      self.onChange(true)
+      this.switchEditor(this.display_text.indexOf(e.currentTarget.value))
+      this.onChange(true)
     })
 
     this.editor_holder = document.createElement('div')
     container.appendChild(this.editor_holder)
 
-    var validatorOptions = {}
-    if (self.jsoneditor.options.custom_validators) {
-      validatorOptions.custom_validators = self.jsoneditor.options.custom_validators
+    const validatorOptions = {}
+    if (this.jsoneditor.options.custom_validators) {
+      validatorOptions.custom_validators = this.jsoneditor.options.custom_validators
     }
 
     this.switcher_options = this.theme.getSwitcherOptions(this.switcher)
-    $each(this.types, function (i, type) {
-      self.editors[i] = false
+    this.types.forEach((type, i) => {
+      this.editors[i] = false
 
-      var schema
+      let schema
 
       if (typeof type === 'string') {
-        schema = $extend({}, self.schema)
+        schema = extend({}, this.schema)
         schema.type = type
       } else {
-        schema = $extend({}, self.schema, type)
+        schema = extend({}, this.schema, type)
 
-        // If we need to merge `required` arrays
-        if (type.required && Array.isArray(type.required) && self.schema.required && Array.isArray(self.schema.required)) {
-          schema.required = self.schema.required.concat(type.required)
+        /* If we need to merge `required` arrays */
+        if (type.required && Array.isArray(type.required) && this.schema.required && Array.isArray(this.schema.required)) {
+          schema.required = this.schema.required.concat(type.required)
         }
       }
-
-      self.validators[i] = new Validator(self.jsoneditor, schema, validatorOptions, self.defaults)
+      this.validators[i] = new Validator(this.jsoneditor, schema, validatorOptions, this.defaults)
     })
 
     this.switchEditor(0)
-  },
-  onChildEditorChange: function (editor) {
+  }
+
+  onChildEditorChange (editor) {
     if (this.editors[this.type]) {
       this.refreshValue()
       this.refreshHeaderText()
     }
 
-    this._super()
-  },
-  refreshHeaderText: function () {
-    var displayText = this.getDisplayText(this.types)
-    $each(this.switcher_options, function (i, option) {
+    super.onChildEditorChange()
+  }
+
+  refreshHeaderText () {
+    const displayText = this.getDisplayText(this.types)
+    Array.from(this.switcher_options).forEach((option, i) => {
       option.textContent = displayText[i]
     })
-  },
-  refreshValue: function () {
+  }
+
+  refreshValue () {
     this.value = this.editors[this.type].getValue()
-  },
-  setValue: function (val, initial) {
-    // Determine type by getting the first one that validates
-    var self = this
-    var prevType = this.type
-    // find the best match one
-    var fitTestVal = {
+  }
+
+  setValue (val, initial) {
+    /* Determine type by getting the first one that validates */
+
+    const prevType = this.type
+    /* find the best match one */
+    let fitTestVal = {
       match: 0,
       extra: 0,
       i: this.type
     }
-    var validVal = {
+    const validVal = {
       match: 0,
       i: null
     }
-    $each(this.validators, function (i, validator) {
-      var fitTestResult = null
-      if (typeof self.anyOf !== 'undefined' && self.anyOf) {
+    this.validators.forEach((validator, i) => {
+      let fitTestResult = null
+      if (typeof this.anyOf !== 'undefined' && this.anyOf) {
         fitTestResult = validator.fitTest(val)
         if (fitTestVal.match < fitTestResult.match) {
           fitTestVal = fitTestResult
@@ -262,10 +269,10 @@ export var MultipleEditor = AbstractEditor.extend({
         }
       }
     })
-    var finalI = validVal.i
-    // if the best fit schema has more match properties, then use the best fit schema.
-    // usually the value could be
-    if (typeof self.anyOf !== 'undefined' && self.anyOf) {
+    let finalI = validVal.i
+    /* if the best fit schema has more match properties, then use the best fit schema. */
+    /* usually the value could be */
+    if (typeof this.anyOf !== 'undefined' && this.anyOf) {
       if (validVal.match < fitTestVal.match) {
         finalI = fitTestVal.i
       }
@@ -276,7 +283,7 @@ export var MultipleEditor = AbstractEditor.extend({
     this.type = finalI
     this.switcher.value = this.display_text[finalI]
 
-    var typeChanged = this.type !== prevType
+    const typeChanged = this.type !== prevType
     if (typeChanged) {
       this.switchEditor(this.type)
     }
@@ -284,41 +291,44 @@ export var MultipleEditor = AbstractEditor.extend({
     this.editors[this.type].setValue(val, initial)
 
     this.refreshValue()
-    self.onChange(typeChanged)
-  },
-  destroy: function () {
-    $each(this.editors, function (type, editor) {
+    this.onChange(typeChanged)
+  }
+
+  destroy () {
+    this.editors.forEach(editor => {
       if (editor) editor.destroy()
     })
     if (this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder)
     if (this.switcher && this.switcher.parentNode) this.switcher.parentNode.removeChild(this.switcher)
-    this._super()
-  },
-  showValidationErrors: function (errors) {
-    var self = this
+    super.destroy()
+  }
 
-    // oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors
+  showValidationErrors (errors) {
+    /* oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors */
     if (this.oneOf || this.anyOf) {
-      var checkPart = this.oneOf ? 'oneOf' : 'anyOf'
-      $each(this.editors, function (i, editor) {
+      const checkPart = this.oneOf ? 'oneOf' : 'anyOf'
+      this.editors.forEach((editor, i) => {
         if (!editor) return
-        var check = self.path + '.' + checkPart + '[' + i + ']'
-        var newErrors = []
-        $each(errors, function (j, error) {
+        const check = `${this.path}.${checkPart}[${i}]`
+        const filterError = (newErrors, error) => {
           if (error.path === check.substr(0, error.path.length)) {
-            var newError = $extend({}, error)
-            newError.path = self.path + newError.path.substr(check.length)
+            const newError = extend({}, error)
+            newError.path = this.path + newError.path.substr(check.length)
             newErrors.push(newError)
           }
-        })
-
-        editor.showValidationErrors(newErrors)
+          return newErrors
+        }
+        editor.showValidationErrors(errors.reduce(filterError, []))
       })
     } else {
-      $each(this.editors, function (type, editor) {
+      this.editors.forEach(editor => {
         if (!editor) return
         editor.showValidationErrors(errors)
       })
     }
   }
-})
+
+  addLinks () {
+    // multiple editor itself don't create links
+  }
+}

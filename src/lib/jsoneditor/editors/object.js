@@ -1,110 +1,114 @@
-import { AbstractEditor } from '../editor'
-import { $extend, $each, $trigger } from '../utilities'
-export var ObjectEditor = AbstractEditor.extend({
+import { AbstractEditor } from '../editor.js'
+import { extend, trigger, hasOwnProperty } from '../utilities.js'
 
-  getDefault: function () {
-    return $extend({}, this.schema['default'] || {})
-  },
-  getChildEditors: function () {
+export class ObjectEditor extends AbstractEditor {
+  constructor (options, defaults, depth) {
+    super(options, defaults)
+    this.currentDepth = depth
+  }
+
+  getDefault () {
+    return extend({}, this.schema.default || {})
+  }
+
+  getChildEditors () {
     return this.editors
-  },
-  register: function () {
-    this._super()
+  }
+
+  register () {
+    super.register()
     if (this.editors) {
-      for (var i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        this.editors[i].register()
-      }
+      Object.values(this.editors).forEach(e => e.register())
     }
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister () {
+    super.unregister()
     if (this.editors) {
-      for (var i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        this.editors[i].unregister()
-      }
+      Object.values(this.editors).forEach(e => e.unregister())
     }
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns () {
     return Math.max(Math.min(12, this.maxwidth), 3)
-  },
-  enable: function () {
+  }
+
+  enable () {
     if (!this.always_disabled) {
       if (this.editjson_control) this.editjson_control.disabled = false
       if (this.addproperty_button) this.addproperty_button.disabled = false
 
-      this._super()
+      super.enable()
       if (this.editors) {
-        for (var i in this.editors) {
-          if (!this.editors.hasOwnProperty(i)) continue
-          if (this.editors[i].isActive()) {
-            this.editors[i].enable()
+        Object.values(this.editors).forEach(e => {
+          if (e.isActive()) {
+            e.enable()
           }
-          this.editors[i].optInCheckbox.disabled = false
-        }
+          e.optInCheckbox.disabled = false
+        })
       }
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.editjson_control) this.editjson_control.disabled = true
     if (this.addproperty_button) this.addproperty_button.disabled = true
     this.hideEditJSON()
 
-    this._super()
+    super.disable()
     if (this.editors) {
-      for (var i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        if (this.editors[i].isActive()) {
-          this.editors[i].disable(alwaysDisabled)
+      Object.values(this.editors).forEach(e => {
+        if (e.isActive()) {
+          e.disable(alwaysDisabled)
         }
-        this.editors[i].optInCheckbox.disabled = true
-      }
+        e.optInCheckbox.disabled = true
+      })
     }
-  },
-  layoutEditors: function () {
-    var self = this; var i; var j
+  }
+
+  layoutEditors () {
+    let i; let j
 
     if (!this.row_container) return
 
-    // Sort editors by propertyOrder
+    /* Sort editors by propertyOrder */
     this.property_order = Object.keys(this.editors)
-    this.property_order = this.property_order.sort(function (a, b) {
-      var ordera = self.editors[a].schema.propertyOrder
-      var orderb = self.editors[b].schema.propertyOrder
+    this.property_order = this.property_order.sort((a, b) => {
+      let ordera = this.editors[a].schema.propertyOrder
+      let orderb = this.editors[b].schema.propertyOrder
       if (typeof ordera !== 'number') ordera = 1000
       if (typeof orderb !== 'number') orderb = 1000
 
       return ordera - orderb
     })
 
-    var container
-    var isCategoriesFormat = (this.format === 'categories')
-    var rows = []
-    var key = null
-    var editor = null
-    var row
+    let container
+    const isCategoriesFormat = (this.format === 'categories')
+    const rows = []
+    let key = null
+    let editor = null
+    let row
 
     if (this.format === 'grid-strict') {
-      var rowIndex = 0
+      let rowIndex = 0
       row = []
 
-      $each(this.property_order, function (j, key) {
-        var editor = self.editors[key]
+      this.property_order.forEach(key => {
+        const editor = this.editors[key]
         if (editor.property_removed) {
           return
         }
-        var width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
-        var offset = editor.options.hidden ? 0 : (editor.options.grid_offset || 0)
-        var gridBreak = editor.options.hidden ? false : (editor.options.grid_break || false)
-        var height = editor.options.hidden ? 0 : editor.container.offsetHeight
+        const width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
+        const offset = editor.options.hidden ? 0 : (editor.options.grid_offset || 0)
+        const gridBreak = editor.options.hidden ? false : (editor.options.grid_break || false)
+        const height = editor.options.hidden ? 0 : editor.container.offsetHeight
 
-        var column = {
-          key: key,
-          width: width,
-          offset: offset,
-          height: height
+        const column = {
+          key,
+          width,
+          offset,
+          height
         }
 
         row.push(column)
@@ -117,11 +121,11 @@ export var ObjectEditor = AbstractEditor.extend({
         }
       })
 
-      // layout hasn't changed
+      /* layout hasn't changed */
       if (this.layout === JSON.stringify(rows)) return false
       this.layout = JSON.stringify(rows)
 
-      // Layout the form
+      /* Layout the form */
       container = document.createElement('div')
       for (i = 0; i < rows.length; i++) {
         row = this.theme.getGridRow()
@@ -138,25 +142,25 @@ export var ObjectEditor = AbstractEditor.extend({
         }
       }
     } else if (this.format === 'grid') {
-      $each(this.property_order, function (j, key) {
-        var editor = self.editors[key]
+      this.property_order.forEach(key => {
+        const editor = this.editors[key]
         if (editor.property_removed) return
-        var found = false
-        var width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
-        var height = editor.options.hidden ? 0 : editor.container.offsetHeight
-        // See if the editor will fit in any of the existing rows first
-        for (var i = 0; i < rows.length; i++) {
-          // If the editor will fit in the row horizontally
+        let found = false
+        const width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
+        const height = editor.options.hidden ? 0 : editor.container.offsetHeight
+        /* See if the editor will fit in any of the existing rows first */
+        for (let i = 0; i < rows.length; i++) {
+          /* If the editor will fit in the row horizontally */
           if (rows[i].width + width <= 12) {
-            // If the editor is close to the other elements in height
-            // i.e. Don't put a really tall editor in an otherwise short row or vice versa
+            /* If the editor is close to the other elements in height */
+            /* i.e. Don't put a really tall editor in an otherwise short row or vice versa */
             if (!height || (rows[i].minh * 0.5 < height && rows[i].maxh * 2 > height)) {
               found = i
             }
           }
         }
 
-        // If there isn't a spot in any of the existing rows, start a new row
+        /* If there isn't a spot in any of the existing rows, start a new row */
         if (found === false) {
           rows.push({
             width: 0,
@@ -168,24 +172,24 @@ export var ObjectEditor = AbstractEditor.extend({
         }
 
         rows[found].editors.push({
-          key: key,
-          // editor: editor,
-          width: width,
-          height: height
+          key,
+          /* editor: editor, */
+          width,
+          height
         })
         rows[found].width += width
         rows[found].minh = Math.min(rows[found].minh, height)
         rows[found].maxh = Math.max(rows[found].maxh, height)
       })
 
-      // Make almost full rows width 12
-      // Do this by increasing all editors' sizes proprotionately
-      // Any left over space goes to the biggest editor
-      // Don't touch rows with a width of 6 or less
+      /* Make almost full rows width 12 */
+      /* Do this by increasing all editors' sizes proprotionately */
+      /* Any left over space goes to the biggest editor */
+      /* Don't touch rows with a width of 6 or less */
       for (i = 0; i < rows.length; i++) {
         if (rows[i].width < 12) {
-          var biggest = false
-          var newWidth = 0
+          let biggest = false
+          let newWidth = 0
           for (j = 0; j < rows[i].editors.length; j++) {
             if (biggest === false) biggest = j
             else if (rows[i].editors[j].width > rows[i].editors[biggest].width) biggest = j
@@ -198,11 +202,11 @@ export var ObjectEditor = AbstractEditor.extend({
         }
       }
 
-      // layout hasn't changed
+      /* layout hasn't changed */
       if (this.layout === JSON.stringify(rows)) return false
       this.layout = JSON.stringify(rows)
 
-      // Layout the form
+      /* Layout the form */
       container = document.createElement('div')
       for (i = 0; i < rows.length; i++) {
         row = this.theme.getGridRow()
@@ -216,158 +220,157 @@ export var ObjectEditor = AbstractEditor.extend({
           row.appendChild(editor.container)
         }
       }
-    // Normal layout
+      /* Normal layout */
     } else {
       container = document.createElement('div')
 
       if (isCategoriesFormat) {
-        // A container for properties not object nor arrays
-        var containerSimple = document.createElement('div')
-        // This will be the place to (re)build tabs and panes
-        // tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content
-        var newTabsHolder = this.theme.getTopTabHolder(this.schema.title)
-        // child [1] of previous, stores panes
-        var newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
+        /* A container for properties not object nor arrays */
+        const containerSimple = document.createElement('div')
+        /* This will be the place to (re)build tabs and panes */
+        /* tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content */
+        const newTabsHolder = this.theme.getTopTabHolder(this.schema.title)
+        /* child [1] of previous, stores panes */
+        const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
-        $each(this.property_order, function (i, key) {
-          var editor = self.editors[key]
+        this.property_order.forEach(key => {
+          const editor = this.editors[key]
           if (editor.property_removed) return
-          var aPane = self.theme.getTabContent()
-          var isObjOrArray = editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')
-          // mark the pane
+          const aPane = this.theme.getTabContent()
+          const isObjOrArray = editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')
+          /* mark the pane */
           aPane.isObjOrArray = isObjOrArray
-          var gridRow = self.theme.getGridRow()
+          const gridRow = this.theme.getGridRow()
 
-          // this happens with added properties, they don't have a tab
+          /* this happens with added properties, they don't have a tab */
           if (!editor.tab) {
-            // Pass the pane which holds the editor
-            if (typeof self.basicPane === 'undefined') {
-              // There is no basicPane yet, so aPane will be it
-              self.addRow(editor, newTabsHolder, aPane)
+            /* Pass the pane which holds the editor */
+            if (typeof this.basicPane === 'undefined') {
+              /* There is no basicPane yet, so aPane will be it */
+              this.addRow(editor, newTabsHolder, aPane)
             } else {
-              self.addRow(editor, newTabsHolder, self.basicPane)
+              this.addRow(editor, newTabsHolder, this.basicPane)
             }
           }
 
-          aPane.id = self.getValidId(editor.tab_text.textContent)
+          aPane.id = this.getValidId(editor.tab_text.textContent)
 
-          // For simple properties, add them on the same panel (Basic)
+          /* For simple properties, add them on the same panel (Basic) */
           if (!isObjOrArray) {
             containerSimple.appendChild(gridRow)
-            // There are already some panes
+            /* There are already some panes */
             if (newTabPanesContainer.childElementCount > 0) {
-              // If first pane is object or array, insert before a simple pane
+              /* If first pane is object or array, insert before a simple pane */
               if (newTabPanesContainer.firstChild.isObjOrArray) {
-                // Append pane for simple properties
+                /* Append pane for simple properties */
                 aPane.appendChild(containerSimple)
                 newTabPanesContainer.insertBefore(aPane, newTabPanesContainer.firstChild)
-                // Add "Basic" tab
-                self.theme.insertBasicTopTab(editor.tab, newTabsHolder)
-                // newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
-                // Update the basicPane
+                /* Add "Basic" tab */
+                this.theme.insertBasicTopTab(editor.tab, newTabsHolder)
+                /* newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild); */
+                /* Update the basicPane */
                 editor.basicPane = aPane
               } else {
-                // We already have a first "Basic" pane, just add the new property to it, so
-                // do nothing;
+                /* We already have a first "Basic" pane, just add the new property to it, so */
+                /* do nothing; */
               }
-            // There is no pane, so add the first (simple) pane
+              /* There is no pane, so add the first (simple) pane */
             } else {
-              // Append pane for simple properties
+              /* Append pane for simple properties */
               aPane.appendChild(containerSimple)
               newTabPanesContainer.appendChild(aPane)
-              // Add "Basic" tab
-              // newTabs_holder.firstChild.appendChild(editor.tab);
-              self.theme.addTopTab(newTabsHolder, editor.tab)
-              // Update the basicPane
+              /* Add "Basic" tab */
+              /* newTabs_holder.firstChild.appendChild(editor.tab); */
+              this.theme.addTopTab(newTabsHolder, editor.tab)
+              /* Update the basicPane */
               editor.basicPane = aPane
             }
-          // Objects and arrays earn their own panes
+            /* Objects and arrays earn their own panes */
           } else {
             aPane.appendChild(gridRow)
             newTabPanesContainer.appendChild(aPane)
-            // newTabs_holder.firstChild.appendChild(editor.tab);
-            self.theme.addTopTab(newTabsHolder, editor.tab)
+            /* newTabs_holder.firstChild.appendChild(editor.tab); */
+            this.theme.addTopTab(newTabsHolder, editor.tab)
           }
 
           if (editor.options.hidden) editor.container.style.display = 'none'
-          else self.theme.setGridColumnSize(editor.container, 12)
-          // Now, add the property editor to the row
+          else this.theme.setGridColumnSize(editor.container, 12)
+          /* Now, add the property editor to the row */
           gridRow.appendChild(editor.container)
-          // Update the rowPane (same as self.rows[x].rowPane)
+          /* Update the rowPane (same as this.rows[x].rowPane) */
           editor.rowPane = aPane
         })
 
-        // Erase old panes
+        /* Erase old panes */
         while (this.tabPanesContainer.firstChild) {
           this.tabPanesContainer.removeChild(this.tabPanesContainer.firstChild)
         }
 
-        // Erase old tabs and set the new ones
-        var parentTabsHolder = this.tabs_holder.parentNode
+        /* Erase old tabs and set the new ones */
+        const parentTabsHolder = this.tabs_holder.parentNode
         parentTabsHolder.removeChild(parentTabsHolder.firstChild)
         parentTabsHolder.appendChild(newTabsHolder)
 
         this.tabPanesContainer = newTabPanesContainer
         this.tabs_holder = newTabsHolder
 
-        // Activate the first tab
-        var firstTab = this.theme.getFirstTab(this.tabs_holder)
+        /* Activate the first tab */
+        const firstTab = this.theme.getFirstTab(this.tabs_holder)
         if (firstTab) {
-          $trigger(firstTab, 'click')
+          trigger(firstTab, 'click')
         }
         return
-      // Normal layout
-      } else {
-        $each(this.property_order, function (i, key) {
-          var editor = self.editors[key]
-          if (editor.property_removed) return
-          row = self.theme.getGridRow()
-          container.appendChild(row)
-
-          if (editor.options.hidden) editor.container.style.display = 'none'
-          else self.theme.setGridColumnSize(editor.container, 12)
-          row.appendChild(editor.container)
-        })
+        /* Normal layout */
       }
+      this.property_order.forEach(key => {
+        const editor = this.editors[key]
+        if (editor.property_removed) return
+        row = this.theme.getGridRow()
+        container.appendChild(row)
+
+        if (editor.options.hidden) editor.container.style.display = 'none'
+        else this.theme.setGridColumnSize(editor.container, 12)
+        row.appendChild(editor.container)
+      })
     }
-    // for grid and normal layout
+    /* for grid and normal layout */
     while (this.row_container.firstChild) {
       this.row_container.removeChild(this.row_container.firstChild)
     }
     this.row_container.appendChild(container)
-  },
-  getPropertySchema: function (key) {
-    // Schema declared directly in properties
-    var schema = this.schema.properties[key] || {}
-    schema = $extend({}, schema)
-    var matched = !!this.schema.properties[key]
+  }
 
-    // Any matching patternProperties should be merged in
+  getPropertySchema (key) {
+    /* Schema declared directly in properties */
+    let schema = this.schema.properties[key] || {}
+    schema = extend({}, schema)
+    let matched = !!this.schema.properties[key]
+
+    /* Any matching patternProperties should be merged in */
     if (this.schema.patternProperties) {
-      for (var i in this.schema.patternProperties) {
-        if (!this.schema.patternProperties.hasOwnProperty(i)) continue
-        var regex = new RegExp(i)
+      Object.keys(this.schema.patternProperties).forEach(i => {
+        const regex = new RegExp(i)
         if (regex.test(key)) {
           schema.allOf = schema.allOf || []
           schema.allOf.push(this.schema.patternProperties[i])
           matched = true
         }
-      }
+      })
     }
 
-    // Hasn't matched other rules, use additionalProperties schema
+    /* Hasn't matched other rules, use additionalProperties schema */
     if (!matched && this.schema.additionalProperties && typeof this.schema.additionalProperties === 'object') {
-      schema = $extend({}, this.schema.additionalProperties)
+      schema = extend({}, this.schema.additionalProperties)
     }
 
     return schema
-  },
-  preBuild: function () {
-    this._super()
+  }
+
+  preBuild () {
+    super.preBuild()
 
     this.editors = {}
     this.cached_editors = {}
-    var self = this
 
     this.format = this.options.layout || this.options.object_layout || this.schema.format || this.jsoneditor.options.object_layout || 'normal'
 
@@ -376,178 +379,172 @@ export var ObjectEditor = AbstractEditor.extend({
     this.minwidth = 0
     this.maxwidth = 0
 
-    // If the object should be rendered as a table row
+    /* If the object should be rendered as a table row */
     if (this.options.table_row) {
-      $each(this.schema.properties, function (key, schema) {
-        var editor = self.jsoneditor.getEditorClass(schema)
-        self.editors[key] = self.jsoneditor.createEditor(editor, {
-          jsoneditor: self.jsoneditor,
-          schema: schema,
-          path: self.path + '.' + key,
-          parent: self,
+      Object.entries(this.schema.properties).forEach(([key, schema]) => {
+        const editor = this.jsoneditor.getEditorClass(schema)
+        this.editors[key] = this.jsoneditor.createEditor(editor, {
+          jsoneditor: this.jsoneditor,
+          schema,
+          path: `${this.path}.${key}`,
+          parent: this,
           compact: true,
           required: true
-        })
-        self.editors[key].preBuild()
+        }, this.currentDepth + 1)
+        this.editors[key].preBuild()
 
-        var width = self.editors[key].options.hidden ? 0 : (self.editors[key].options.grid_columns || self.editors[key].getNumColumns())
+        const width = this.editors[key].options.hidden ? 0 : (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
 
-        self.minwidth += width
-        self.maxwidth += width
+        this.minwidth += width
+        this.maxwidth += width
       })
       this.no_link_holder = true
-    // If the object should be rendered as a table
+      /* If the object should be rendered as a table */
     } else if (this.options.table) {
-      // TODO: table display format
+      /* TODO: table display format */
       throw new Error('Not supported yet')
-    // If the object should be rendered as a div
+      /* If the object should be rendered as a div */
     } else {
       if (!this.schema.defaultProperties) {
         if (this.jsoneditor.options.display_required_only || this.options.display_required_only) {
-          this.schema.defaultProperties = []
-          $each(this.schema.properties, function (k, s) {
-            if (self.isRequiredObject({ key: k, schema: s })) {
-              self.schema.defaultProperties.push(k)
-            }
-          })
+          this.schema.defaultProperties = Object.keys(this.schema.properties).filter(k => this.isRequiredObject({ key: k, schema: this.schema.properties[k] }))
         } else {
-          self.schema.defaultProperties = Object.keys(self.schema.properties)
+          this.schema.defaultProperties = Object.keys(this.schema.properties)
         }
       }
 
-      // Increase the grid width to account for padding
-      self.maxwidth += 1
+      /* Increase the grid width to account for padding */
+      this.maxwidth += 1
 
-      $each(this.schema.defaultProperties, function (i, key) {
-        self.addObjectProperty(key, true)
+      this.schema.defaultProperties.forEach(key => {
+        this.addObjectProperty(key, true)
 
-        if (self.editors[key]) {
-          self.minwidth = Math.max(self.minwidth, (self.editors[key].options.grid_columns || self.editors[key].getNumColumns()))
-          self.maxwidth += (self.editors[key].options.grid_columns || self.editors[key].getNumColumns())
+        if (this.editors[key]) {
+          this.minwidth = Math.max(this.minwidth, (this.editors[key].options.grid_columns || this.editors[key].getNumColumns()))
+          this.maxwidth += (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
         }
       })
     }
 
-    // Sort editors by propertyOrder
+    /* Sort editors by propertyOrder */
     this.property_order = Object.keys(this.editors)
-    this.property_order = this.property_order.sort(function (a, b) {
-      var ordera = self.editors[a].schema.propertyOrder
-      var orderb = self.editors[b].schema.propertyOrder
+    this.property_order = this.property_order.sort((a, b) => {
+      let ordera = this.editors[a].schema.propertyOrder
+      let orderb = this.editors[b].schema.propertyOrder
       if (typeof ordera !== 'number') ordera = 1000
       if (typeof orderb !== 'number') orderb = 1000
 
       return ordera - orderb
     })
-  },
-  // "Borrow" from arrays code
-  addTab: function (idx) {
-    var self = this
-    var isObjOrArray = self.rows[idx].schema && (self.rows[idx].schema.type === 'object' || self.rows[idx].schema.type === 'array')
-    if (self.tabs_holder) {
-      self.rows[idx].tab_text = document.createElement('span')
+  }
+
+  /* "Borrow" from arrays code */
+  addTab (idx) {
+    const isObjOrArray = this.rows[idx].schema && (this.rows[idx].schema.type === 'object' || this.rows[idx].schema.type === 'array')
+    if (this.tabs_holder) {
+      this.rows[idx].tab_text = document.createElement('span')
 
       if (!isObjOrArray) {
-        self.rows[idx].tab_text.textContent = (typeof self.schema.basicCategoryTitle === 'undefined') ? 'Basic' : self.schema.basicCategoryTitle
+        this.rows[idx].tab_text.textContent = (typeof this.schema.basicCategoryTitle === 'undefined') ? 'Basic' : this.schema.basicCategoryTitle
       } else {
-        self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText()
+        this.rows[idx].tab_text.textContent = this.rows[idx].getHeaderText()
       }
-      self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text, this.getValidId(self.rows[idx].tab_text.textContent))
-      self.rows[idx].tab.addEventListener('click', function (e) {
-        self.active_tab = self.rows[idx].tab
-        self.refreshTabs()
+      this.rows[idx].tab = this.theme.getTopTab(this.rows[idx].tab_text, this.getValidId(this.rows[idx].tab_text.textContent))
+      this.rows[idx].tab.addEventListener('click', (e) => {
+        this.active_tab = this.rows[idx].tab
+        this.refreshTabs()
         e.preventDefault()
         e.stopPropagation()
       })
     }
-  },
-  addRow: function (editor, tabHolder, aPane) {
-    var self = this
-    var rowsLen = this.rows.length
-    var isObjOrArray = editor.schema.type === 'object' || editor.schema.type === 'array'
+  }
 
-    // Add a row
-    self.rows[rowsLen] = editor
-    // rowPane stores the editor corresponding pane to set the display style when refreshing Tabs
-    self.rows[rowsLen].rowPane = aPane
+  addRow (editor, tabHolder, aPane) {
+    const rowsLen = this.rows.length
+    const isObjOrArray = editor.schema.type === 'object' || editor.schema.type === 'array'
+
+    /* Add a row */
+    this.rows[rowsLen] = editor
+    /* rowPane stores the editor corresponding pane to set the display style when refreshing Tabs */
+    this.rows[rowsLen].rowPane = aPane
 
     if (!isObjOrArray) {
-      // This is the first simple property to be added,
-      // add a ("Basic") tab for it and save it's row number
-      if (typeof self.basicTab === 'undefined') {
-        self.addTab(rowsLen)
-        // Store the index row of the first simple property added
-        self.basicTab = rowsLen
-        self.basicPane = aPane
-        self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab)
+      /* This is the first simple property to be added, */
+      /* add a ("Basic") tab for it and save it's row number */
+      if (typeof this.basicTab === 'undefined') {
+        this.addTab(rowsLen)
+        /* Store the index row of the first simple property added */
+        this.basicTab = rowsLen
+        this.basicPane = aPane
+        this.theme.addTopTab(tabHolder, this.rows[rowsLen].tab)
       } else {
-        // Any other simple property gets the same tab (and the same pane) as the first one,
-        // so, when 'click' event is fired from a row, it gets the correct ("Basic") tab
-        self.rows[rowsLen].tab = self.rows[self.basicTab].tab
-        self.rows[rowsLen].tab_text = self.rows[self.basicTab].tab_text
-        self.rows[rowsLen].rowPane = self.rows[self.basicTab].rowPane
+        /* Any other simple property gets the same tab (and the same pane) as the first one, */
+        /* so, when 'click' event is fired from a row, it gets the correct ("Basic") tab */
+        this.rows[rowsLen].tab = this.rows[this.basicTab].tab
+        this.rows[rowsLen].tab_text = this.rows[this.basicTab].tab_text
+        this.rows[rowsLen].rowPane = this.rows[this.basicTab].rowPane
       }
     } else {
-      self.addTab(rowsLen)
-      self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab)
+      this.addTab(rowsLen)
+      this.theme.addTopTab(tabHolder, this.rows[rowsLen].tab)
     }
-  },
-  // Mark the active tab and make visible the corresponding pane, hide others
-  refreshTabs: function (refreshHeaders) {
-    var self = this
-    var basicTabPresent = typeof self.basicTab !== 'undefined'
-    var basicTabRefreshed = false
+  }
 
-    $each(this.rows, function (i, row) {
-      // If it's an orphan row (some property which has been deleted), return
+  /* Mark the active tab and make visible the corresponding pane, hide others */
+  refreshTabs (refreshHeaders) {
+    const basicTabPresent = typeof this.basicTab !== 'undefined'
+    let basicTabRefreshed = false
+
+    this.rows.forEach(row => {
+      /* If it's an orphan row (some property which has been deleted), return */
       if (!row.tab || !row.rowPane || !row.rowPane.parentNode) return
 
-      if (basicTabPresent && row.tab === self.rows[self.basicTab].tab && basicTabRefreshed) return
+      if (basicTabPresent && row.tab === this.rows[this.basicTab].tab && basicTabRefreshed) return
 
       if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
       } else {
-        // All rows of simple properties point to the same tab, so refresh just once
-        if (basicTabPresent && row.tab === self.rows[self.basicTab].tab) basicTabRefreshed = true
+        /* All rows of simple properties point to the same tab, so refresh just once */
+        if (basicTabPresent && row.tab === this.rows[this.basicTab].tab) basicTabRefreshed = true
 
-        if (row.tab === self.active_tab) {
-          self.theme.markTabActive(row)
+        if (row.tab === this.active_tab) {
+          this.theme.markTabActive(row)
         } else {
-          self.theme.markTabInactive(row)
+          this.theme.markTabInactive(row)
         }
       }
     })
-  },
-  build: function () {
-    var self = this
+  }
 
-    var isCategoriesFormat = (this.format === 'categories')
+  build () {
+    const isCategoriesFormat = (this.format === 'categories')
     this.rows = []
     this.active_tab = null
 
-    // If the object should be rendered as a table row
+    /* If the object should be rendered as a table row */
     if (this.options.table_row) {
       this.editor_holder = this.container
-      $each(this.editors, function (key, editor) {
-        var holder = self.theme.getTableCell()
-        self.editor_holder.appendChild(holder)
+      Object.entries(this.editors).forEach(([key, editor]) => {
+        const holder = this.theme.getTableCell()
+        this.editor_holder.appendChild(holder)
 
         editor.setContainer(holder)
         editor.build()
         editor.postBuild()
         editor.setOptInCheckbox(editor.header)
 
-        if (self.editors[key].options.hidden) {
+        if (this.editors[key].options.hidden) {
           holder.style.display = 'none'
         }
-        if (self.editors[key].options.input_width) {
-          holder.style.width = self.editors[key].options.input_width
+        if (this.editors[key].options.input_width) {
+          holder.style.width = this.editors[key].options.input_width
         }
       })
-    // If the object should be rendered as a table
+      /* If the object should be rendered as a table */
     } else if (this.options.table) {
-      // TODO: table display format
+      /* TODO: table display format */
       throw new Error('Not supported yet')
-    // If the object should be rendered as a div
+      /* If the object should be rendered as a div */
     } else {
       this.header = ''
       if (!this.options.compact) {
@@ -559,10 +556,10 @@ export var ObjectEditor = AbstractEditor.extend({
       this.controls.style.margin = '0 0 0 10px'
 
       this.container.appendChild(this.title)
-      this.title.appendChild(this.controls)
+      this.container.appendChild(this.controls)
       this.container.style.position = 'relative'
 
-      // Edit JSON modal
+      /* Edit JSON modal */
       this.editjson_holder = this.theme.getModal()
       this.editjson_textarea = this.theme.getTextareaInput()
       this.editjson_textarea.style.height = '170px'
@@ -570,31 +567,31 @@ export var ObjectEditor = AbstractEditor.extend({
       this.editjson_textarea.style.display = 'block'
       this.editjson_save = this.getButton('Save', 'save', 'Save')
       this.editjson_save.classList.add('json-editor-btntype-save')
-      this.editjson_save.addEventListener('click', function (e) {
+      this.editjson_save.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.saveJSON()
+        this.saveJSON()
       })
       this.editjson_copy = this.getButton('Copy', 'copy', 'Copy')
       this.editjson_copy.classList.add('json-editor-btntype-copy')
-      this.editjson_copy.addEventListener('click', function (e) {
+      this.editjson_copy.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.copyJSON()
+        this.copyJSON()
       })
       this.editjson_cancel = this.getButton('Cancel', 'cancel', 'Cancel')
       this.editjson_cancel.classList.add('json-editor-btntype-cancel')
-      this.editjson_cancel.addEventListener('click', function (e) {
+      this.editjson_cancel.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.hideEditJSON()
+        this.hideEditJSON()
       })
       this.editjson_holder.appendChild(this.editjson_textarea)
       this.editjson_holder.appendChild(this.editjson_save)
       this.editjson_holder.appendChild(this.editjson_copy)
       this.editjson_holder.appendChild(this.editjson_cancel)
 
-      // Manage Properties modal
+      /* Manage Properties modal */
       this.addproperty_holder = this.theme.getModal()
       this.addproperty_list = document.createElement('div')
       this.addproperty_list.style.width = '295px'
@@ -611,25 +608,25 @@ export var ObjectEditor = AbstractEditor.extend({
       this.addproperty_input.style.width = '220px'
       this.addproperty_input.style.marginBottom = '0'
       this.addproperty_input.style.display = 'inline-block'
-      this.addproperty_add.addEventListener('click', function (e) {
+      this.addproperty_add.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (self.addproperty_input.value) {
-          if (self.editors[self.addproperty_input.value]) {
+        if (this.addproperty_input.value) {
+          if (this.editors[this.addproperty_input.value]) {
             window.alert('there is already a property with that name')
             return
           }
 
-          self.addObjectProperty(self.addproperty_input.value)
-          if (self.editors[self.addproperty_input.value]) {
-            self.editors[self.addproperty_input.value].disable()
+          this.addObjectProperty(this.addproperty_input.value)
+          if (this.editors[this.addproperty_input.value]) {
+            this.editors[this.addproperty_input.value].disable()
           }
-          self.onChange(true)
+          this.onChange(true)
         }
       })
-      this.addproperty_input.addEventListener('input', function (e) {
-        e.target.previousSibling.childNodes.forEach(function (value) {
-          if (value.innerText.indexOf(e.target.value) >= 0) {
+      this.addproperty_input.addEventListener('input', (e) => {
+        e.target.previousSibling.childNodes.forEach((value) => {
+          if (value.innerText.includes(e.target.value)) {
             value.style.display = ''
           } else {
             value.style.display = 'none'
@@ -639,28 +636,28 @@ export var ObjectEditor = AbstractEditor.extend({
       this.addproperty_holder.appendChild(this.addproperty_list)
       this.addproperty_holder.appendChild(this.addproperty_input)
       this.addproperty_holder.appendChild(this.addproperty_add)
-      var spacer = document.createElement('div')
+      const spacer = document.createElement('div')
       spacer.style.clear = 'both'
       this.addproperty_holder.appendChild(spacer)
 
-      // Close properties modal if clicked outside modal
+      /* Close properties modal if clicked outside modal */
       document.addEventListener('click', this.onOutsideModalClick)
 
-      // Description
+      /* Description */
       if (this.schema.description) {
         this.description = this.theme.getDescription(this.schema.description)
         this.container.appendChild(this.description)
       }
 
-      // Validation error placeholder area
+      /* Validation error placeholder area */
       this.error_holder = document.createElement('div')
       this.container.appendChild(this.error_holder)
 
-      // Container for child editor area
+      /* Container for child editor area */
       this.editor_holder = this.theme.getIndentedPanel()
       this.container.appendChild(this.editor_holder)
 
-      // Container for rows of child editors
+      /* Container for rows of child editors */
       this.row_container = this.theme.getGridContainer()
 
       if (isCategoriesFormat) {
@@ -673,37 +670,37 @@ export var ObjectEditor = AbstractEditor.extend({
         this.editor_holder.appendChild(this.row_container)
       }
 
-      $each(this.editors, function (key, editor) {
-        var aPane = self.theme.getTabContent()
-        var holder = self.theme.getGridColumn()
-        var isObjOrArray = !!((editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')))
+      Object.values(this.editors).forEach(editor => {
+        const aPane = this.theme.getTabContent()
+        const holder = this.theme.getGridColumn()
+        const isObjOrArray = !!((editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')))
         aPane.isObjOrArray = isObjOrArray
 
         if (isCategoriesFormat) {
           if (isObjOrArray) {
-            var singleRowContainer = self.theme.getGridContainer()
+            const singleRowContainer = this.theme.getGridContainer()
             singleRowContainer.appendChild(holder)
             aPane.appendChild(singleRowContainer)
-            self.tabPanesContainer.appendChild(aPane)
-            self.row_container = singleRowContainer
+            this.tabPanesContainer.appendChild(aPane)
+            this.row_container = singleRowContainer
           } else {
-            if (typeof self.row_container_basic === 'undefined') {
-              self.row_container_basic = self.theme.getGridContainer()
-              aPane.appendChild(self.row_container_basic)
-              if (self.tabPanesContainer.childElementCount === 0) {
-                self.tabPanesContainer.appendChild(aPane)
+            if (typeof this.row_container_basic === 'undefined') {
+              this.row_container_basic = this.theme.getGridContainer()
+              aPane.appendChild(this.row_container_basic)
+              if (this.tabPanesContainer.childElementCount === 0) {
+                this.tabPanesContainer.appendChild(aPane)
               } else {
-                self.tabPanesContainer.insertBefore(aPane, self.tabPanesContainer.childNodes[1])
+                this.tabPanesContainer.insertBefore(aPane, this.tabPanesContainer.childNodes[1])
               }
             }
-            self.row_container_basic.appendChild(holder)
+            this.row_container_basic.appendChild(holder)
           }
 
-          self.addRow(editor, self.tabs_holder, aPane)
+          this.addRow(editor, this.tabs_holder, aPane)
 
-          aPane.id = self.getValidId(editor.schema.title) // editor.schema.path//tab_text.textContent
+          aPane.id = this.getValidId(editor.schema.title) /* editor.schema.path//tab_text.textContent */
         } else {
-          self.row_container.appendChild(holder)
+          this.row_container.appendChild(holder)
         }
 
         editor.setContainer(holder)
@@ -713,132 +710,135 @@ export var ObjectEditor = AbstractEditor.extend({
       })
 
       if (this.rows[0]) {
-        $trigger(this.rows[0].tab, 'click')
+        trigger(this.rows[0].tab, 'click')
       }
 
-      // Show/Hide button
+      /* Show/Hide button */
       this.collapsed = false
       this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
       this.collapse_control.style.margin = '0 10px 0 0'
       this.collapse_control.classList.add('json-editor-btntype-toggle')
       this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
 
-      this.collapse_control.addEventListener('click', function (e) {
+      this.collapse_control.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (self.collapsed) {
-          self.editor_holder.style.display = ''
-          self.collapsed = false
-          self.setButtonText(self.collapse_control, '', 'collapse', self.translate('button_collapse'))
+        if (this.collapsed) {
+          this.editor_holder.style.display = ''
+          this.collapsed = false
+          this.setButtonText(this.collapse_control, '', 'collapse', this.translate('button_collapse'))
         } else {
-          self.editor_holder.style.display = 'none'
-          self.collapsed = true
-          self.setButtonText(self.collapse_control, '', 'expand', self.translate('button_expand'))
+          this.editor_holder.style.display = 'none'
+          this.collapsed = true
+          this.setButtonText(this.collapse_control, '', 'expand', this.translate('button_expand'))
         }
       })
 
-      // If it should start collapsed
+      /* If it should start collapsed */
       if (this.options.collapsed) {
-        $trigger(this.collapse_control, 'click')
+        trigger(this.collapse_control, 'click')
       }
 
-      // Collapse button disabled
+      /* Collapse button disabled */
       if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
         if (this.schema.options.disable_collapse) this.collapse_control.style.display = 'none'
       } else if (this.jsoneditor.options.disable_collapse) {
         this.collapse_control.style.display = 'none'
       }
 
-      // Edit JSON Button
+      /* Edit JSON Button */
       this.editjson_control = this.getButton('JSON', 'edit', 'Edit JSON')
       this.editjson_control.classList.add('json-editor-btntype-editjson')
-      this.editjson_control.addEventListener('click', function (e) {
+      this.editjson_control.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.toggleEditJSON()
+        this.toggleEditJSON()
       })
       this.controls.appendChild(this.editjson_control)
-      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[1])
+      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
 
-      // Edit JSON Buttton disabled
+      /* Edit JSON Buttton disabled */
       if (this.schema.options && typeof this.schema.options.disable_edit_json !== 'undefined') {
         if (this.schema.options.disable_edit_json) this.editjson_control.style.display = 'none'
       } else if (this.jsoneditor.options.disable_edit_json) {
         this.editjson_control.style.display = 'none'
       }
 
-      // Object Properties Button
-      this.addproperty_button = this.getButton('Properties', 'edit_properties', self.translate('button_object_properties'))
+      /* Object Properties Button */
+      this.addproperty_button = this.getButton('Properties', 'edit_properties', this.translate('button_object_properties'))
       this.addproperty_button.classList.add('json-editor-btntype-properties')
-      this.addproperty_button.addEventListener('click', function (e) {
+      this.addproperty_button.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.toggleAddProperty()
+        this.toggleAddProperty()
       })
       this.controls.appendChild(this.addproperty_button)
       this.controls.insertBefore(this.addproperty_holder, this.controls.childNodes[1])
 
       this.refreshAddProperties()
 
-      // non required properties start deactivated
+      /* non required properties start deactivated */
       this.deactivateNonRequiredProperties()
     }
 
-    // Fix table cell ordering
+    /* Fix table cell ordering */
     if (this.options.table_row) {
       this.editor_holder = this.container
-      $each(this.property_order, function (i, key) {
-        self.editor_holder.appendChild(self.editors[key].container)
+      this.property_order.forEach(key => {
+        this.editor_holder.appendChild(this.editors[key].container)
       })
-    // Layout object editors in grid if needed
+      /* Layout object editors in grid if needed */
     } else {
-      // Initial layout
+      /* Initial layout */
       this.layoutEditors()
-      // Do it again now that we know the approximate heights of elements
+      /* Do it again now that we know the approximate heights of elements */
       this.layoutEditors()
     }
-  },
-  deactivateNonRequiredProperties: function () {
-    var self = this
-    // the show_opt_in editor option is for backward compatibility
+  }
+
+  deactivateNonRequiredProperties () {
+    /* the show_opt_in editor option is for backward compatibility */
     if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
-      $each(this.editors, function (key, editor) {
-        if (!self.isRequiredObject(editor)) {
-          self.editors[key].deactivate()
+      Object.entries(this.editors).forEach(([key, editor]) => {
+        if (!this.isRequiredObject(editor)) {
+          this.editors[key].deactivate()
         }
       })
     }
-  },
-  showEditJSON: function () {
+  }
+
+  showEditJSON () {
     if (!this.editjson_holder) return
     this.hideAddProperty()
 
-    // Position the form directly beneath the button
-    // TODO: edge detection
-    this.editjson_holder.style.left = this.editjson_control.offsetLeft + 'px'
-    this.editjson_holder.style.top = this.editjson_control.offsetTop + this.editjson_control.offsetHeight + 'px'
+    /* Position the form directly beneath the button */
+    /* TODO: edge detection */
+    this.editjson_holder.style.left = `${this.editjson_control.offsetLeft}px`
+    this.editjson_holder.style.top = `${this.editjson_control.offsetTop + this.editjson_control.offsetHeight}px`
 
-    // Start the textarea with the current value
+    /* Start the textarea with the current value */
     this.editjson_textarea.value = JSON.stringify(this.getValue(), null, 2)
 
-    // Disable the rest of the form while editing JSON
+    /* Disable the rest of the form while editing JSON */
     this.disable()
 
     this.editjson_holder.style.display = ''
     this.editjson_control.disabled = false
     this.editing_json = true
-  },
-  hideEditJSON: function () {
+  }
+
+  hideEditJSON () {
     if (!this.editjson_holder) return
     if (!this.editing_json) return
 
     this.editjson_holder.style.display = 'none'
     this.enable()
     this.editing_json = false
-  },
-  copyJSON: function () {
+  }
+
+  copyJSON () {
     if (!this.editjson_holder) return
-    var ta = document.createElement('textarea')
+    const ta = document.createElement('textarea')
     ta.value = this.editjson_textarea.value
     ta.setAttribute('readonly', '')
     ta.style.position = 'absolute'
@@ -847,12 +847,13 @@ export var ObjectEditor = AbstractEditor.extend({
     ta.select()
     document.execCommand('copy')
     document.body.removeChild(ta)
-  },
-  saveJSON: function () {
+  }
+
+  saveJSON () {
     if (!this.editjson_holder) return
 
     try {
-      var json = JSON.parse(this.editjson_textarea.value)
+      const json = JSON.parse(this.editjson_textarea.value)
       this.setValue(json)
       this.hideEditJSON()
       this.onChange(true)
@@ -860,19 +861,21 @@ export var ObjectEditor = AbstractEditor.extend({
       window.alert('invalid JSON')
       throw e
     }
-  },
-  toggleEditJSON: function () {
+  }
+
+  toggleEditJSON () {
     if (this.editing_json) this.hideEditJSON()
     else this.showEditJSON()
-  },
-  insertPropertyControlUsingPropertyOrder: function (property, control, container) {
-    var propertyOrder
+  }
+
+  insertPropertyControlUsingPropertyOrder (property, control, container) {
+    let propertyOrder
     if (this.schema.properties[property]) { propertyOrder = this.schema.properties[property].propertyOrder }
     if (typeof propertyOrder !== 'number') propertyOrder = 1000
     control.propertyOrder = propertyOrder
 
-    for (var i = 0; i < container.childNodes.length; i++) {
-      var child = container.childNodes[i]
+    for (let i = 0; i < container.childNodes.length; i++) {
+      const child = container.childNodes[i]
       if (control.propertyOrder < child.propertyOrder) {
         this.addproperty_list.insertBefore(control, child)
         control = null
@@ -882,56 +885,58 @@ export var ObjectEditor = AbstractEditor.extend({
     if (control) {
       this.addproperty_list.appendChild(control)
     }
-  },
-  addPropertyCheckbox: function (key) {
-    var self = this
-    var checkbox, label, labelText, control
+  }
 
-    checkbox = self.theme.getCheckbox()
+  addPropertyCheckbox (key) {
+    let labelText
+
+    const checkbox = this.theme.getCheckbox()
     checkbox.style.width = 'auto'
 
     if (this.schema.properties[key] && this.schema.properties[key].title) { labelText = this.schema.properties[key].title } else { labelText = key }
 
-    label = self.theme.getCheckboxLabel(labelText)
+    const label = this.theme.getCheckboxLabel(labelText)
 
-    control = self.theme.getFormControl(label, checkbox)
+    const control = this.theme.getFormControl(label, checkbox)
     control.style.paddingBottom = control.style.marginBottom = control.style.paddingTop = control.style.marginTop = 0
     control.style.height = 'auto'
-    // control.style.overflowY = 'hidden';
+    /* control.style.overflowY = 'hidden'; */
 
     this.insertPropertyControlUsingPropertyOrder(key, control, this.addproperty_list)
 
     checkbox.checked = key in this.editors
-    checkbox.addEventListener('change', function () {
+    checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
-        self.addObjectProperty(key)
+        this.addObjectProperty(key)
       } else {
-        self.removeObjectProperty(key)
+        this.removeObjectProperty(key)
       }
-      self.onChange(true)
+      this.onChange(true)
     })
-    self.addproperty_checkboxes[key] = checkbox
+    this.addproperty_checkboxes[key] = checkbox
 
     return checkbox
-  },
-  showAddProperty: function () {
+  }
+
+  showAddProperty () {
     if (!this.addproperty_holder) return
     this.hideEditJSON()
 
-    // Position the form directly beneath the button
-    // TODO: edge detection
-    this.addproperty_holder.style.left = this.addproperty_button.offsetLeft + 'px'
-    this.addproperty_holder.style.top = this.addproperty_button.offsetTop + this.addproperty_button.offsetHeight + 'px'
+    /* Position the form directly beneath the button */
+    /* TODO: edge detection */
+    this.addproperty_holder.style.left = `${this.addproperty_button.offsetLeft}px`
+    this.addproperty_holder.style.top = `${this.addproperty_button.offsetTop + this.addproperty_button.offsetHeight}px`
 
-    // Disable the rest of the form while editing JSON
+    /* Disable the rest of the form while editing JSON */
     this.disable()
 
     this.adding_property = true
     this.addproperty_button.disabled = false
     this.addproperty_holder.style.display = ''
     this.refreshAddProperties()
-  },
-  hideAddProperty: function () {
+  }
+
+  hideAddProperty () {
     if (!this.addproperty_holder) return
     if (!this.adding_property) return
 
@@ -939,12 +944,14 @@ export var ObjectEditor = AbstractEditor.extend({
     this.enable()
 
     this.adding_property = false
-  },
-  toggleAddProperty: function () {
+  }
+
+  toggleAddProperty () {
     if (this.adding_property) this.hideAddProperty()
     else this.showAddProperty()
-  },
-  removeObjectProperty: function (property) {
+  }
+
+  removeObjectProperty (property) {
     if (this.editors[property]) {
       this.editors[property].unregister()
       delete this.editors[property]
@@ -952,81 +959,111 @@ export var ObjectEditor = AbstractEditor.extend({
       this.refreshValue()
       this.layoutEditors()
     }
-  },
-  addObjectProperty: function (name, prebuildOnly) {
-    var self = this
+  }
 
-    // Property is already added
+  getSchemaOnMaxDepth (schema) {
+    return Object.keys(schema).reduce((acc, key) => {
+      switch (key) {
+        case '$ref':
+          return acc
+        case 'properties':
+        case 'items':
+          return {
+            ...acc,
+            [key]: {}
+          }
+        case 'additionalProperties':
+          return {
+            ...acc,
+            [key]: true
+          }
+        default:
+          return {
+            ...acc,
+            [key]: schema[key]
+          }
+      }
+    }, {})
+  }
+
+  addObjectProperty (name, prebuildOnly) {
+    /* Property is already added */
     if (this.editors[name]) return
 
-    // Property was added before and is cached
+    /* Property was added before and is cached */
     if (this.cached_editors[name]) {
       this.editors[name] = this.cached_editors[name]
       if (prebuildOnly) return
       this.editors[name].register()
-    // New property
+      /* New property */
     } else {
       if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name])) {
         return
       }
 
-      var schema = self.getPropertySchema(name)
+      const schema = this.getPropertySchema(name)
       if (typeof schema.propertyOrder !== 'number') {
-        // if the propertyOrder undefined, then set a smart default value.
-        schema.propertyOrder = Object.keys(self.editors).length + 1000
+        /* if the propertyOrder undefined, then set a smart default value. */
+        schema.propertyOrder = Object.keys(this.editors).length + 1000
       }
 
-      // Add the property
-      var editor = self.jsoneditor.getEditorClass(schema)
+      /* Add the property */
+      const editor = this.jsoneditor.getEditorClass(schema)
 
-      self.editors[name] = self.jsoneditor.createEditor(editor, {
-        jsoneditor: self.jsoneditor,
-        schema: schema,
-        path: self.path + '.' + name,
-        parent: self
-      })
-      self.editors[name].preBuild()
+      const { max_depth: maxDepth } = this.jsoneditor.options
+
+      this.editors[name] = this.jsoneditor.createEditor(editor, {
+        jsoneditor: this.jsoneditor,
+        schema: !!maxDepth && this.currentDepth >= maxDepth ? this.getSchemaOnMaxDepth(schema) : schema,
+        path: `${this.path}.${name}`,
+        parent: this
+      }, this.currentDepth + 1)
+      this.editors[name].preBuild()
 
       if (!prebuildOnly) {
-        var holder = self.theme.getChildEditorHolder()
-        self.editor_holder.appendChild(holder)
-        self.editors[name].setContainer(holder)
-        self.editors[name].build()
-        self.editors[name].postBuild()
-        self.editors[name].setOptInCheckbox(editor.header)
-        self.editors[name].activate()
+        const holder = this.theme.getChildEditorHolder()
+        this.editor_holder.appendChild(holder)
+        this.editors[name].setContainer(holder)
+        this.editors[name].build()
+        this.editors[name].postBuild()
+        this.editors[name].setOptInCheckbox(editor.header)
+        this.editors[name].activate()
       }
 
-      self.cached_editors[name] = self.editors[name]
+      this.cached_editors[name] = this.editors[name]
     }
 
-    // If we're only prebuilding the editors, don't refresh values
+    /* If we're only prebuilding the editors, don't refresh values */
     if (!prebuildOnly) {
-      self.refreshValue()
-      self.layoutEditors()
+      this.refreshValue()
+      this.layoutEditors()
     }
-  },
-  onOutsideModalClick: function (e) {
-    if (this.addproperty_holder && !this.addproperty_holder.contains(e.target) && this.adding_property) {
+  }
+
+  onOutsideModalClick (e) {
+    if (this.addproperty_holder &&
+      !this.addproperty_holder.contains(e.path[0] || e.composedPath()[0]) &&
+      this.adding_property) {
       e.preventDefault()
       e.stopPropagation()
       this.toggleAddProperty()
     }
-  },
-  onChildEditorChange: function (editor) {
+  }
+
+  onChildEditorChange (editor) {
     this.refreshValue()
-    this._super(editor)
-  },
-  canHaveAdditionalProperties: function () {
+    super.onChildEditorChange(editor)
+  }
+
+  canHaveAdditionalProperties () {
     if (typeof this.schema.additionalProperties === 'boolean') {
       return this.schema.additionalProperties
     }
     return !this.jsoneditor.options.no_additional_properties
-  },
-  destroy: function () {
-    $each(this.cached_editors, function (i, el) {
-      el.destroy()
-    })
+  }
+
+  destroy () {
+    Object.values(this.cached_editors).forEach(el => el.destroy())
     if (this.editor_holder) this.editor_holder.innerHTML = ''
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.error_holder && this.error_holder.parentNode) this.error_holder.parentNode.removeChild(this.error_holder)
@@ -1037,59 +1074,54 @@ export var ObjectEditor = AbstractEditor.extend({
     this.editor_holder = null
     document.removeEventListener('click', this.onOutsideModalClick)
 
-    this._super()
-  },
-  getValue: function () {
+    super.destroy()
+  }
+
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    var result = this._super()
-    if (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties) {
-      for (var i in result) {
-        if (result.hasOwnProperty(i)) {
-          if (
-            typeof result[i] === 'undefined' ||
-            result[i] === '' ||
-            (
-              result[i] === Object(result[i]) &&
-              Object.keys(result[i]).length === 0 &&
-              result[i].constructor === Object
-            )) {
-            delete result[i]
-          }
+    const result = super.getValue()
+    const isEmpty = obj => typeof obj === 'undefined' || obj === '' ||
+    (
+      obj === Object(obj) &&
+      Object.keys(obj).length === 0 &&
+      obj.constructor === Object
+    )
+    if (result && (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties)) {
+      Object.keys(result).forEach(key => {
+        if (isEmpty(result[key])) {
+          delete result[key]
         }
-      }
+      })
     }
-
     return result
-  },
-  refreshValue: function () {
+  }
+
+  refreshValue () {
     this.value = {}
 
-    for (var i in this.editors) {
-      if (!this.editors.hasOwnProperty(i)) continue
+    Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {
         this.value[i] = this.editors[i].getValue()
       }
-    }
+    })
 
     if (this.adding_property) this.refreshAddProperties()
-  },
-  refreshAddProperties: function () {
+  }
+
+  refreshAddProperties () {
     if (this.options.disable_properties || (this.options.disable_properties !== false && this.jsoneditor.options.disable_properties)) {
       this.addproperty_button.style.display = 'none'
       return
     }
 
-    var canAdd = false; var numProps = 0; var i; var showModal = false
+    let canAdd = false; let numProps = 0; let showModal = false
 
-    // Get number of editors
-    for (i in this.editors) {
-      if (!this.editors.hasOwnProperty(i)) continue
-      numProps++
-    }
+    /* Get number of editors */
+    Object.keys(this.editors).forEach(i => numProps++)
 
-    // Determine if we can add back removed properties
+    /* Determine if we can add back removed properties */
     canAdd = this.canHaveAdditionalProperties() && !(typeof this.schema.maxProperties !== 'undefined' && numProps >= this.schema.maxProperties)
 
     if (this.addproperty_checkboxes) {
@@ -1097,10 +1129,8 @@ export var ObjectEditor = AbstractEditor.extend({
     }
     this.addproperty_checkboxes = {}
 
-    // Check for which editors can't be removed or added back
-    for (i in this.cached_editors) {
-      if (!this.cached_editors.hasOwnProperty(i)) continue
-
+    /* Check for which editors can't be removed or added back */
+    Object.keys(this.cached_editors).forEach(i => {
       this.addPropertyCheckbox(i)
 
       if (this.isRequiredObject(this.cached_editors[i]) && i in this.editors) {
@@ -1111,7 +1141,7 @@ export var ObjectEditor = AbstractEditor.extend({
         this.addproperty_checkboxes[i].disabled = this.addproperty_checkboxes[i].checked
         if (!this.addproperty_checkboxes[i].checked) showModal = true
       } else if (!(i in this.editors)) {
-        if (!canAdd && !this.schema.properties.hasOwnProperty(i)) {
+        if (!canAdd && !hasOwnProperty(this.schema.properties, i)) {
           this.addproperty_checkboxes[i].disabled = true
         } else {
           this.addproperty_checkboxes[i].disabled = false
@@ -1120,108 +1150,106 @@ export var ObjectEditor = AbstractEditor.extend({
       } else {
         showModal = true
       }
-    }
+    })
 
     if (this.canHaveAdditionalProperties()) {
       showModal = true
     }
 
-    // Additional addproperty checkboxes not tied to a current editor
-    for (i in this.schema.properties) {
-      if (!this.schema.properties.hasOwnProperty(i)) continue
-      if (this.cached_editors[i]) continue
+    /* Additional addproperty checkboxes not tied to a current editor */
+    Object.keys(this.schema.properties).forEach(i => {
+      if (this.cached_editors[i]) return
       showModal = true
       this.addPropertyCheckbox(i)
-    }
+    })
 
-    // If no editors can be added or removed, hide the modal button
+    /* If no editors can be added or removed, hide the modal button */
     if (!showModal) {
       this.hideAddProperty()
       this.addproperty_button.style.display = 'none'
-    // If additional properties are disabled
+      /* If additional properties are disabled */
     } else if (!this.canHaveAdditionalProperties()) {
       this.addproperty_add.style.display = 'none'
       this.addproperty_input.style.display = 'none'
-    // If no new properties can be added
+      /* If no new properties can be added */
     } else if (!canAdd) {
       this.addproperty_add.disabled = true
-    // If new properties can be added
+      /* If new properties can be added */
     } else {
       this.addproperty_add.disabled = false
     }
-  },
-  isRequiredObject: function (editor) {
+  }
+
+  isRequiredObject (editor) {
     if (!editor) {
       return
     }
     if (typeof editor.schema.required === 'boolean') return editor.schema.required
-    else if (Array.isArray(this.schema.required)) return this.schema.required.indexOf(editor.key) > -1
+    else if (Array.isArray(this.schema.required)) return this.schema.required.includes(editor.key)
     else if (this.jsoneditor.options.required_by_default) return true
-    else return false
-  },
-  setValue: function (value, initial) {
-    var self = this
+    return false
+  }
+
+  setValue (value, initial) {
     value = value || {}
 
     if (typeof value !== 'object' || Array.isArray(value)) value = {}
 
-    // First, set the values for all of the defined properties
-    $each(this.cached_editors, function (i, editor) {
-      // Value explicitly set
+    /* First, set the values for all of the defined properties */
+    Object.entries(this.cached_editors).forEach(([i, editor]) => {
+      /* Value explicitly set */
       if (typeof value[i] !== 'undefined') {
-        self.addObjectProperty(i)
+        this.addObjectProperty(i)
         editor.setValue(value[i], initial)
-      // Otherwise, remove value unless this is the initial set or it's required
-      } else if (!initial && !self.isRequiredObject(editor)) {
-        self.removeObjectProperty(i)
-      // Otherwise, set the value to the default
+        /* Otherwise, remove value unless this is the initial set or it's required */
+      } else if (!initial && !this.isRequiredObject(editor)) {
+        this.removeObjectProperty(i)
+        /* Otherwise, set the value to the default */
       } else {
         editor.setValue(editor.getDefault(), initial)
       }
     })
 
-    $each(value, function (i, val) {
-      if (!self.cached_editors[i]) {
-        self.addObjectProperty(i)
-        if (self.editors[i]) self.editors[i].setValue(val, initial)
+    Object.entries(value).forEach(([i, val]) => {
+      if (!this.cached_editors[i]) {
+        this.addObjectProperty(i)
+        if (this.editors[i]) this.editors[i].setValue(val, initial)
       }
     })
 
     this.refreshValue()
-    // 重排会导致sceditor失效，不清楚为什么要重排，先注释
-    // this.layoutEditors()
+    this.layoutEditors()
     this.onChange()
-  },
-  showValidationErrors: function (errors) {
-    var self = this
+  }
 
-    // Get all the errors that pertain to this editor
-    var myErrors = []
-    var otherErrors = []
-    $each(errors, function (i, error) {
-      if (error.path === self.path) {
+  showValidationErrors (errors) {
+    /* Get all the errors that pertain to this editor */
+    const myErrors = []
+    const otherErrors = []
+    errors.forEach(error => {
+      if (error.path === this.path) {
         myErrors.push(error)
       } else {
         otherErrors.push(error)
       }
     })
 
-    // Show errors for this editor
+    /* Show errors for this editor */
     if (this.error_holder) {
       if (myErrors.length) {
         this.error_holder.innerHTML = ''
         this.error_holder.style.display = ''
-        $each(myErrors, function (i, error) {
-          if (error.errorcount && error.errorcount > 1) error.message += ' (' + error.errorcount + ' errors)'
-          self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
+        myErrors.forEach(error => {
+          if (error.errorcount && error.errorcount > 1) error.message += ` (${error.errorcount} errors)`
+          this.error_holder.appendChild(this.theme.getErrorMessage(error.message))
         })
-      // Hide error area
+        /* Hide error area */
       } else {
         this.error_holder.style.display = 'none'
       }
     }
 
-    // Show error for the table row if this is inside a table
+    /* Show error for the table row if this is inside a table */
     if (this.options.table_row) {
       if (myErrors.length) {
         this.theme.addTableRowError(this.container)
@@ -1230,9 +1258,9 @@ export var ObjectEditor = AbstractEditor.extend({
       }
     }
 
-    // Show errors for child editors
-    $each(this.editors, function (i, editor) {
+    /* Show errors for child editors */
+    Object.values(this.editors).forEach(editor => {
       editor.showValidationErrors(otherErrors)
     })
   }
-})
+}

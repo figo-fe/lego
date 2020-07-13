@@ -1,578 +1,498 @@
-import { ArrayEditor } from './array';
-import { $extend, $each, $trigger } from '../utilities';
-export var TableEditor = ArrayEditor.extend({
-  register: function () {
-    this._super();
+import { ArrayEditor } from './array.js'
+import { extend, trigger } from '../utilities.js'
+
+export class TableEditor extends ArrayEditor {
+  register () {
+    super.register()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].register();
+      for (let i = 0; i < this.rows.length; i++) {
+        this.rows[i].register()
       }
     }
-  },
-  unregister: function () {
-    this._super();
+  }
+
+  unregister () {
+    super.unregister()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].unregister();
+      for (let i = 0; i < this.rows.length; i++) {
+        this.rows[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
-    return Math.max(Math.min(12, this.width), 3);
-  },
-  preBuild: function () {
-    var itemSchema = this.jsoneditor.expandRefs(this.schema.items || {});
+  }
 
-    this.item_title = itemSchema.title || 'row';
-    this.item_default = itemSchema['default'] || null;
-    this.item_has_child_editors = itemSchema.properties || itemSchema.items;
-    this.width = 12;
-    this._super();
-  },
-  build: function () {
-    var self = this;
-    this.table = this.theme.getTable();
-    this.container.appendChild(this.table);
-    this.thead = this.theme.getTableHead();
-    this.table.appendChild(this.thead);
-    this.header_row = this.theme.getTableRow();
-    this.thead.appendChild(this.header_row);
-    this.row_holder = this.theme.getTableBody();
-    this.table.appendChild(this.row_holder);
+  getNumColumns () {
+    return Math.max(Math.min(12, this.width), 3)
+  }
 
-    // Determine the default value of array element
-    var tmp = this.getElementEditor(0, true);
-    this.item_default = tmp.getDefault();
-    this.width = tmp.getNumColumns() + 2;
+  preBuild () {
+    const itemSchema = this.jsoneditor.expandRefs(this.schema.items || {})
+
+    this.item_title = itemSchema.title || 'row'
+    this.item_default = itemSchema.default || null
+    this.item_has_child_editors = itemSchema.properties || itemSchema.items
+    this.width = 12
+    super.preBuild()
+  }
+
+  build () {
+    this.table = this.theme.getTable()
+    this.container.appendChild(this.table)
+    this.thead = this.theme.getTableHead()
+    this.table.appendChild(this.thead)
+    this.header_row = this.theme.getTableRow()
+    this.thead.appendChild(this.header_row)
+    this.row_holder = this.theme.getTableBody()
+    this.table.appendChild(this.row_holder)
+
+    /* Determine the default value of array element */
+    const tmp = this.getElementEditor(0, true)
+    this.item_default = tmp.getDefault()
+    this.width = tmp.getNumColumns() + 2
 
     if (!this.options.compact) {
-      this.header = document.createElement('label');
-      this.header.textContent = this.getTitle();
-      this.title = this.theme.getHeader(this.header);
-      this.container.appendChild(this.title);
-      this.title_controls = this.theme.getHeaderButtonHolder();
-      this.title.appendChild(this.title_controls);
+      this.header = document.createElement('label')
+      this.header.textContent = this.getTitle()
+      this.title = this.theme.getHeader(this.header)
+      this.container.appendChild(this.title)
+      this.title_controls = this.theme.getHeaderButtonHolder()
+      this.title.appendChild(this.title_controls)
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description);
-        this.container.appendChild(this.description);
+        this.description = this.theme.getDescription(this.schema.description)
+        this.container.appendChild(this.description)
       }
-      this.panel = this.theme.getIndentedPanel();
-      this.container.appendChild(this.panel);
-      this.error_holder = document.createElement('div');
-      this.panel.appendChild(this.error_holder);
+      this.panel = this.theme.getIndentedPanel()
+      this.container.appendChild(this.panel)
+      this.error_holder = document.createElement('div')
+      this.panel.appendChild(this.error_holder)
     } else {
-      this.panel = document.createElement('div');
-      this.container.appendChild(this.panel);
+      this.panel = document.createElement('div')
+      this.container.appendChild(this.panel)
     }
 
-    this.panel.appendChild(this.table);
-    this.controls = this.theme.getButtonHolder();
-    this.panel.appendChild(this.controls);
+    this.panel.appendChild(this.table)
+    this.controls = this.theme.getButtonHolder()
+    this.panel.appendChild(this.controls)
 
     if (this.item_has_child_editors) {
-      var ce = tmp.getChildEditors();
-      var order = tmp.property_order || Object.keys(ce);
-      for (var i = 0; i < order.length; i++) {
-        var th = self.theme.getTableHeaderCell(ce[order[i]].getTitle());
-        if (ce[order[i]].options.hidden) th.style.display = 'none';
-        self.header_row.appendChild(th);
+      const ce = tmp.getChildEditors()
+      const order = tmp.property_order || Object.keys(ce)
+      for (let i = 0; i < order.length; i++) {
+        const th = this.theme.getTableHeaderCell(ce[order[i]].getTitle())
+        if (ce[order[i]].options.hidden) th.style.display = 'none'
+        this.header_row.appendChild(th)
       }
     } else {
-      self.header_row.appendChild(self.theme.getTableHeaderCell(this.item_title));
+      this.header_row.appendChild(this.theme.getTableHeaderCell(this.item_title))
     }
 
-    tmp.destroy();
-    this.row_holder.innerHTML = '';
+    tmp.destroy()
+    this.row_holder.innerHTML = ''
 
-    // Row Controls column
-    this.controls_header_cell = self.theme.getTableHeaderCell(' ');
-    self.header_row.appendChild(this.controls_header_cell);
+    /* Row Controls column */
+    this.controls_header_cell = this.theme.getTableHeaderCell(' ')
+    this.header_row.appendChild(this.controls_header_cell)
 
-    // Add controls
-    this.addControls();
-  },
-  onChildEditorChange: function (editor) {
-    this.refreshValue();
-    this._super();
-  },
-  getItemDefault: function () {
-    return $extend({}, { default: this.item_default })['default'];
-  },
-  getItemTitle: function () {
-    return this.item_title;
-  },
-  getElementEditor: function (i, ignore) {
-    var schemaCopy = $extend({}, this.schema.items);
-    var editor = this.jsoneditor.getEditorClass(schemaCopy, this.jsoneditor);
-    var row = this.row_holder.appendChild(this.theme.getTableRow());
-    var holder = row;
+    /* Add controls */
+    this.addControls()
+  }
+
+  onChildEditorChange (editor) {
+    this.refreshValue()
+    super.onChildEditorChange()
+  }
+
+  getItemDefault () {
+    return extend({}, { default: this.item_default }).default
+  }
+
+  getItemTitle () {
+    return this.item_title
+  }
+
+  getElementEditor (i, ignore) {
+    const schemaCopy = extend({}, this.schema.items)
+    const editor = this.jsoneditor.getEditorClass(schemaCopy, this.jsoneditor)
+    const row = this.row_holder.appendChild(this.theme.getTableRow())
+    let holder = row
     if (!this.item_has_child_editors) {
-      holder = this.theme.getTableCell();
-      row.appendChild(holder);
+      holder = this.theme.getTableCell()
+      row.appendChild(holder)
     }
 
-    var ret = this.jsoneditor.createEditor(editor, {
+    const ret = this.jsoneditor.createEditor(editor, {
       jsoneditor: this.jsoneditor,
       schema: schemaCopy,
       container: holder,
-      path: this.path + '.' + i,
+      path: `${this.path}.${i}`,
       parent: this,
       compact: true,
-      table_row: true,
-    });
+      table_row: true
+    })
 
-    ret.preBuild();
+    ret.preBuild()
     if (!ignore) {
-      ret.build();
-      ret.postBuild();
+      ret.build()
+      ret.postBuild()
 
-      ret.controls_cell = row.appendChild(this.theme.getTableCell());
-      ret.row = row;
-      ret.table_controls = this.theme.getButtonHolder();
-      ret.controls_cell.appendChild(ret.table_controls);
-      ret.table_controls.style.margin = 0;
-      ret.table_controls.style.padding = 0;
+      ret.controls_cell = row.appendChild(this.theme.getTableCell())
+      ret.row = row
+      ret.table_controls = this.theme.getButtonHolder()
+      ret.controls_cell.appendChild(ret.table_controls)
+      ret.table_controls.style.margin = 0
+      ret.table_controls.style.padding = 0
     }
 
-    return ret;
-  },
-  destroy: function () {
-    this.innerHTML = '';
-    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
-    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder);
-    if (this.table && this.table.parentNode) this.table.parentNode.removeChild(this.table);
-    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel);
+    return ret
+  }
 
-    this.rows = this.title = this.description = this.row_holder = this.table = this.panel = null;
+  destroy () {
+    this.innerHTML = ''
+    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
+    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
+    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder)
+    if (this.table && this.table.parentNode) this.table.parentNode.removeChild(this.table)
+    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel)
 
-    this._super();
-  },
-  setValue: function (value, initial) {
-    // Update the array's value, adding/removing rows when necessary
-    value = value || [];
+    this.rows = this.title = this.description = this.row_holder = this.table = this.panel = null
 
-    // Make sure value has between minItems and maxItems items in it
+    super.destroy()
+  }
+
+  setValue (value = [], initial) {
+    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemDefault());
+        value.push(this.getItemDefault())
       }
     }
     if (this.schema.maxItems && value.length > this.schema.maxItems) {
-      value = value.slice(0, this.schema.maxItems);
+      value = value.slice(0, this.schema.maxItems)
     }
 
-    var serialized = JSON.stringify(value);
-    if (serialized === this.serialized) return;
+    const serialized = JSON.stringify(value)
+    if (serialized === this.serialized) return
 
-    var numrowsChanged = false;
+    let numrowsChanged = false
 
-    var self = this;
-    $each(value, function (i, val) {
-      if (self.rows[i]) {
-        // TODO: don't set the row's value if it hasn't changed
-        self.rows[i].setValue(val);
+    value.forEach((val, i) => {
+      if (this.rows[i]) {
+        /* TODO: don't set the row's value if it hasn't changed */
+        this.rows[i].setValue(val)
       } else {
-        self.addRow(val);
-        numrowsChanged = true;
+        this.addRow(val)
+        numrowsChanged = true
       }
-    });
+    })
 
-    for (var j = value.length; j < self.rows.length; j++) {
-      var holder = self.rows[j].container;
-      if (!self.item_has_child_editors) {
-        self.rows[j].row.parentNode.removeChild(self.rows[j].row);
+    for (let j = value.length; j < this.rows.length; j++) {
+      const holder = this.rows[j].container
+      if (!this.item_has_child_editors) {
+        this.rows[j].row.parentNode.removeChild(this.rows[j].row)
       }
-      self.rows[j].destroy();
-      if (holder.parentNode) holder.parentNode.removeChild(holder);
-      self.rows[j] = null;
-      numrowsChanged = true;
+      this.rows[j].destroy()
+      if (holder.parentNode) holder.parentNode.removeChild(holder)
+      this.rows[j] = null
+      numrowsChanged = true
     }
-    self.rows = self.rows.slice(0, value.length);
+    this.rows = this.rows.slice(0, value.length)
 
-    self.refreshValue();
-    if (numrowsChanged || initial) self.refreshRowButtons();
+    this.refreshValue()
+    if (numrowsChanged || initial) this.refreshRowButtons()
 
-    self.onChange();
+    this.onChange()
 
-    // TODO: sortable
-  },
-  refreshRowButtons: function () {
-    var self = this;
+    /* TODO: sortable */
+  }
 
+  refreshRowButtons () {
     /* If we currently have minItems items in the array */
-    const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length;
+    const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
     /* If we currently have maxItems items in the array */
-    const maxItems = this.schema.maxItems && this.schema.maxItems <= this.rows.length;
+    const maxItems = this.schema.maxItems && this.schema.maxItems <= this.rows.length
 
-    var needRowButtons = false;
-    $each(this.rows, function (i, editor) {
-      // Hide the move down button for the last row
-      if (editor.movedown_button) {
-        if (i === self.rows.length - 1) {
-          editor.movedown_button.style.display = 'none';
-        } else {
-          needRowButtons = true;
-          editor.movedown_button.style.display = '';
-        }
-      }
-
-      // Hide the delete button if we have minItems items
+    let needRowButtons = false
+    this.rows.forEach((editor, i) => {
       if (editor.delete_button) {
+        /* Hide the delete button if we have minItems items */
         if (minItems) {
-          editor.delete_button.style.display = 'none';
+          editor.delete_button.style.display = 'none'
         } else {
-          needRowButtons = true;
-          editor.delete_button.style.display = '';
+          needRowButtons = true
+          editor.delete_button.style.display = ''
         }
       }
 
       if (editor.copy_button) {
         /* Hide the copy button if we have maxItems items */
         if (maxItems) {
-          editor.copy_button.style.display = 'none';
+          editor.copy_button.style.display = 'none'
         } else {
-          needRowButtons = true;
-          editor.copy_button.style.display = '';
+          needRowButtons = true
+          editor.copy_button.style.display = ''
         }
       }
 
       if (editor.moveup_button) {
-        needRowButtons = true;
+        /* Hide the moveup button for the first row */
+        if (i === 0) {
+          editor.moveup_button.style.display = 'none'
+        } else {
+          needRowButtons = true
+          editor.moveup_button.style.display = ''
+        }
       }
-    });
 
-    // Show/hide controls column in table
-    $each(this.rows, function (i, editor) {
+      if (editor.movedown_button) {
+        /* Hide the movedown button for the last row */
+        if (i === this.rows.length - 1) {
+          editor.movedown_button.style.display = 'none'
+        } else {
+          needRowButtons = true
+          editor.movedown_button.style.display = ''
+        }
+      }
+    })
+
+    /* Show/hide controls column in table */
+    this.rows.forEach(editor => {
       if (needRowButtons) {
-        editor.controls_cell.style.display = '';
+        editor.controls_cell.style.display = ''
       } else {
-        editor.controls_cell.style.display = 'none';
+        editor.controls_cell.style.display = 'none'
       }
-    });
+    })
     if (needRowButtons) {
-      this.controls_header_cell.style.display = '';
+      this.controls_header_cell.style.display = ''
     } else {
-      this.controls_header_cell.style.display = 'none';
+      this.controls_header_cell.style.display = 'none'
     }
-
-    var controlsNeeded = false;
 
     if (!this.value.length) {
-      this.delete_last_row_button.style.display = 'none';
-      this.remove_all_rows_button.style.display = 'none';
-      this.table.style.display = 'none';
-    } else if (this.value.length === 1) {
-      this.table.style.display = '';
-      this.remove_all_rows_button.style.display = 'none';
-
-      // If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows
-      if (minItems || this.hide_delete_last_row_buttons) {
-        this.delete_last_row_button.style.display = 'none';
-      } else {
-        this.delete_last_row_button.style.display = '';
-        controlsNeeded = true;
-      }
+      this.table.style.display = 'none'
     } else {
-      this.table.style.display = '';
-
-      if (minItems || this.hide_delete_last_row_buttons) {
-        this.delete_last_row_button.style.display = 'none';
-      } else {
-        this.delete_last_row_button.style.display = '';
-        controlsNeeded = true;
-      }
-
-      if (minItems || this.hide_delete_all_rows_buttons) {
-        this.remove_all_rows_button.style.display = 'none';
-      } else {
-        this.remove_all_rows_button.style.display = '';
-        controlsNeeded = true;
-      }
+      this.table.style.display = ''
     }
 
-    // If there are maxItems in the array, hide the add button beneath the rows
-    if ((this.schema.maxItems && this.schema.maxItems <= this.rows.length) || this.hide_add_button) {
-      this.add_row_button.style.display = 'none';
+    let controlsNeeded = false
+
+    /* If there are maxItems items in the array, or configured to hide the add_row_button button, hide the button beneath the rows */
+    if (maxItems || this.hide_add_button) {
+      this.add_row_button.style.display = 'none'
     } else {
-      this.add_row_button.style.display = '';
-      controlsNeeded = true;
+      this.add_row_button.style.display = ''
+      controlsNeeded = true
+    }
+
+    /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
+    if (!this.value.length || minItems || this.hide_delete_last_row_buttons) {
+      this.delete_last_row_button.style.display = 'none'
+    } else {
+      this.delete_last_row_button.style.display = ''
+      controlsNeeded = true
+    }
+
+    /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
+    if (this.value.length <= 1 || minItems || this.hide_delete_all_rows_buttons) {
+      this.remove_all_rows_button.style.display = 'none'
+    } else {
+      this.remove_all_rows_button.style.display = ''
+      controlsNeeded = true
     }
 
     if (!controlsNeeded) {
-      this.controls.style.display = 'none';
+      this.controls.style.display = 'none'
     } else {
-      this.controls.style.display = '';
+      this.controls.style.display = ''
     }
-  },
-  refreshValue: function () {
-    var self = this;
-    this.value = [];
+  }
 
-    $each(this.rows, function (i, editor) {
-      // Get the value for this editor
-      self.value[i] = editor.getValue();
-    });
-    this.serialized = JSON.stringify(this.value);
-  },
-  addRow: function (value) {
-    var self = this;
-    var i = this.rows.length;
+  refreshValue () {
+    this.value = []
 
-    self.rows[i] = this.getElementEditor(i);
+    this.rows.forEach((editor, i) => {
+      /* Get the value for this editor */
+      this.value[i] = editor.getValue()
+    })
+    this.serialized = JSON.stringify(this.value)
+  }
 
-    var controlsHolder = self.rows[i].table_controls;
+  addRow (value) {
+    const i = this.rows.length
 
-    // 操作垂直居中
-    controlsHolder.parentNode.style.verticalAlign = 'middle';
+    this.rows[i] = this.getElementEditor(i)
 
-    // Buttons to delete row, move row up, and move row down
+    const controlsHolder = this.rows[i].table_controls
+
+    /* Buttons to delete row, copy row, move row up, and move row down */
     if (!this.hide_delete_buttons) {
-      self.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'));
-      self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete');
-      self.rows[i].delete_button.setAttribute('data-i', i);
-      self.rows[i].delete_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+      this.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'))
+      this.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
+      this.rows[i].delete_button.setAttribute('data-i', i)
+      this.rows[i].delete_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-        if (!self.askConfirmation()) {
-          return false;
+        if (!this.askConfirmation()) {
+          return false
         }
 
-        var i = this.getAttribute('data-i') * 1;
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
 
-        var value = self.getValue();
+        value.splice(j, 1)
 
-        var newval = [];
-        $each(value, function (j, row) {
-          if (j === i) return; // If this is the one we're deleting
-          newval.push(row);
-        });
-        self.setValue(newval);
-        self.onChange(true);
-        self.jsoneditor.trigger('deleteRow', self.rows[i]);
-      });
-      controlsHolder.appendChild(self.rows[i].delete_button);
+        this.setValue(value)
+        this.onChange(true)
+        this.jsoneditor.trigger('deleteRow', this.rows[j])
+      })
+      controlsHolder.appendChild(this.rows[i].delete_button)
     }
 
     if (this.show_copy_button) {
-      this.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'));
-      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
-      this.rows[i].copy_button.setAttribute('data-i', i);
+      this.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'))
+      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
+      this.rows[i].copy_button.setAttribute('data-i', i)
       this.rows[i].copy_button.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault()
+        e.stopPropagation()
 
-        const j = e.currentTarget.getAttribute('data-i') * 1;
-        const value = this.getValue();
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
 
-        value.splice(j + 1, 0, value[j]);
+        value.splice(j + 1, 0, value[j])
 
-        this.setValue(value);
-        this.onChange(true);
-        this.jsoneditor.trigger('copyRow', this.rows[j + 1]);
-      });
-      controlsHolder.appendChild(this.rows[i].copy_button);
-    }
-
-    // 自定义排序 2020-05-14 18:19:38
-    if (this.show_sort_button) {
-      const sortInput = this.theme.getFormInputField('number');
-      const sortButton = this.getButton('', 'sort', this.translate('button_sort_row_title_short'));
-      this.rows[i].sort_button = sortButton;
-
-      sortInput.classList.add('form-control-sm');
-      sortInput.value = i + 1;
-      sortInput.style.cssText = [
-        'border-radius:0;width:50px;font-size:12px;vertical-align:middle;',
-        'box-shadow:none;margin-left:-1px;display:none',
-      ].join(';');
-
-      sortButton.classList.add('sort', 'json-editor-btntype-sort');
-      sortButton.setAttribute('data-i', i);
-      sortButton.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (sortInput.style.display === 'none') {
-          sortInput.style.display = 'inline-block';
-          sortButton.firstChild.className = sortButton.firstChild.className.replace('sort', 'check');
-        } else {
-          const newIndex = sortInput.value - 1;
-
-          if (newIndex >= 0 && newIndex < self.rows.length) {
-            // 排序不变时跳过
-            if (newIndex !== i) {
-              const rows = self.getValue();
-
-              if (newIndex > i) {
-                rows.splice(newIndex + 1, 0, rows[i]);
-                rows.splice(i, 1);
-              } else {
-                rows.splice(newIndex, 0, rows[i]);
-                rows.splice(i + 1, 1);
-              }
-
-              self.setValue(rows);
-              self.onChange(true);
-              self.jsoneditor.trigger('moveRow', self.rows[newIndex]);
-
-              sortInput.value = i + 1;
-            }
-
-            sortInput.style.display = 'none';
-            sortButton.firstChild.className = sortButton.firstChild.className.replace('check', 'sort');
-          } else {
-            alert('Invalid Sort Number');
-          }
-        }
-      });
-
-      controlsHolder.appendChild(sortInput);
-      controlsHolder.appendChild(sortButton);
-    }
-
-    if (i && !this.hide_move_buttons) {
-      self.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'));
-      self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move');
-      self.rows[i].moveup_button.setAttribute('data-i', i);
-      self.rows[i].moveup_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var i = this.getAttribute('data-i') * 1;
-
-        if (i <= 0) return;
-        var rows = self.getValue();
-        var tmp = rows[i - 1];
-        rows[i - 1] = rows[i];
-        rows[i] = tmp;
-
-        self.setValue(rows);
-        self.onChange(true);
-        self.jsoneditor.trigger('moveRow', self.rows[i - 1]);
-      });
-      controlsHolder.appendChild(self.rows[i].moveup_button);
+        this.setValue(value)
+        this.onChange(true)
+        this.jsoneditor.trigger('copyRow', this.rows[j + 1])
+      })
+      controlsHolder.appendChild(this.rows[i].copy_button)
     }
 
     if (!this.hide_move_buttons) {
-      self.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'));
-      self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move');
-      self.rows[i].movedown_button.setAttribute('data-i', i);
-      self.rows[i].movedown_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var i = this.getAttribute('data-i') * 1;
-        var rows = self.getValue();
-        if (i >= rows.length - 1) return;
-        var tmp = rows[i + 1];
-        rows[i + 1] = rows[i];
-        rows[i] = tmp;
+      this.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'))
+      this.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
+      this.rows[i].moveup_button.setAttribute('data-i', i)
+      this.rows[i].moveup_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-        self.setValue(rows);
-        self.onChange(true);
-        self.jsoneditor.trigger('moveRow', self.rows[i + 1]);
-      });
-      controlsHolder.appendChild(self.rows[i].movedown_button);
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
+
+        value.splice(j - 1, 0, value.splice(j, 1)[0])
+
+        this.setValue(value)
+        this.onChange(true)
+        this.jsoneditor.trigger('moveRow', this.rows[j - 1])
+      })
+      controlsHolder.appendChild(this.rows[i].moveup_button)
     }
 
-    if (value) self.rows[i].setValue(value);
-  },
-  addControls: function () {
-    var self = this;
+    if (!this.hide_move_buttons) {
+      this.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'))
+      this.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
+      this.rows[i].movedown_button.setAttribute('data-i', i)
+      this.rows[i].movedown_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-    this.collapsed = false;
-    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'));
-    this.toggle_button.classList.add('json-editor-btntype-toggle');
-    this.toggle_button.style.margin = '0 10px 0 0';
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
+
+        value.splice(j + 1, 0, value.splice(j, 1)[0])
+
+        this.setValue(value)
+        this.onChange(true)
+        this.jsoneditor.trigger('moveRow', this.rows[j + 1])
+      })
+      controlsHolder.appendChild(this.rows[i].movedown_button)
+    }
+
+    if (value) this.rows[i].setValue(value)
+  }
+
+  addControls () {
+    this.collapsed = false
+    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
+    this.toggle_button.classList.add('json-editor-btntype-toggle')
+    this.toggle_button.style.margin = '0 10px 0 0'
     if (this.title_controls) {
-      this.title.insertBefore(this.toggle_button, this.title.childNodes[0]);
-      this.toggle_button.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+      this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
+      this.toggle_button.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-        if (self.collapsed) {
-          self.collapsed = false;
-          self.panel.style.display = '';
-          self.setButtonText(this, '', 'collapse', self.translate('button_collapse'));
+        if (this.collapsed) {
+          this.collapsed = false
+          this.panel.style.display = ''
+          this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
         } else {
-          self.collapsed = true;
-          self.panel.style.display = 'none';
-          self.setButtonText(this, '', 'expand', self.translate('button_expand'));
+          this.collapsed = true
+          this.panel.style.display = 'none'
+          this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
         }
-      });
+      })
 
-      // If it should start collapsed
+      /* If it should start collapsed */
       if (this.options.collapsed) {
-        $trigger(this.toggle_button, 'click');
+        trigger(this.toggle_button, 'click')
       }
 
-      // Collapse button disabled
+      /* Collapse button disabled */
       if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
-        if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none';
+        if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none'
       } else if (this.jsoneditor.options.disable_collapse) {
-        this.toggle_button.style.display = 'none';
+        this.toggle_button.style.display = 'none'
       }
     }
 
-    // Add "new row" and "delete last" buttons below editor
-    this.add_row_button = this.getButton(
-      this.getItemTitle(),
-      'add',
-      this.translate('button_add_row_title', [this.getItemTitle()]),
-    );
-    this.add_row_button.classList.add('json-editor-btntype-add');
-    this.add_row_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+    /* Add "new row" and "delete last" buttons below editor */
+    this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
+    this.add_row_button.classList.add('json-editor-btntype-add')
+    this.add_row_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-      var editor = self.addRow();
-      self.refreshValue();
-      self.refreshRowButtons();
-      self.onChange(true);
-      self.jsoneditor.trigger('addRow', editor);
-    });
-    self.controls.appendChild(this.add_row_button);
+      const editor = this.addRow()
+      this.refreshValue()
+      this.refreshRowButtons()
+      this.onChange(true)
+      this.jsoneditor.trigger('addRow', editor)
+    })
+    this.controls.appendChild(this.add_row_button)
 
-    this.delete_last_row_button = this.getButton(
-      this.translate('button_delete_last', [this.getItemTitle()]),
-      'subtract',
-      this.translate('button_delete_last_title', [this.getItemTitle()]),
-    );
-    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast');
-    this.delete_last_row_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
+    this.delete_last_row_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-      if (!self.askConfirmation()) {
-        return false;
+      if (!this.askConfirmation()) {
+        return false
       }
 
-      var rows = self.getValue();
-      var editor = rows.pop();
-      self.setValue(rows);
-      self.onChange(true);
-      self.jsoneditor.trigger('deleteRow', editor);
-    });
-    self.controls.appendChild(this.delete_last_row_button);
+      const rows = this.getValue()
+      const editor = rows.pop()
+      this.setValue(rows)
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteRow', editor)
+    })
+    this.controls.appendChild(this.delete_last_row_button)
 
-    this.remove_all_rows_button = this.getButton(
-      this.translate('button_delete_all'),
-      'delete',
-      this.translate('button_delete_all_title'),
-    );
-    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall');
-    this.remove_all_rows_button.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+    this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
+    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
+    this.remove_all_rows_button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-      if (!self.askConfirmation()) {
-        return false;
+      if (!this.askConfirmation()) {
+        return false
       }
 
-      self.setValue([]);
-      self.onChange(true);
-      self.jsoneditor.trigger('deleteAllRows');
-    });
-    self.controls.appendChild(this.remove_all_rows_button);
-  },
-});
+      this.setValue([])
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteAllRows')
+    })
+    this.controls.appendChild(this.remove_all_rows_button)
+  }
+}

@@ -35,14 +35,10 @@ td > .form-group {
 
 /* bring select2 input size to default twbs4 size (only matched size for input_size: normal) */
 .select2-container--default .select2-selection--single,
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__arrow {
+.select2-container--default .select2-selection--single .select2-selection__arrow {
   height: calc(1.5em + 0.75rem + 2px);
 }
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__rendered {
+.select2-container--default .select2-selection--single .select2-selection__rendered {
   line-height: calc(1.5em + 0.75rem + 2px);
 }
 

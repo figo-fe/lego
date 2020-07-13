@@ -1,30 +1,24 @@
-import { Class } from './class';
 
-export var AbstractIconLib = Class.extend({
-  mapping: {
-    collapse: '',
-    expand: '',
-    delete: '',
-    edit: '',
-    add: '',
-    cancel: '',
-    save: '',
-    moveup: '',
-    movedown: '',
-  },
-  icon_prefix: '',
-  getIconClass: function (key) {
-    if (this.mapping[key]) return this.icon_prefix + this.mapping[key];
-    else return null;
-  },
-  getIcon: function (key) {
-    var iconclass = this.getIconClass(key);
+const defaultMapping = { collapse: '', expand: '', delete: '', edit: '', add: '', cancel: '', save: '', moveup: '', movedown: '' }
 
-    if (!iconclass) return null;
+export class AbstractIconLib {
+  constructor (iconPrefix = '', mapping = defaultMapping) {
+    this.mapping = mapping
+    this.icon_prefix = iconPrefix
+  }
 
-    var i = document.createElement('i');
-    i.classList.add.apply(i.classList, iconclass.split(' '));
+  getIconClass (key) {
+    return this.mapping[key] ? this.icon_prefix + this.mapping[key] : null
+  }
 
-    return i;
-  },
-});
+  getIcon (key) {
+    const iconclass = this.getIconClass(key)
+
+    if (!iconclass) return null
+
+    const i = document.createElement('i')
+    i.classList.add(...iconclass.split(' '))
+
+    return i
+  }
+}
