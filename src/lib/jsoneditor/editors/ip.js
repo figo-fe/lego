@@ -1,13 +1,13 @@
-import { StringEditor } from './string.js'
-import { extend } from '../utilities.js'
+import { StringEditor } from './string.js';
+import { extend } from '../utilities.js';
 
 export class IpEditor extends StringEditor {
-  preBuild () {
-    super.preBuild()
+  preBuild() {
+    super.preBuild();
 
     /* Create schema options object if deesn't exist */
     if (!this.schema.options) {
-      this.schema.options = {}
+      this.schema.options = {};
     }
 
     /* Create cleave options if they don't exist */
@@ -17,20 +17,21 @@ export class IpEditor extends StringEditor {
           this.schema.options.cleave = {
             delimiters: [':'],
             blocks: [4, 4, 4, 4, 4, 4, 4, 4],
-            uppercase: true
-          }
-          break
+            uppercase: true,
+          };
+          break;
         case 'ipv4':
           this.schema.options.cleave = {
             delimiters: ['.'],
             blocks: [3, 3, 3, 3],
-            numericOnly: true
-          }
-          break
+            numericOnly: true,
+          };
+          break;
+        default:
       }
     }
 
     /* Update options object */
-    this.options = extend(this.options, this.schema.options || {})
+    this.options = extend(this.options, this.schema.options || {});
   }
 }

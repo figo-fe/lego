@@ -389,7 +389,7 @@ export class JSONEditor {
 
     Object.keys(rules).forEach(selector => {
       const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`;
-      cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}' + '\n';
+      cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}\n';
     });
     const styleSheet = new CSSStyleSheet();
     styleSheet.replaceSync(cssText);

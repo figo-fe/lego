@@ -11,17 +11,17 @@ export class Validator {
 
     this._validateSubSchema = {
       enum(schema, value, path) {
-        const stringified = JSON.stringify(value);
-        const valid = schema.enum.some(e => stringified === JSON.stringify(e));
-        if (!valid) {
-          return [
-            {
-              path,
-              property: 'enum',
-              message: this.translate('error_enum'),
-            },
-          ];
-        }
+        // const stringified = JSON.stringify(value);
+        // const valid = schema.enum.some(e => stringified === JSON.stringify(e));
+        // if (!valid) {
+        //   return [
+        //     {
+        //       path,
+        //       property: 'enum',
+        //       message: this.translate('error_enum'),
+        //     },
+        //   ];
+        // }
         return [];
       },
       extends(schema, value, path) {

@@ -39,6 +39,7 @@ export function ipValidator(schema, value, path, translate) {
       case 'hostname':
         validateHostname(value);
         break;
+      default:
     }
     return [];
   } catch (err) {
