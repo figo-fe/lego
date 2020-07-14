@@ -9,9 +9,10 @@ export class ChoicesEditor extends SelectEditor {
       let sanitized = this.typecast(value || '');
 
       // 异步载入enum时默认为空，兼容表单设值
-      if (this.enum_values[0] === undefined) {
+      if (this.enum_values.length === 0) {
         this.enum_values = [sanitized];
-        this.enum_options = ['' + sanitized];
+        this.enum_options = [String(sanitized)];
+        this.enum_display = [String(sanitized)];
       }
 
       if (!this.enum_values.includes(sanitized)) sanitized = this.enum_values[0];
@@ -27,12 +28,7 @@ export class ChoicesEditor extends SelectEditor {
 
       this.value = sanitized;
       this.onChange(true);
-    } else {
-      // 轮询设值
-      setTimeout(() => {
-        this.setValue(value, initial);
-      }, 100);
-    }
+    } else super.setValue(value, initial);
   }
 
   afterInputReady() {
@@ -52,13 +48,13 @@ export class ChoicesEditor extends SelectEditor {
       if (this.setter && typeof window[this.setter] === 'function') {
         setTimeout(() => {
           try {
-            window[this.setter].call(this, {}, function (list) {
+            window[this.setter].call(this, {}, list => {
               this.updateChoices(list);
             });
           } catch (e) {
             console.warn(String(e));
           }
-        }, 150);
+        }, 100);
       }
     }
     super.afterInputReady();

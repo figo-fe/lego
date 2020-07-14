@@ -7,7 +7,6 @@ export class AceEditor extends StringEditor {
     if (res !== undefined && res.changed && this.ace_editor_instance) {
       this.ace_editor_instance.setValue(res.value);
       this.ace_editor_instance.session.getSelection().clearSelection();
-      this.ace_editor_instance.session.setUseWorker(false);
       this.ace_editor_instance.resize();
     }
   }
@@ -57,6 +56,7 @@ export class AceEditor extends StringEditor {
 
       this.ace_editor_instance.setValue(this.getValue());
       this.ace_editor_instance.session.getSelection().clearSelection();
+      this.ace_editor_instance.session.setUseWorker(false);
       this.ace_editor_instance.resize();
 
       if (this.schema.readOnly || this.schema.readonly || this.schema.template) {

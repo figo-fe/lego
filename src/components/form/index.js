@@ -5,7 +5,14 @@ import SchemaEditor from './schema-editor';
 
 import './index.scss';
 
-export const SchemaForm = ({ schema, startval, show = true, editable = false, onReady, onSchemaUpdate }) => {
+export const SchemaForm = ({
+  schema, // string
+  startval,
+  show = true,
+  editable = false,
+  onReady,
+  onSchemaUpdate,
+}) => {
   const formContainer = useRef(null);
   const editorRef = useRef(null);
   const editPathRef = useRef(null);
@@ -16,7 +23,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
   useLayoutEffect(() => {
     if (schema) {
       const opts = startval ? { startval } : {};
-      const editor = initEditor(formContainer.current, schema, opts);
+      const editor = initEditor(formContainer.current, JSON.parse(schema), opts);
 
       if (editor && typeof onReadyRef.current === 'function') {
         onReadyRef.current(editor);
@@ -34,7 +41,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
     const { target } = evt;
     const { schematype, schemapath } = target.dataset;
     if (editable && schemapath && /string|integer|number|boolean/.test(schematype)) {
-      const formSchema = findSchemaByPath(schema, schemapath);
+      const formSchema = findSchemaByPath(JSON.parse(schema), schemapath);
       editPathRef.current = schemapath;
       setEditSchema(formSchema);
     }
@@ -42,7 +49,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
 
   // 更新单个表单
   function onFormUpdate(formSchema) {
-    onSchemaUpdate(updateSchemaByPath(schema, editPathRef.current, formSchema));
+    onSchemaUpdate(updateSchemaByPath(JSON.parse(schema), editPathRef.current, formSchema));
     setEditSchema(null);
   }
 
@@ -69,7 +76,7 @@ export const SchemaForm = ({ schema, startval, show = true, editable = false, on
       {editable && schemaShow && (
         <CodePopup
           height={600}
-          initCode={JSON.stringify(schema, null, 2)}
+          initCode={JSON.stringify(JSON.parse(schema), null, 2)}
           onClose={() => setSchemaShow(false)}
           onSubmit={code => {
             try {

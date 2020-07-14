@@ -70,7 +70,7 @@ export const TableEdit = props => {
   return (
     <Wrap>
       <div className='lego-card'>
-        <SchemaForm onReady={editor => (formEditor.current = editor)} schema={createTable} />
+        <SchemaForm onReady={editor => (formEditor.current = editor)} schema={JSON.stringify(createTable)} />
 
         <div className='card card-body' style={{ marginTop: 20, background: '#fafafa' }}>
           <div className='row'>

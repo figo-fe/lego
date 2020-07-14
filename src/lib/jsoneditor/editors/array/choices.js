@@ -42,7 +42,7 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
       /* this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string'; */
 
       /* Choices doesn't support adding new items to select type input */
-      this.newEnumAllowed = !!options.addItems && this.schema.items && this.schema.items.type === 'string';
+      this.newEnumAllowed = false;
 
       this.choices_instance = new window.Choices(this.input, options);
 

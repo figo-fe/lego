@@ -19,12 +19,12 @@ container.className = 'popup-mask';
 const cbs = {};
 
 const updateHeight = evt => {
-  if (evt && evt.data) {
+  try {
     const data = JSON.parse(evt.data);
     if (data.type === 'LEGO_POPUP_HEIGHT') {
       window.$('.popup-main').height(Math.min(650, data.height));
     }
-  }
+  } catch (e) {}
 };
 
 const show = (src, width = 800, height = 'auto') => {

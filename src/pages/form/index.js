@@ -61,7 +61,7 @@ export const FormEdit = props => {
         {formData.schema.length > 0 ? (
           <SchemaForm
             editable={true}
-            schema={JSON.parse(formData.schema)}
+            schema={formData.schema}
             onSchemaUpdate={schema => setFormData(data => Object.assign({}, data, { schema: JSON.stringify(schema) }))}
           />
         ) : (
@@ -83,7 +83,7 @@ export const FormEdit = props => {
 
         {/* 表单配置 */}
         <div style={{ marginTop: 20 }}>
-          <SchemaForm schema={createForm} onReady={editor => (configRef.current = editor)} />
+          <SchemaForm schema={JSON.stringify(createForm)} onReady={editor => (configRef.current = editor)} />
         </div>
 
         {/* 底部按钮 */}

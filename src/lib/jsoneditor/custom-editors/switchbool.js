@@ -1,8 +1,8 @@
 import { StringEditor } from '../editors/string';
 
-export const SwitchBool = StringEditor.extend({
-  build: function () {
-    this._super();
+export class SwitchBool extends StringEditor {
+  build() {
+    super.build();
     if (!this.input) return;
 
     const self = this;
@@ -23,11 +23,12 @@ export const SwitchBool = StringEditor.extend({
     this.switchInput.addEventListener('change', function (e) {
       self.setValue(e.target.checked);
     });
-  },
-  setValue: function (value) {
+  }
+
+  setValue(value) {
     this.switchInput.checked = value;
     this.value = value;
     this.input.value = value;
     this.onChange(true);
-  },
-});
+  }
+}

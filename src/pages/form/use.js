@@ -8,13 +8,14 @@ import { langs, lang } from '@lang';
 export const FormUse = props => {
   const debug = kv('debug');
   const context = useContext(SettingContext);
-  const [state, setState] = useState({
+  const [loading, setLoading] = useState(true);
+
+  const formRef = useRef(null);
+  const formDataRef = useRef({
     api: '',
     origin: '',
-    schema: '{}',
-    loading: true,
+    schema: '',
   });
-  const formRef = useRef(null);
 
   useEffect(() => {
     const id = props.match.params.id;
@@ -24,12 +25,11 @@ export const FormUse = props => {
       let { api, origin, schema, ext, state = 0 } = res.data;
       if (state === 0) {
         toast(langs[lang]['form_invalid']);
-        setState({
-          schema: `{"title":"${langs[lang]['form_invalid']}","properties":{},"options":{"disable_collapse":true}}`,
-          loading: false,
-        });
+        formDataRef.current.schema = `{"title":"${langs[lang]['form_invalid']}","properties":{},"options":{"disable_collapse":true}}`;
+        setLoading(false);
       } else {
-        setState({ api, origin, schema, loading: false });
+        formDataRef.current = { api, origin, schema };
+        setLoading(false);
         [fn, script] = execJs(ext);
       }
     });
@@ -37,6 +37,7 @@ export const FormUse = props => {
     return () => {
       try {
         // 跳出时卸载JS
+        setLoading(true);
         console.log(`unmount ${fn}`);
         delete window._editor_;
         delete window._onDataReady_;
@@ -55,16 +56,18 @@ export const FormUse = props => {
 
   useEffect(() => {
     const params = parseUrl();
-    // do = edit且配置数据源时进入编辑模式
-    if (params && params.do === 'edit' && state.origin && context.baseUrl !== void 0) {
-      const origin = buildApi(context.baseUrl, state.origin);
-      const originUrl = buildUrl(origin, params);
+    const { origin } = formDataRef.current;
+    const editable = context.baseUrl !== undefined && !loading && params.do === 'edit' && origin;
+
+    if (editable) {
+      const originTpl = buildApi(context.baseUrl, origin);
+      const originUrl = buildUrl(originTpl, params);
 
       axios('GET', originUrl)
         .then(res => {
           if (res.code === 0) {
             try {
-              // 自定义回填表单
+              // 回填表单
               if (typeof window._onDataReady_ === 'function') {
                 window._onDataReady_(formRef.current, res.data);
               } else {
@@ -73,6 +76,15 @@ export const FormUse = props => {
             } catch (err) {
               toast(err.desc || err.msg);
               console.warn(err);
+            }
+
+            if (isInFrame && document.querySelector('.lego-card')) {
+              window.parent.postMessage(
+                JSON.stringify({
+                  type: 'LEGO_POPUP_HEIGHT',
+                  height: document.querySelector('.lego-card').offsetHeight,
+                }),
+              );
             }
           }
         })
@@ -83,23 +95,7 @@ export const FormUse = props => {
           }
         });
     }
-
-    if (isInFrame) {
-      try {
-        // 更新iframe高度
-        setTimeout(() => {
-          window.parent.postMessage(
-            JSON.stringify({
-              type: 'LEGO_POPUP_HEIGHT',
-              height: document.querySelector('.lego-card').offsetHeight,
-            }),
-          );
-        }, 100);
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-  }, [state.origin, context.baseUrl]);
+  }, [context.baseUrl, loading]);
 
   function doSubmit() {
     const editor = formRef.current;
@@ -113,7 +109,7 @@ export const FormUse = props => {
         ].join(''),
       );
     } else {
-      const api = buildApi(context.baseUrl, state.api);
+      const api = buildApi(context.baseUrl, formDataRef.current.api);
       const opts = {};
 
       // 自定义提交数据
@@ -183,9 +179,9 @@ export const FormUse = props => {
   }
 
   return (
-    <Wrap loading={state.loading}>
+    <Wrap loading={loading}>
       <div className='lego-card'>
-        <SchemaForm schema={JSON.parse(state.schema)} onReady={editor => (formRef.current = editor)} />
+        <SchemaForm schema={formDataRef.current.schema} onReady={editor => (formRef.current = editor)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value={langs[lang]['submit']} extClass='btn-primary' />
           {debug && <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />}

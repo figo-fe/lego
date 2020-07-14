@@ -63,7 +63,7 @@ export const ChartEdit = props => {
   return (
     <Wrap>
       <div className='lego-card'>
-        <SchemaForm onReady={editor => (chartEditor.current = editor)} schema={createChart} />
+        <SchemaForm onReady={editor => (chartEditor.current = editor)} schema={JSON.stringify(createChart)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
           <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/chart`)} extClass='btn-outline-primary' />

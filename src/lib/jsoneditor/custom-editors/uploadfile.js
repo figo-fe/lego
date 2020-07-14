@@ -22,9 +22,10 @@ const getProgress = () => {
   return progress;
 };
 
-export const UploadFile = StringEditor.extend({
-  build: function () {
-    this._super();
+export class UploadFile extends StringEditor {
+  build() {
+    super.build();
+
     if (!this.input) return;
 
     const self = this;
@@ -51,8 +52,8 @@ export const UploadFile = StringEditor.extend({
         self.uploadFile(this.files[0]);
       }
     });
-  },
-  uploadFile: function (file) {
+  }
+  uploadFile(file) {
     const uploader = window.formUploader || window.fileUploader;
     if (uploader) {
       const self = this;
@@ -82,6 +83,6 @@ export const UploadFile = StringEditor.extend({
         },
       });
     }
-  },
-  afterInputReady: function () {},
-});
+  }
+  afterInputReady() {}
+}

@@ -91,7 +91,7 @@ export const BoardEdit = props => {
   return (
     <Wrap>
       <div className='lego-card'>
-        <SchemaForm onReady={editor => (boardEditor.current = editor)} schema={createBoard} />
+        <SchemaForm onReady={editor => (boardEditor.current = editor)} schema={JSON.stringify(createBoard)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
           <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/board`)} extClass='btn-outline-primary' />

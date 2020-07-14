@@ -124,6 +124,8 @@ export class AbstractEditor {
           this.dependenciesFulfilled = true;
           return true;
         }
+
+        return false;
       });
     } else if (typeof choices === 'object') {
       if (typeof value !== 'object') {
@@ -138,6 +140,7 @@ export class AbstractEditor {
             return true;
           }
           this.dependenciesFulfilled = true;
+          return false;
         });
       }
     } else if (typeof choices === 'string' || typeof choices === 'number') {
