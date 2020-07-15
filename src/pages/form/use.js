@@ -25,13 +25,12 @@ export const FormUse = props => {
       let { api, origin, schema, ext, state = 0 } = res.data;
       if (state === 0) {
         toast(langs[lang]['form_invalid']);
-        formDataRef.current.schema = `{"title":"${langs[lang]['form_invalid']}","properties":{},"options":{"disable_collapse":true}}`;
-        setLoading(false);
+        formDataRef.current.schema = `{"title":"Invalid","properties":{}}`;
       } else {
         formDataRef.current = { api, origin, schema };
-        setLoading(false);
         [fn, script] = execJs(ext);
       }
+      setLoading(false);
     });
 
     return () => {
@@ -77,15 +76,6 @@ export const FormUse = props => {
               toast(err.desc || err.msg);
               console.warn(err);
             }
-
-            if (isInFrame && document.querySelector('.lego-card')) {
-              window.parent.postMessage(
-                JSON.stringify({
-                  type: 'LEGO_POPUP_HEIGHT',
-                  height: document.querySelector('.lego-card').offsetHeight,
-                }),
-              );
-            }
           }
         })
         .catch(err => {
@@ -94,6 +84,17 @@ export const FormUse = props => {
             window._onDataError_(formRef.current, err);
           }
         });
+    }
+
+    if (isInFrame) {
+      setTimeout(() => {
+        window.parent.postMessage(
+          JSON.stringify({
+            type: 'LEGO_POPUP_HEIGHT',
+            height: document.querySelector('.lego-card').offsetHeight,
+          }),
+        );
+      });
     }
   }, [context.baseUrl, loading]);
 
