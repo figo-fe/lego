@@ -15,7 +15,7 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
   const config = {
     base: {
       name: '修改记录',
-      api: `${apiPrefix}log/list?mod_type=${type}&data_id=${id}&pn={{pageNo}}`,
+      api: `${apiPrefix}log/list?mod_type=${type}&data_id=${id}&pn={{pageNo}}&ps=10`,
       path: 'data.list',
     },
     cols: [

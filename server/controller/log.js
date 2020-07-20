@@ -48,8 +48,8 @@ exports.logDelete = ctx => {
 /**
  * 列表
  */
-const ps = 20; // pageSize
-const getList = (mod_type, data_id, pn) => {
+
+const getList = (mod_type, data_id, pn, ps = 20) => {
   let find = 'state = 1';
   find += mod_type ? ` AND mod_type = '${mod_type}'` : '';
   find += data_id ? ` AND data_id = '${data_id}'` : '';
@@ -72,10 +72,10 @@ const getTotal = (mod_type, data_id) => {
 };
 
 exports.logList = ctx => {
-  const { mod_type, data_id, pn = 1 } = ctx.query;
+  const { mod_type, data_id, pn = 1, ps = 20 } = ctx.query;
   resEnd(ctx, {
     data: {
-      list: getList(mod_type, data_id, pn),
+      list: getList(mod_type, data_id, pn, ps),
       page: {
         pageSize: ps,
         pageNo: pn,
