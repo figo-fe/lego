@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Wrap, Button, SchemaForm } from '../../components';
-import { axios, toast, parseUrl, execJs, buildUrl, isInFrame, kv, buildApi } from '../../common/utils';
+import { axios, toast, parseUrl, execJs, buildUrl, isInFrame, kv, buildApi, popup } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { FORM } from '../../config/apis';
 import { langs, lang } from '@lang';
@@ -103,11 +103,14 @@ export const FormUse = props => {
     const validates = editor.validate();
     let params = parseUrl();
     if (validates.length > 0) {
-      toast(
+      popup.show(
         [
-          `${langs[lang]['form_validate_fail']}<br />`,
-          `${validates.map(err => err.path + ': ' + err.message).join('<br />')}`,
+          '<div class="card"><div class="card-body">',
+          `<h5 class="card-title">${langs[lang]['form_validate_fail']}</h5>`,
+          `<p class="card-text">${validates.map(err => err.path + ': ' + err.message).join('<br />')}</p>`,
+          '</div></div>',
         ].join(''),
+        600,
       );
     } else {
       const api = buildApi(context.baseUrl, formDataRef.current.api);
@@ -184,7 +187,9 @@ export const FormUse = props => {
       <div className='lego-card'>
         <SchemaForm schema={formDataRef.current.schema} onReady={editor => (formRef.current = editor)} />
         <div className='btns-row'>
-          <Button onClick={doSubmit} value={langs[lang]['submit']} extClass='btn-primary' />
+          {formDataRef.current.api && (
+            <Button onClick={doSubmit} value={langs[lang]['submit']} extClass='btn-primary' />
+          )}
           {debug && <Button onClick={doConsole} value='console.log' extClass='btn-outline-primary' />}
           {!isInFrame && props.history.length > 1 && (
             <Button

@@ -6,7 +6,13 @@ export const Wrap = ({ children, title = '', loading = false }) => {
     <div className='wrap'>
       {title.length > 0 && <div className='sitepath'>{title}</div>}
       <div className='main-content' style={{ padding: isInFrame ? 0 : null }}>
-        {loading ? <div className='lego-card'>loading...</div> : children}
+        {loading ? (
+          <div className='lego-card' style={{ height: '100%' }}>
+            loading...
+          </div>
+        ) : (
+          children
+        )}
       </div>
     </div>
   );

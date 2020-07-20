@@ -36,7 +36,6 @@ export const createForm = {
     api: {
       title: '提交API',
       type: 'string',
-      minLength: 1,
       options: {
         grid_columns: 3,
       },
