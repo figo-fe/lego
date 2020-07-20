@@ -12,6 +12,7 @@ export const SchemaForm = ({
   editable = false,
   onReady,
   onSchemaUpdate,
+  onCommitShow,
 }) => {
   const formContainer = useRef(null);
   const editorRef = useRef(null);
@@ -64,31 +65,39 @@ export const SchemaForm = ({
         onClick={onFormEdit}
       />
       {editable && (
-        <div className='btn btn-sm btn-outline-info edit-toolbar' onClick={() => setSchemaShow(true)}>
-          <i className='fa fa-code' /> 编辑Schema
-        </div>
-      )}
-      {editable && editSchema && (
-        <Popup width={600} height={350} onClose={() => setEditSchema(null)}>
-          <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
-        </Popup>
-      )}
-      {editable && schemaShow && (
-        <CodePopup
-          height={600}
-          initCode={JSON.stringify(JSON.parse(schema), null, 2)}
-          onClose={() => setSchemaShow(false)}
-          onSubmit={code => {
-            try {
-              if (typeof onSchemaUpdate === 'function') {
-                onSchemaUpdate(JSON.parse(code));
-                setSchemaShow(false);
-              }
-            } catch (err) {
-              toast(String(err));
-            }
-          }}
-        />
+        <>
+          <div className='edit-toolbar'>
+            <div className='btn btn-sm btn-outline-info' onClick={() => setSchemaShow(true)}>
+              <i className='fa fa-code' /> 编辑Schema
+            </div>
+            <div className='btn btn-sm btn-outline-primary' onClick={onCommitShow}>
+              <i className='fa fa-code-branch' /> Commits
+            </div>
+          </div>
+
+          {editSchema && (
+            <Popup width={600} height={350} onClose={() => setEditSchema(null)}>
+              <SchemaEditor schema={editSchema} onUpdate={onFormUpdate} />
+            </Popup>
+          )}
+          {schemaShow && (
+            <CodePopup
+              height={600}
+              initCode={JSON.stringify(JSON.parse(schema), null, 2)}
+              onClose={() => setSchemaShow(false)}
+              onSubmit={code => {
+                try {
+                  if (typeof onSchemaUpdate === 'function') {
+                    onSchemaUpdate(JSON.parse(code));
+                    setSchemaShow(false);
+                  }
+                } catch (err) {
+                  toast(String(err));
+                }
+              }}
+            />
+          )}
+        </>
       )}
     </div>
   );

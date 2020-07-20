@@ -4,7 +4,10 @@
     position: absolute;
     right: 0;
     top: 0;
-    font-size: 12px;
+    .btn {
+      font-size: 12px;
+      margin-left: 10px;
+    }
   }
   .table-bordered {
     margin-bottom: 15px;

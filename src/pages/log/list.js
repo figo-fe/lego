@@ -28,9 +28,9 @@ export const LogList = () => {
         action: 'script',
       },
       {
-        key: 'edit',
+        key: 'recover',
         name: '恢复',
-        icon: 'edit',
+        icon: 'sync-alt',
         url: `${apiPrefix}log/recover?id={{id}}`,
         action: 'api',
       },

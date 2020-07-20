@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Wrap, Button, SchemaForm, CodePopup } from '../../components';
+import { CommitList } from '../../components/commits/list';
 import { createForm, formJsonDemo } from '../../config/schema';
 import { json2schema, toast, axios } from '../../common/utils';
 import { FORM, PREPATH } from '../../config/apis';
@@ -11,6 +12,7 @@ export const FormEdit = props => {
   const configRef = useRef(null);
   const [loading, setLoading] = useState(isEdit); //页面加载状态
   const [jsonPopShow, setJsonPopShow] = useState(false); // 显示数据模型输入框
+  const [commitShow, setCommitShow] = useState(false); // 显示操作记录
 
   // 表单数据
   const [formData, setFormData] = useState({
@@ -63,6 +65,7 @@ export const FormEdit = props => {
             editable={true}
             schema={formData.schema}
             onSchemaUpdate={schema => setFormData(data => Object.assign({}, data, { schema: JSON.stringify(schema) }))}
+            onCommitShow={() => setCommitShow(true)}
           />
         ) : (
           <div
@@ -113,6 +116,11 @@ export const FormEdit = props => {
             }}
             onClose={() => setJsonPopShow(false)}
           />
+        )}
+
+        {/* commit日志 */}
+        {isEdit && (
+          <CommitList show={commitShow} id={props.match.params.id} type='form' onClose={() => setCommitShow(false)} />
         )}
       </div>
     </Wrap>

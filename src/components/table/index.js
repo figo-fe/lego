@@ -302,7 +302,7 @@ const _Table = props => {
                         row[item.key],
                       )}"></i>` + content;
                   }
-                  return <td key={item.key} dangerouslySetInnerHTML={{ __html: content }} />;
+                  return <td key={item.key} dangerouslySetInnerHTML={{ __html: content || '--' }} />;
                 })}
                 {hasHandle && (
                   <td>

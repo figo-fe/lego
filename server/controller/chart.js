@@ -6,15 +6,29 @@ const { addLog } = require('../controller/log');
  * 创建和编辑
  */
 const saveChart = data => {
+  let result;
+
   if (data.id) {
-    return db
+    result = db
       .prepare('UPDATE charts SET name = ?, desc = ?, config = ? , ext = ?, state = 1 WHERE id = ?')
       .run(data.name, data.desc, data.config, data.ext, data.id);
   } else {
-    return db
+    result = db
       .prepare('INSERT INTO charts (name, desc, config, ext) VALUES (?, ?, ?, ?)')
       .run(data.name, data.desc, data.config, data.ext);
   }
+
+  if (result.changes) {
+    // 插入日志
+    addLog({
+      mod_type: 'chart',
+      data_id: parseInt(data.id || result.lastInsertRowid),
+      action: data.id ? 'modify' : 'create',
+      config: JSON.stringify(data),
+    });
+  }
+
+  return result;
 };
 exports.saveChart = saveChart;
 
@@ -29,16 +43,8 @@ exports.chart = ctx => {
     try {
       const data = ctx.request.body;
       const result = saveChart(data);
-      if (result.changes) {
-        // 插入日志
-        addLog({
-          mod_type: 'chart',
-          data_id: data.id || result.lastInsertRowid,
-          action: data.id ? 'modify' : 'create',
-          config: JSON.stringify(data),
-        });
 
-        // 接口返回
+      if (result.changes) {
         resEnd(ctx);
       } else {
         resEnd(ctx, { code: 401, msg: '更新数据失败' });

@@ -7,20 +7,33 @@ const readSetting = () => {
 };
 const saveSetting = data => {
   const row = db.prepare('select * from setting').get();
+  let result;
 
   if (row) {
-    return db
+    result = db
       .prepare(
         'UPDATE setting SET name = ?, baseUrl = ?, permissionApi = ?, sideMenu = ?, uploadFn = ?, config = ? WHERE id = ?',
       )
       .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, data.config, row.id);
   } else {
-    return db
+    result = db
       .prepare(
         'INSERT INTO setting (name, baseUrl, permissionApi, sideMenu, uploadFn, config) VALUES (?, ?, ?, ?, ?, ?)',
       )
       .run(data.name, data.baseUrl, data.permissionApi, data.sideMenu, data.uploadFn, data.config);
   }
+
+  if (result.changes) {
+    // 插入日志
+    addLog({
+      mod_type: 'setting',
+      data_id: 1,
+      action: 'modify',
+      config: JSON.stringify(data),
+    });
+  }
+
+  return result;
 };
 
 exports.saveSetting = saveSetting;
@@ -35,15 +48,6 @@ exports.setting = ctx => {
       const result = saveSetting(data);
 
       if (result.changes) {
-        // 插入日志
-        addLog({
-          mod_type: 'setting',
-          data_id: 1,
-          action: 'modify',
-          config: JSON.stringify(data),
-        });
-
-        // 接口返回
         resEnd(ctx);
       } else {
         resEnd(ctx, { code: 401, msg: '更新数据失败' });
