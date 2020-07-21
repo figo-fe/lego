@@ -51,26 +51,40 @@ export class ChoicesEditor extends SelectEditor {
 
   onWatchedFieldChange() {
     super.onWatchedFieldChange();
-    if (this.choices_instance) {
-      if (typeof this.setter === 'function') {
-        try {
-          this.setter.call(this, this.getWatchedFieldValues(), list => this.updateChoices(list));
-        } catch (err) {
-          console.warn(err);
+
+    setTimeout(() => {
+      if (this.choices_instance) {
+        const vars = this.getWatchedFieldValues();
+
+        // 自己改变值不执行watch
+        if (Object.keys(vars).length === 1) return;
+
+        if (typeof this.setter === 'function') {
+          try {
+            this.setter.call(this, this.getWatchedFieldValues(), list => this.updateChoices(list));
+          } catch (err) {
+            console.warn(err);
+          }
+        } else {
+          const choicesList = this.enum_options.map((v, i) => ({
+            value: v,
+            label: this.enum_display[i],
+          }));
+          this.choices_instance.setChoices(choicesList, 'value', 'label', true);
+          this.choices_instance.setChoiceByValue(String(this.value)); /* Set new selection */
         }
-      } else {
-        const choicesList = this.enum_options.map((v, i) => ({
-          value: v,
-          label: this.enum_display[i],
-        }));
-        this.choices_instance.setChoices(choicesList, 'value', 'label', true);
-        this.choices_instance.setChoiceByValue(`${this.value}`); /* Set new selection */
       }
-    }
+    });
   }
 
   updateChoices(list) {
-    const values = list.map(({ value }) => value);
+    let selected_idx;
+
+    const values = list.map(({ value, selected }, idx) => {
+      if (selected) selected_idx = idx;
+      return this.typecast(value);
+    });
+
     const display = list.map(({ label }) => label);
     const options = values.map(value => String(value));
 
@@ -78,17 +92,27 @@ export class ChoicesEditor extends SelectEditor {
     this.enum_display = display;
     this.enum_options = options;
 
-    if (values.includes(this.value)) {
-      setTimeout(() => {
-        if (this.choices_instance) {
-          this.choices_instance.setChoices(list, 'value', 'label', true);
-        }
-      });
-    } else {
-      // 会触发onWatchedFieldChange
-      this.value = values[0];
+    // 未指定选中项且值不在选项中，选择第一项
+    if (selected_idx === undefined && !values.includes(this.value)) {
+      selected_idx = 0;
+    }
+
+    if (selected_idx !== undefined) {
+      this.value = values[selected_idx];
       this.onChange(true);
     }
+
+    setTimeout(() => {
+      if (this.choices_instance) {
+        this.choices_instance.setChoices(
+          options.map((value, i) => ({ value, label: display[i] })),
+          'value',
+          'label',
+          true,
+        );
+        this.choices_instance.setChoiceByValue(String(this.value));
+      }
+    });
   }
 
   enable() {

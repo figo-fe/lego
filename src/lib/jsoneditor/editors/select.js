@@ -7,7 +7,7 @@ export class SelectEditor extends AbstractEditor {
     let sanitized = this.typecast(value);
 
     // 异步载入enum时将value设为默认项
-    if (this.enum_values.length === 0) {
+    if (this.enum_values.length === 0 && value !== undefined) {
       this.enum_values = [sanitized];
       this.enum_display = [String(sanitized)];
       this.enum_options = [String(sanitized)];
