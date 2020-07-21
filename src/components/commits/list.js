@@ -12,17 +12,16 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
 
   const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8081';
   const apiPrefix = `//${host}/lego-api/`;
-  const config = {
+  const config = useRef({
     base: {
       name: '修改记录',
-      api: `${apiPrefix}log/list?mod_type=${type}&data_id=${id}&pn={{pageNo}}&ps=10`,
+      api: `${apiPrefix}log/list?mod_type=${type}&data_id=${id}&pn={{pageNo}}`,
       path: 'data.list',
     },
     cols: [
       { key: 'id', name: 'ID', width: '80', fn: ['multi'] },
-      { key: 'time', name: 'Time', width: '160', fn: [] },
-      { key: 'action', name: 'Action', width: '100', fn: [] },
-      { key: 'operator', name: 'Operator', width: '150', fn: [] },
+      { key: 'time', name: 'Time', width: '200', fn: [] },
+      { key: 'operator', name: 'Operator', width: '', fn: [] },
     ],
     handles: [
       {
@@ -52,7 +51,7 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
         },
       },
     ],
-  };
+  });
 
   useEffect(() => {
     if (show) {
@@ -62,7 +61,7 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
       }, 50);
     } else {
       if (elementRef.current) {
-        elementRef.current.style.transform = 'translateX(700px)';
+        elementRef.current.style.transform = 'translateX(100%)';
         setTimeout(() => {
           setNativeShow(false);
         }, 200);
@@ -105,7 +104,7 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
           dmp.diff_cleanupSemantic(diffs);
 
           const html = dmp.diff_prettyHtml(diffs).replace(/&para;/g, '');
-          popup.show(`<div class="commits-diff"><pre>${html}</pre></div>`, 650, 600);
+          popup.show(`<div class="commits-diff"><pre class="commits-code">${html}</pre></div>`, 650, 600);
         },
       );
     } else {
@@ -132,7 +131,11 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
           html += codeSplit + code.ext;
         }
 
-        popup.show(`<div class="commits-diff"><pre>${html}</pre></div>`, 650, 600);
+        popup.show(
+          `<div class="commits-diff"><textarea readonly="true" class="commits-code">${html}</textarea></div>`,
+          650,
+          600,
+        );
       }
     });
   };
@@ -145,7 +148,7 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
         <i className='commits-close fa fa-times' onClick={onClose} />
         <div className='commits-title'>修改记录</div>
         <div className='commits-list'>
-          <Table config={config} />
+          <Table config={config.current} />
         </div>
       </div>
     </div>

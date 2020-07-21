@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Button = ({ value, extClass, onClick }) => {
+export const Button = ({ value, icon, extClass, extStyle = {}, onClick }) => {
   let classList = ['btn', 'btn-sm'];
 
   if (extClass) {
@@ -8,7 +8,8 @@ export const Button = ({ value, extClass, onClick }) => {
   }
 
   return (
-    <button className={classList.join(' ')} onClick={onClick}>
+    <button style={extStyle} className={classList.join(' ')} onClick={onClick}>
+      {!!icon && <i className={'mr-1 fa fa-' + icon} />}
       {value}
     </button>
   );

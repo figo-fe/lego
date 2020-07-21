@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Wrap, SchemaForm, Button, AceCode } from '../../components';
+import React, { useRef, useEffect, useState } from 'react';
+import { Wrap, SchemaForm, Button, AceCode, CommitList } from '../../components';
 import { createTable } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
 import { TABLE, PREPATH } from '../../config/apis';
@@ -8,6 +8,7 @@ export const TableEdit = props => {
   const isEdit = props.match.path === '/table/edit/:id';
   const formEditor = useRef(null);
   const extEditor = useRef(null);
+  const [commitShow, setCommitShow] = useState(false); // 显示操作记录
 
   if (isEdit) {
     createTable.title = '编辑列表';
@@ -90,6 +91,20 @@ export const TableEdit = props => {
           <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/table`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
+
+        {/* commit日志 */}
+        {isEdit && (
+          <Button
+            extStyle={{ position: 'absolute', right: 15, top: 15 }}
+            extClass='btn-outline-primary'
+            value='Commits'
+            icon='code-branch'
+            onClick={() => setCommitShow(true)}
+          />
+        )}
+        {isEdit && (
+          <CommitList show={commitShow} id={props.match.params.id} type='table' onClose={() => setCommitShow(false)} />
+        )}
       </div>
     </Wrap>
   );

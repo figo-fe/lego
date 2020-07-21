@@ -83,11 +83,8 @@ export const createBoard = {
                   watch: {
                     type: 'mod_item.type',
                   },
-                  enumSource: [
-                    {
-                      setter: 'getBoardModules',
-                    },
-                  ],
+                  enum: [],
+                  setter: 'getBoardModules',
                 },
                 grid: {
                   type: 'number',

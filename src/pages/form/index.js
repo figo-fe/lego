@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Wrap, Button, SchemaForm, CodePopup } from '../../components';
-import { CommitList } from '../../components/commits/list';
+import { Wrap, Button, SchemaForm, CodePopup, CommitList } from '../../components';
 import { createForm, formJsonDemo } from '../../config/schema';
 import { json2schema, toast, axios } from '../../common/utils';
 import { FORM, PREPATH } from '../../config/apis';

@@ -9,3 +9,4 @@ export { SchemaForm } from './form';
 export { AceCode } from './ace-code';
 export { Popup } from './popup';
 export { CodePopup } from './pop-code';
+export { CommitList } from './commits/list';

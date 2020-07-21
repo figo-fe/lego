@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Wrap, SchemaForm, Button } from '../../components';
+import React, { useRef, useEffect, useState } from 'react';
+import { Wrap, SchemaForm, Button, CommitList } from '../../components';
 import { createBoard } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
 import { BOARD, PREPATH, BASEURL } from '../../config/apis';
@@ -8,6 +8,7 @@ export const BoardEdit = props => {
   const isEdit = props.match.path === '/board/edit/:id';
   const boardEditor = useRef(null);
   const tmpList = useRef({});
+  const [commitShow, setCommitShow] = useState(false); // 显示操作记录
 
   if (isEdit) {
     createBoard.title = '编辑面板';
@@ -65,10 +66,10 @@ export const BoardEdit = props => {
         tmpList.current.chart = fixList('chart', resp[1].data.list);
       });
 
-      window.getBoardModules = (editor, vars) => {
+      window.getBoardModules = (vars, callback) => {
         const { type } = vars;
         if (type !== 'none' && tmpList.current[type]) {
-          editor.updateChoices(tmpList.current[type]);
+          callback(tmpList.current[type]);
         }
       };
     }
@@ -97,6 +98,18 @@ export const BoardEdit = props => {
           <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/board`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
+        {isEdit && (
+          <Button
+            extStyle={{ position: 'absolute', right: 15, top: 15 }}
+            extClass='btn-outline-primary'
+            value='Commits'
+            icon='code-branch'
+            onClick={() => setCommitShow(true)}
+          />
+        )}
+        {isEdit && (
+          <CommitList show={commitShow} id={props.match.params.id} type='board' onClose={() => setCommitShow(false)} />
+        )}
       </div>
     </Wrap>
   );
