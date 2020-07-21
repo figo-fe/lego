@@ -6,6 +6,14 @@ export class SelectEditor extends AbstractEditor {
     /* Sanitize value before setting it */
     let sanitized = this.typecast(value);
 
+    // 异步载入enum时将value设为默认项
+    if (this.enum_values.length === 0) {
+      this.enum_values = [sanitized];
+      this.enum_display = [String(sanitized)];
+      this.enum_options = [String(sanitized)];
+      this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display);
+    }
+
     const haveToUseDefaultValue =
       !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined';
 
