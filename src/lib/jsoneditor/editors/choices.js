@@ -8,6 +8,14 @@ export class ChoicesEditor extends SelectEditor {
       /* Sanitize value before setting it */
       let sanitized = this.typecast(value || '');
 
+      // 异步载入enum时将value设为默认项
+      if (this.enum_values.length === 0 && value !== undefined) {
+        this.enum_values = [sanitized];
+        this.enum_display = [String(sanitized)];
+        this.enum_options = [String(sanitized)];
+        this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display);
+      }
+
       if (!this.enum_values.includes(sanitized)) sanitized = this.enum_values[0];
 
       if (this.value === sanitized) return;
@@ -15,12 +23,12 @@ export class ChoicesEditor extends SelectEditor {
       if (initial) this.is_dirty = false;
       else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true;
 
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+      const choicesValue = this.enum_options[this.enum_values.indexOf(sanitized)];
 
-      this.choices_instance.setChoiceByValue(this.input.value);
+      this.choices_instance.setChoiceByValue(choicesValue);
 
       this.value = sanitized;
-      this.onChange();
+      this.onChange(true);
     } else super.setValue(value, initial);
   }
 
@@ -52,29 +60,22 @@ export class ChoicesEditor extends SelectEditor {
   onWatchedFieldChange() {
     super.onWatchedFieldChange();
 
-    setTimeout(() => {
-      if (this.choices_instance) {
-        const vars = this.getWatchedFieldValues();
-
-        // 自己改变值不执行watch
-        if (Object.keys(vars).length === 1) return;
-
-        if (typeof this.setter === 'function') {
-          try {
-            this.setter.call(this, this.getWatchedFieldValues(), list => this.updateChoices(list));
-          } catch (err) {
-            console.warn(err);
-          }
-        } else {
-          const choicesList = this.enum_options.map((v, i) => ({
-            value: v,
-            label: this.enum_display[i],
-          }));
-          this.choices_instance.setChoices(choicesList, 'value', 'label', true);
-          this.choices_instance.setChoiceByValue(String(this.value)); /* Set new selection */
+    if (this.choices_instance) {
+      if (typeof this.setter === 'function') {
+        try {
+          this.setter.call(this, this.getWatchedFieldValues(), list => this.updateChoices(list));
+        } catch (err) {
+          console.warn(err);
         }
+      } else {
+        const choicesList = this.enum_options.map((v, i) => ({
+          value: v,
+          label: this.enum_display[i],
+        }));
+        this.choices_instance.setChoices(choicesList, 'value', 'label', true);
+        this.choices_instance.setChoiceByValue(String(this.value)); /* Set new selection */
       }
-    });
+    }
   }
 
   updateChoices(list) {
@@ -87,6 +88,9 @@ export class ChoicesEditor extends SelectEditor {
 
     const display = list.map(({ label }) => label);
     const options = values.map(value => String(value));
+
+    // 数据不变时不更新
+    if (values.join(',') === this.enum_values.join(',')) return;
 
     this.enum_values = values;
     this.enum_display = display;
