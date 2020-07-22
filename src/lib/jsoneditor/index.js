@@ -20,6 +20,7 @@ JSONEditor.defaults.options.choices = {
   shouldSort: false,
   searchEnabled: false,
   itemSelectText: '',
+  position: 'bottom',
 };
 
 // WYSIWYG Jodit Editor
