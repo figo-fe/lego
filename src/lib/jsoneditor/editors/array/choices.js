@@ -42,7 +42,7 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
       /* this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string'; */
 
       /* Choices doesn't support adding new items to select type input */
-      this.newEnumAllowed = false;
+      this.newEnumAllowed = true; // 异步更新数据时需添加新选项
 
       this.choices_instance = new window.Choices(this.input, options);
 
@@ -85,8 +85,14 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     this.option_keys.push(`${value}`);
     this.option_titles.push(`${value}`);
     this.select_values[`${value}`] = value;
+
     /* Update Schema enum to prevent triggering "Value must be one of the enumerated values" */
-    this.schema.items.enum.push(value);
+    if (!this.schema.items.enum) {
+      this.schema.items.enum = [value];
+    } else {
+      this.schema.items.enum.push(value);
+    }
+
     /* Add new value and label to choices */
     this.choices_instance.setChoices([{ value: `${value}`, label: `${value}` }], 'value', 'label', false);
 
@@ -94,33 +100,35 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
   }
 
   updateChoices(list) {
-    const option_keys = [];
-    const option_titles = [];
-    const select_values = {};
+    const keys = [];
+    const titles = [];
+    const values = {};
 
-    list = list.map(({ value, label, selected }) => ({
-      value,
-      label,
-      selected: this.value.indexOf(String(value)) >= 0 || !!selected,
-    }));
+    list = list.map(({ value, label, selected }) => {
+      const key = String(value);
 
-    list.forEach(function (data) {
-      option_keys.push(String(data.value));
-      option_titles.push(data.label);
-      select_values[String(data.value)] = data.value;
+      keys.push(key);
+      titles.push(label);
+      values[key] = value;
+
+      return {
+        value,
+        label,
+        selected: this.value.includes(key) || !!selected,
+      };
     });
 
-    this.option_keys = option_keys;
-    this.option_titles = option_titles;
-    this.select_values = select_values;
-    this.schema.items.enum = Object.values(select_values);
+    this.option_keys = keys;
+    this.option_titles = titles;
+    this.select_values = values;
+    this.schema.items.enum = Object.values(values);
 
     setTimeout(() => {
       if (this.choices_instance) {
         this.choices_instance.removeActiveItems();
         this.choices_instance.setChoices(list, 'value', 'label', true);
       }
-    }, 100);
+    });
   }
 
   enable() {
