@@ -115,18 +115,12 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     const titles = [];
     const values = {};
 
-    list = list.map(({ value, label, selected }) => {
+    list.forEach(({ value, label }) => {
       const key = String(value);
 
       keys.push(key);
       titles.push(label);
       values[key] = value;
-
-      return {
-        value,
-        label,
-        selected: this.value.includes(key) || !!selected,
-      };
     });
 
     this.option_keys = keys;
@@ -136,8 +130,13 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
 
     setTimeout(() => {
       if (this.choices_instance) {
+        const fixList = list.map(({ value, label, selected }) => ({
+          value,
+          label,
+          selected: this.value.includes(value) || !!selected,
+        }));
         this.choices_instance.removeActiveItems();
-        this.choices_instance.setChoices(list, 'value', 'label', true);
+        this.choices_instance.setChoices(fixList, 'value', 'label', true);
       }
     });
   }
