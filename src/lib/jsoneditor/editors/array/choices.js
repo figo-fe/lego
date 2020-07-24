@@ -56,6 +56,17 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
         this.onChange(true);
       };
       this.control.addEventListener('change', this.multiselectChangeHandler, false);
+
+      // 自定义setter
+      this.setter = window[this.schema.setter || 'setter_is_undefined'];
+
+      if (typeof this.setter === 'function') {
+        try {
+          this.setter.call(this, list => this.updateChoices(list));
+        } catch (err) {
+          console.warn(err);
+        }
+      }
     }
     super.afterInputReady();
   }
