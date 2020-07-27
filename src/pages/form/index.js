@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Wrap, Button, SchemaForm, CodePopup, CommitList } from '../../components';
 import { createForm, formJsonDemo } from '../../config/schema';
-import { json2schema, toast, axios } from '../../common/utils';
-import { FORM, PREPATH } from '../../config/apis';
+import { json2schema, toast, axios, popup } from '../../common/utils';
+import { FORM, BASENAME } from '../../config/apis';
 
 import './form.scss';
 
@@ -40,7 +40,7 @@ export const FormEdit = props => {
 
   // 保存表单
   function doSave() {
-    const postData = Object.assign(formData, configRef.current.getValue());
+    const postData = Object.assign({}, formData, configRef.current.getValue());
 
     if (isEdit) {
       postData.id = props.match.params.id;
@@ -54,6 +54,22 @@ export const FormEdit = props => {
       .catch(err => {
         toast(err.msg || err.desc);
       });
+  }
+
+  // 预览表单
+  function doPreview() {
+    let params = window.location.search;
+
+    params += (params ? '&' : '?') + 'preview=1';
+
+    popup.show(`${BASENAME}/form/use/0${params}`, window.innerWidth - 100);
+
+    setTimeout(() => {
+      const { api, origin, ext } = configRef.current.getValue();
+      const { schema } = formData;
+      const iframeWin = document.querySelector('iframe').contentWindow;
+      iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', api, origin, schema, ext });
+    }, 500);
   }
 
   return (
@@ -91,9 +107,10 @@ export const FormEdit = props => {
         {/* 底部按钮 */}
         <div className='btns-row'>
           <Button value='保存' onClick={doSave} extClass='btn-success' />
+          <Button value='预览' onClick={doPreview} extClass='btn-info' />
           <Button
             key='help'
-            onClick={() => window.open(`${PREPATH}/help/form`)}
+            onClick={() => window.open(`${BASENAME}/help/form`)}
             value='帮助'
             extClass='btn-outline-primary'
           />

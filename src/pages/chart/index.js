@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Wrap, SchemaForm, Button, CommitList } from '../../components';
 import { createChart } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
-import { CHART, PREPATH } from '../../config/apis';
+import { CHART, BASENAME } from '../../config/apis';
 
 export const ChartEdit = props => {
   const isEdit = props.match.path === '/chart/edit/:id';
@@ -67,7 +67,7 @@ export const ChartEdit = props => {
         <SchemaForm onReady={editor => (chartEditor.current = editor)} schema={JSON.stringify(createChart)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/chart`)} extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open(`${BASENAME}/help/chart`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
         {isEdit && (

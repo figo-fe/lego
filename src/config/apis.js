@@ -4,4 +4,4 @@ export const FORM = BASEURL + '/form';
 export const TABLE = BASEURL + '/table';
 export const CHART = BASEURL + '/chart';
 export const BOARD = BASEURL + '/board';
-export const PREPATH = process.env.REACT_APP_PRE;
+export const BASENAME = process.env.REACT_APP_PRE;

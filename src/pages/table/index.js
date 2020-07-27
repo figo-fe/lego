@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Wrap, SchemaForm, Button, AceCode, CommitList } from '../../components';
 import { createTable } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
-import { TABLE, PREPATH } from '../../config/apis';
+import { TABLE, BASENAME } from '../../config/apis';
 
 export const TableEdit = props => {
   const isEdit = props.match.path === '/table/edit/:id';
@@ -88,7 +88,7 @@ export const TableEdit = props => {
 
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/table`)} extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open(`${BASENAME}/help/table`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
 

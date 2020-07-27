@@ -3,7 +3,7 @@ import { Wrap, Button } from '../../components';
 import { initEditor, axios, toast } from '../../common/utils';
 import { SettingContext } from '../../config/context';
 import { setting } from '../../config/schema';
-import { SETTING, PREPATH } from '../../config/apis';
+import { SETTING, BASENAME } from '../../config/apis';
 
 export const Setting = () => {
   const context = useContext(SettingContext);
@@ -59,13 +59,13 @@ export const Setting = () => {
           <Button key='save' value='保存' onClick={doSave} extClass='btn-success' />
           <Button
             key='help'
-            onClick={() => window.open(`${PREPATH}/help/setting`)}
+            onClick={() => window.open(`${BASENAME}/help/setting`)}
             value='帮助'
             extClass='btn-outline-primary'
           />
           <Button
             key='log'
-            onClick={() => window.open(`${PREPATH}/log/list`)}
+            onClick={() => window.open(`${BASENAME}/log/list`)}
             value='操作日志'
             extClass='btn-outline-info'
           />

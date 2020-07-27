@@ -28,7 +28,7 @@ import { LogList } from './pages/log/list';
 
 import { SettingContext } from './config/context';
 import { axios, execJs, buildApi, toast } from './common/utils';
-import { SETTING } from './config/apis';
+import { SETTING, BASENAME } from './config/apis';
 
 import './common/bootstrap.css';
 import './common/base.scss';
@@ -134,7 +134,7 @@ const App = () => {
   return (
     <SettingContext.Provider value={setting}>
       <section className='frame-main'>
-        <BrowserRouter basename={process.env.REACT_APP_PRE}>
+        <BrowserRouter basename={BASENAME}>
           <Switch>
             <Route path='/login' component={Login} />
             <Frame>

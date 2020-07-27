@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Wrap, SchemaForm, Button, CommitList } from '../../components';
 import { createBoard } from '../../config/schema';
 import { axios, toast } from '../../common/utils';
-import { BOARD, PREPATH, BASEURL } from '../../config/apis';
+import { BOARD, BASENAME, BASEURL } from '../../config/apis';
 
 export const BoardEdit = props => {
   const isEdit = props.match.path === '/board/edit/:id';
@@ -95,7 +95,7 @@ export const BoardEdit = props => {
         <SchemaForm onReady={editor => (boardEditor.current = editor)} schema={JSON.stringify(createBoard)} />
         <div className='btns-row'>
           <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
-          <Button value='帮助' onClick={() => window.open(`${PREPATH}/help/board`)} extClass='btn-outline-primary' />
+          <Button value='帮助' onClick={() => window.open(`${BASENAME}/help/board`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
         {isEdit && (

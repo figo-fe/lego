@@ -7,31 +7,38 @@ import { langs, lang } from '@lang';
 
 export const FormUse = props => {
   const debug = kv('debug');
+  const preview = useRef(kv('preview'));
   const context = useContext(SettingContext);
   const [loading, setLoading] = useState(true);
 
   const formRef = useRef(null);
-  const formDataRef = useRef({
-    api: '',
-    origin: '',
-    schema: '',
-  });
+  const formDataRef = useRef({ api: '', origin: '', schema: '' });
 
   useEffect(() => {
-    const id = props.match.params.id;
     let fn, script;
-
-    axios('GET', FORM, { id }).then(res => {
-      let { api, origin, schema, ext, state = 0 } = res.data;
-      if (state === 0) {
-        toast(langs[lang]['form_invalid']);
-        formDataRef.current.schema = `{"title":"Invalid","properties":{}}`;
-      } else {
-        formDataRef.current = { api, origin, schema };
-        [fn, script] = execJs(ext);
-      }
-      setLoading(false);
-    });
+    if (isInFrame && preview.current === '1') {
+      window.addEventListener('message', evt => {
+        const { type, api, origin, schema, ext } = evt.data;
+        if (type === 'LEGO_POPUP_PREVIEW') {
+          formDataRef.current = { api, origin, schema };
+          [fn, script] = execJs(ext);
+          setLoading(false);
+        }
+      });
+    } else {
+      const id = props.match.params.id;
+      axios('GET', FORM, { id }).then(res => {
+        let { api, origin, schema, ext, state = 0 } = res.data;
+        if (state === 0) {
+          toast(langs[lang]['form_invalid']);
+          formDataRef.current.schema = `{"title":"Invalid","properties":{}}`;
+        } else {
+          formDataRef.current = { api, origin, schema };
+          [fn, script] = execJs(ext);
+        }
+        setLoading(false);
+      });
+    }
 
     return () => {
       try {
@@ -88,12 +95,10 @@ export const FormUse = props => {
 
     if (isInFrame) {
       setTimeout(() => {
-        window.parent.postMessage(
-          JSON.stringify({
-            type: 'LEGO_POPUP_HEIGHT',
-            height: document.querySelector('.lego-card').offsetHeight,
-          }),
-        );
+        window.parent.postMessage({
+          type: 'LEGO_POPUP_HEIGHT',
+          height: document.querySelector('.lego-card').offsetHeight,
+        });
       });
     }
   }, [context.baseUrl, loading]);
