@@ -52,6 +52,11 @@ export const TableToolBar = ({ loading = true, search = [], toolbar = [], onClic
                 const [value, label, selected] = item.split(':');
                 return { value, label, selected: selected === 'true' };
               }),
+              callbackOnInit: function () {
+                if (tool.width) {
+                  this.containerOuter.element.style.minWidth = parseInt(tool.width) + 'px';
+                }
+              },
             });
 
             // 自定义更新数据
