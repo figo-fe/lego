@@ -97,9 +97,9 @@ export class ChoicesEditor extends SelectEditor {
     this.enum_options = options;
 
     // 未指定选中项且值不在选项中，选择第一项
-    if (selected_idx === undefined && !values.includes(this.value)) {
-      selected_idx = 0;
-    }
+    // if (selected_idx === undefined && !values.includes(this.value)) {
+    //   selected_idx = 0;
+    // }
 
     if (selected_idx !== undefined) {
       this.value = values[selected_idx];
