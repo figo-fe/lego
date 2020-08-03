@@ -19,9 +19,9 @@ export const CommitList = ({ show = false, type, id, onClose }) => {
       path: 'data.list',
     },
     cols: [
-      { key: 'id', name: 'ID', width: '80', fn: ['multi'] },
-      { key: 'time', name: 'Time', width: '200', fn: [] },
-      { key: 'operator', name: 'Operator', width: '', fn: [] },
+      { key: 'id', name: 'ID', width: '', fn: ['multi'] },
+      { key: 'time', name: 'Time', width: '180', fn: [] },
+      // { key: 'operator', name: 'Operator', width: '', fn: [] },
     ],
     handles: [
       {
