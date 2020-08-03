@@ -62,14 +62,18 @@ export const FormEdit = props => {
 
     params += (params ? '&' : '?') + 'preview=1';
 
-    popup.show(`${BASENAME}/form/use/0${params}`, window.innerWidth - 100);
+    popup.show(`${BASENAME}/form/use/0${params}`, window.innerWidth - 200, 650);
 
-    setTimeout(() => {
-      const { api, origin, ext } = configRef.current.getValue();
-      const { schema } = formData;
-      const iframeWin = document.querySelector('iframe').contentWindow;
-      iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', api, origin, schema, ext });
-    }, 500);
+    const iframeWin = document.querySelector('iframe').contentWindow;
+
+    iframeWin.addEventListener('load', () => {
+      setTimeout(() => {
+        const { api, origin, ext } = configRef.current.getValue();
+        const { schema } = formData;
+
+        iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', api, origin, schema, ext });
+      }, 100);
+    });
   }
 
   return (

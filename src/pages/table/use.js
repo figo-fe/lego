@@ -1,18 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Wrap, Table } from '../../components';
-import { axios, execJs } from '../../common/utils';
+import { axios, execJs, kv, isInFrame } from '../../common/utils';
 import { TABLE } from '../../config/apis';
 
 export const TableUse = props => {
   const [config, setConfig] = useState(null);
+  const preview = useRef(kv('preview'));
 
   useEffect(() => {
-    const id = props.match.params.id;
     let fn, script;
-    axios('GET', TABLE, { id }).then(res => {
-      setConfig(JSON.parse(res.data.config));
-      [fn, script] = execJs(res.data.ext);
-    });
+    if (isInFrame && preview.current === '1') {
+      window.addEventListener('message', evt => {
+        const { type, config, ext } = evt.data;
+        if (type === 'LEGO_POPUP_PREVIEW') {
+          setConfig(JSON.parse(config));
+          [fn, script] = execJs(ext);
+        }
+      });
+    } else {
+      const id = props.match.params.id;
+      axios('GET', TABLE, { id }).then(res => {
+        setConfig(JSON.parse(res.data.config));
+        [fn, script] = execJs(res.data.ext);
+      });
+    }
 
     return () => {
       try {

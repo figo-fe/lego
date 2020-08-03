@@ -33,8 +33,10 @@ const show = (src, width = 800, height = 'auto') => {
   container.innerHTML = isIframe ? renderIframe(src, width, height) : renderHtml(src, width, height);
   document.body.appendChild(container);
 
-  // 自适应高度
-  window.addEventListener('message', updateHeight);
+  if (height === 'auto') {
+    // 自适应高度
+    window.addEventListener('message', updateHeight);
+  }
 
   return {
     then: onHide => (cbs.onHide = onHide),

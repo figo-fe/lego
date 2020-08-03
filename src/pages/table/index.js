@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Wrap, SchemaForm, Button, AceCode, CommitList } from '../../components';
 import { createTable } from '../../config/schema';
-import { axios, toast } from '../../common/utils';
+import { axios, toast, popup } from '../../common/utils';
 import { TABLE, BASENAME } from '../../config/apis';
 
 export const TableEdit = props => {
@@ -16,7 +16,7 @@ export const TableEdit = props => {
     createTable.title = '创建列表';
   }
 
-  function doSubmit() {
+  function doSave() {
     const editor = formEditor.current;
     const validates = editor.validate();
 
@@ -49,6 +49,26 @@ export const TableEdit = props => {
       .catch(err => {
         toast(err.msg || err.desc);
       });
+  }
+
+  function doPreview() {
+    let params = window.location.search;
+
+    params += (params ? '&' : '?') + 'preview=1';
+
+    popup.show(`${BASENAME}/table/use/0${params}`, window.innerWidth - 200, 650);
+
+    const iframeWin = document.querySelector('iframe').contentWindow;
+
+    // 传递预览数据
+    iframeWin.addEventListener('load', () => {
+      setTimeout(() => {
+        const config = JSON.stringify(formEditor.current.getValue());
+        const ext = extEditor.current.getValue();
+
+        iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', config, ext });
+      }, 100);
+    });
   }
 
   useEffect(() => {
@@ -87,7 +107,8 @@ export const TableEdit = props => {
         </div>
 
         <div className='btns-row'>
-          <Button onClick={doSubmit} value='提交' extClass='btn-primary' />
+          <Button onClick={doSave} value='保存' extClass='btn-success' />
+          <Button value='预览' onClick={doPreview} extClass='btn-info' />
           <Button value='帮助' onClick={() => window.open(`${BASENAME}/help/table`)} extClass='btn-outline-primary' />
           <Button onClick={() => props.history.goBack()} value='返回' extClass='btn-outline-secondary' />
         </div>
