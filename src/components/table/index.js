@@ -161,7 +161,7 @@ const _Table = props => {
   function fmt(fmt, value) {
     switch (fmt) {
       case 'image':
-        return `<a href="${value}" target="_blank"><img src="${value}" style="height:120px;margin:10px 0;" /></a>`;
+        return `<a href="${value}" target="_blank"><img src="${value}" style="height:100px;margin:8px 0;" /></a>`;
 
       case 'datetime':
         return dateFormat(value);
@@ -291,10 +291,13 @@ const _Table = props => {
             tableList.map((row, idx) => (
               <tr key={idx}>
                 {cols.map(item => {
-                  let content = fmt(item.fmt, row[item.key] === void 0 ? '--' : row[item.key]);
+                  let content = row[item.key];
+
                   if (typeof window._colFix_ === 'function') {
-                    content = window._colFix_(item.key, content, extendBySearch(row)) || content;
+                    content = window._colFix_(item.key, content, extendBySearch(row)) || content || '--';
                   }
+
+                  content = fmt(item.fmt, content);
 
                   if (item.fn.indexOf('multi') >= 0) {
                     content =

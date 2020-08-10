@@ -89,9 +89,6 @@ export class ChoicesEditor extends SelectEditor {
     const display = list.map(({ label }) => label);
     const options = values.map(value => String(value));
 
-    // 数据不变时不更新
-    if (values.join(',') === this.enum_values.join(',')) return;
-
     this.enum_values = values;
     this.enum_display = display;
     this.enum_options = options;
@@ -106,17 +103,9 @@ export class ChoicesEditor extends SelectEditor {
       this.onChange(true);
     }
 
-    setTimeout(() => {
-      if (this.choices_instance) {
-        this.choices_instance.setChoices(
-          options.map((value, i) => ({ value, label: display[i] })),
-          'value',
-          'label',
-          true,
-        );
-        this.choices_instance.setChoiceByValue(String(this.value));
-      }
-    });
+    const choicesList = options.map((value, i) => ({ value, label: display[i] }));
+    this.choices_instance.setChoices(choicesList, 'value', 'label', true);
+    this.choices_instance.setChoiceByValue(String(this.value));
   }
 
   enable() {

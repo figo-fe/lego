@@ -1,5 +1,8 @@
 .form-view {
   position: relative;
+  .form-group .choices {
+    margin: 0;
+  }
   .edit-toolbar {
     position: absolute;
     right: 0;
