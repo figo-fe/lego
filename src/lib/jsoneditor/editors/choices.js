@@ -98,7 +98,7 @@ export class ChoicesEditor extends SelectEditor {
     //   selected_idx = 0;
     // }
 
-    if (selected_idx !== undefined) {
+    if (selected_idx !== undefined && values[selected_idx] !== this.value) {
       this.value = values[selected_idx];
       this.onChange(true);
     }
