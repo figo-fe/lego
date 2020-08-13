@@ -67,7 +67,7 @@ export const TableEdit = props => {
         const ext = extEditor.current.getValue();
 
         iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', config, ext });
-      }, 100);
+      }, 500);
     });
   }
 
