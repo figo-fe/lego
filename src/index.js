@@ -34,7 +34,7 @@ import './common/bootstrap.css';
 import './common/base.scss';
 
 const App = () => {
-  const [setting, setSetting] = useState({});
+  const [setting, setSetting] = useState(null);
 
   // 获取系统配置和权限
   useEffect(() => {
@@ -95,6 +95,14 @@ const App = () => {
           _menu = [];
         }
 
+        // 挂载全局上传方法
+        if (uploadFn) {
+          try {
+            execJs(uploadFn);
+            console.log('FileUploader mounted!');
+          } catch (e) {}
+        }
+
         setSetting({
           name,
           homeUrl,
@@ -113,23 +121,7 @@ const App = () => {
       });
   }, []);
 
-  useEffect(() => {
-    let fn = '';
-    try {
-      // 挂载上传方法
-      if (setting.uploadFn) {
-        fn = execJs(setting.uploadFn);
-        console.log('FileUploader mounted!');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-    return () => {
-      if (fn.length > 0) {
-        window[fn] = null;
-      }
-    };
-  }, [setting.uploadFn]);
+  if (!setting) return null;
 
   return (
     <SettingContext.Provider value={setting}>

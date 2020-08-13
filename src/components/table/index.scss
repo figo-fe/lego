@@ -1,6 +1,10 @@
 /* table-list */
-.table-list {
+.table-container {
   width: 100%;
+  overflow-x: auto;
+}
+.table-list {
+  min-width: 100%;
 }
 .table-thead th {
   border-bottom: 1px solid #e8e8e8;

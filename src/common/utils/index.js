@@ -142,6 +142,16 @@ export const buildUrl = (url, params) => {
 // 构建API，按需自动拼接baseUrl
 export const buildApi = (baseUrl, api) => (/^(http|\/\/)/.test(api) ? '' : baseUrl) + api;
 
+// 扩展对象内容
+export const extendOnKey = (obj, query, key) => {
+  const fixQuery = {};
+
+  for (let k in query) {
+    fixQuery[`${key}.` + k] = query[k];
+  }
+
+  return Object.assign({}, obj, fixQuery);
+};
 /**
  * 根据path查找object中的值
  * @param {object} object
