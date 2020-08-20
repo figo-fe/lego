@@ -72,7 +72,7 @@ export const FormEdit = props => {
         const { schema } = formData;
 
         iframeWin.postMessage({ type: 'LEGO_POPUP_PREVIEW', api, origin, schema, ext });
-      }, 100);
+      }, 500);
     });
   }
 

@@ -33,6 +33,9 @@ export const TableUse = props => {
         // 跳出时卸载JS
         console.log(`unmount ${fn}`);
         delete window[fn];
+        delete window._colFix_;
+        delete window._pageFix_;
+        delete window._lego_table_data_;
         script.remove();
       } catch (e) {
         console.warn(e);

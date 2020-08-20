@@ -78,10 +78,6 @@ const _Table = props => {
       // 卸载数据
       $('.multi-box').off('click');
       $('.table-list .fa-check-square').removeClass('fa-check-square').addClass('fa-square');
-
-      delete window._colFix_;
-      delete window._pageFix_;
-      delete window._lego_table_data_;
     };
   }, [autoLoad, context.baseUrl, sort, search, pageNo, hack]);
 

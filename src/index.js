@@ -39,7 +39,9 @@ const App = () => {
   // 获取系统配置和权限
   useEffect(() => {
     // 登录页不加载配置
-    if (window.location.pathname.indexOf('/login') > 0) return;
+    if (window.location.pathname.indexOf('/login') > 0) {
+      return setSetting({});
+    }
 
     axios('GET', SETTING)
       .then(async res => {
