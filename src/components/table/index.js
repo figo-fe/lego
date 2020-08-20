@@ -200,7 +200,7 @@ const _Table = props => {
           />
         </table>
       </div>
-      {page && page.total > page.pageSize && (
+      {page && page.total > 0 && (
         <div className='pages'>
           <Pagination
             onChange={pn => setPageNo(pn)}
