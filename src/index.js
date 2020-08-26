@@ -65,22 +65,29 @@ const App = () => {
         document.title = name;
 
         if (permissionApi) {
+          let resp;
           try {
             // 请求权限接口
-            const resp = await axios('GET', buildApi(baseUrl, permissionApi));
-            if (sideMenu.indexOf('function main') === 0) {
-              // 管理员显示系统菜单
+            resp = await axios('GET', buildApi(baseUrl, permissionApi));
+          } catch (err) {
+            resp = err;
+            console.warn('PermissionApi Error:', err);
+          }
+
+          if (sideMenu.indexOf('function main') === 0) {
+            // 管理员显示系统菜单
+            try {
               // eslint-disable-next-line no-new-func
-              const data = new Function(`return ${sideMenu}`)()(resp.data);
+              const data = new Function(`return ${sideMenu}`)()(resp);
               _menu = data.menu || [];
               _admin = data.admin || false;
               _user = data.user || '';
               _group = data.group || '';
-            } else {
-              toast('请在系统设置中定义权限/菜单配置函数！');
+            } catch (error) {
+              console.warn(error);
             }
-          } catch (err) {
-            console.warn('PermissionApi Error:', err);
+          } else {
+            toast('请在系统设置中定义权限/菜单配置函数！');
           }
         } else {
           try {

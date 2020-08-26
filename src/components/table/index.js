@@ -47,6 +47,11 @@ const _Table = props => {
             document.querySelector('.main-content').scrollTop = 0;
           }
 
+          // 数据设为全局，供组件使用
+          window._lego_table_data_ = res.data;
+          setTableList(findByPath(res, basePath) || []);
+          setLoading(false);
+
           // 绑定多选事件
           $('.multi-box').on('click', function () {
             if (this.className.indexOf('check') > 0) {
@@ -60,12 +65,6 @@ const _Table = props => {
             // 更新已选个数
             setMultiNum(document.querySelectorAll('.table-tbody .fa-check-square').length);
           });
-
-          // 数据设为全局，供组件使用
-          window._lego_table_data_ = res.data;
-
-          setTableList(findByPath(res, basePath) || []);
-          setLoading(false);
         })
         .catch(err => {
           toast(err.desc || err.msg || langs[lang]['load_fail']);
