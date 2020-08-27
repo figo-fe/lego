@@ -66,30 +66,22 @@ export const createBoard = {
             items: {
               title: '模块',
               type: 'object',
-              id: 'mod_item',
               properties: {
-                type: {
-                  type: 'string',
-                  title: '类型',
-                  enum: ['none', 'table', 'chart'],
-                  options: {
-                    enum_titles: ['选择类型', '列表', '图表'],
-                    input_width: '180px',
-                  },
-                },
                 module: {
                   type: 'string',
-                  title: '模块',
-                  watch: {
-                    type: 'mod_item.type',
-                  },
-                  enum: [],
-                  setter: 'getBoardModules',
+                  title: '模块URL',
                 },
                 grid: {
                   type: 'number',
                   title: 'Grid',
-                  enum: [4, 6, 8, 12],
+                  enum: [3, 4, 6, 8, 12],
+                  options: {
+                    input_width: '150px',
+                  },
+                },
+                height: {
+                  type: 'number',
+                  title: '高度（单位px）',
                   options: {
                     input_width: '150px',
                   },

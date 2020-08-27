@@ -295,8 +295,11 @@ code {
   height: calc(100vh - 50px);
   overflow-y: auto;
 }
-.frame-hide-nav .main-content {
-  height: 100vh;
+.frame-hide-nav {
+  background: #fff !important;
+  .main-content {
+    height: 100vh;
+  }
 }
 /* 底部按钮容器 */
 .btns-row {
