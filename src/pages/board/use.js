@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Wrap } from '../../components';
-import { axios, buildUrl } from '../../common/utils';
+import { axios, buildUrl, parseUrl } from '../../common/utils';
 import { BOARD } from '../../config/apis';
 import './board.scss';
 
 export const BoardUse = props => {
+  const initTabIdx = parseInt(parseUrl().tabidx || '0');
   const [config, setConfig] = useState({ list: [] });
-  const [tabIdx, setTabIdx] = useState(0);
-  const initMap = useRef({ 0: true });
+  const [tabIdx, setTabIdx] = useState(initTabIdx);
+  const initMap = useRef({ [initTabIdx]: true });
 
   useEffect(() => {
     const id = props.match.params.id;
