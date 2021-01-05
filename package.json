@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@types/echarts": "4.6.3",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "choices.js": "9.0.1",
     "echarts": "4.8.0",
     "node-sass": "4.14.1",
