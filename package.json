@@ -22,7 +22,7 @@
     "koa-rewrite": "3.0.1",
     "koa-static": "5.0.0",
     "md5.js": "1.3.5",
-    "qs": "6.9.4"
+    "qs": "6.9.7"
   },
   "devDependencies": {
     "@types/echarts": "4.6.3",
